@@ -2,8 +2,10 @@ package kr.co.forearlybird.domain;
 
 import java.util.Date;
 
-//Lombok을 이용함(getter,setter 등등 한번에 처리 가능)
+import lombok.Data;
 
+//Lombok을 이용함(getter,setter 등등 한번에 처리 가능)
+@Data
 public class Content {
 	private int cnt_id; //PK
 	private int brd_id; //게시판 테이블의 ( Board Table )의 PK

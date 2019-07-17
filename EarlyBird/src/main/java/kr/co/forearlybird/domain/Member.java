@@ -2,8 +2,10 @@ package kr.co.forearlybird.domain;
 
 import java.util.Date;
 
-//Lombok을 이용함(getter,setter 등등 한번에 처리 가능)
+import lombok.Data;
 
+//Lombok을 이용함(getter,setter 등등 한번에 처리 가능)
+@Data
 public class Member {
 	private int mem_id; //PK
 	private String mem_userid; //회원 아이디

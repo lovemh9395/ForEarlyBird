@@ -9,10 +9,6 @@
 	<title>Home</title>
 </head>
 <body>
-<h1>
-	커밋테스트
-</h1>
-
 <P>  The time on the server is ${serverTime}. </P>
 </body>
 </html>

@@ -1,7 +1,9 @@
 package kr.co.forearlybird.domain;
 
-//Lombok을 이용함(getter,setter 등등 한번에 처리 가능)
+import lombok.Data;
 
+//Lombok을 이용함(getter,setter 등등 한번에 처리 가능)
+@Data
 public class Board {
 	private int brd_id;  //PK
 	private int bam_id;  //게시판 관리자 ID PK
