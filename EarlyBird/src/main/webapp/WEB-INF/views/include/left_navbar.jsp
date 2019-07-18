@@ -95,8 +95,8 @@
 			<!-- Navigation -->
 			<ul class="navbar-nav">
 				<li class="nav-item  class="active" "><a
-					class=" nav-link active " href="${contextPath}/member/M_login"> <i
-						class="ni ni-tv-2 text-primary"></i> 공지사항
+					class=" nav-link active " href="${contextPath}/member/M_login">
+						<i class="ni ni-tv-2 text-primary"></i> 공지사항
 				</a></li>
 			</ul>
 			<hr class="my-3">

@@ -1,26 +1,44 @@
 package kr.co.forearlybird.controller;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.forearlybird.MainController;
+import kr.co.forearlybird.service.MemberService;
 
 @Controller
 @RequestMapping(value = "/member")
 public class MemberController {
 private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
+	@Autowired
+	MemberService service;
+
 	//로그인으로 이동 (사용자,관리자 레벨로 이동)
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String M_login(Model model) {
 		logger.info("로그인 페이지");
-		
-		return "/M_login";
+		return "member/M_login";
 	}
+	
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public ModelAndView login(@RequestBody Map<String,Object> params) throws Exception {
+		logger.info("로그인 하기");
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("");
+		mav.addObject("result", service.M_login(params));
+		return mav;
+	}
+
 	
 	//회원가입으로 이동
 	@RequestMapping(value = "/make", method = RequestMethod.GET)

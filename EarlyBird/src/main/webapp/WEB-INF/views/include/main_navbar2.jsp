@@ -26,10 +26,10 @@
 		</form>
 		<!-- User -->
 		<div class="row">
-			<div class="col-md-6"><%@ include file="modal.jsp"%></div>
+			<div class="col-md-6">${user}님 환영합니다</div>
 			<div class="col-md-5">
-				<a href="${contextPath}/member/M_make"><button
-						class="btn btn-info" type="button">회원가입</button></a>
+				<a href="${contextPath}/member/M_logout"><button
+						class="btn btn-info" type="button">로그아웃</button></a>
 			</div>
 		</div>
 	</div>
