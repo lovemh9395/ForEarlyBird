@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page session="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 	request.setCharacterEncoding("UTF-8");
 %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
+
 <nav class="navbar navbar-top navbar-expand-md navbar-dark"
 	id="navbar-main">
 	<div class="container-fluid">
@@ -26,10 +27,18 @@
 		</form>
 		<!-- User -->
 		<div class="row">
-			<div class="col-md-6"><%@ include file="modal.jsp"%></div>
-			<div class="col-md-5">
-				<a href="${contextPath}/member/M_make"><button
-						class="btn btn-info" type="button">회원가입</button></a>
+
+			<div class="col-md-auto">
+				<c:if test="${user==null }">
+					<%@ include file="../member/M_login.jsp"%>
+				</c:if>
+				<c:if test="${user!=null }">
+					${user.id}님 환영합니다
+				</c:if>
+			</div>
+			<div class="col-md-auto">
+				<a href="${contextPath}/member/M_logout"><button
+						class="btn btn-info" type="button">로그아웃</button></a>
 			</div>
 		</div>
 	</div>

@@ -34,18 +34,13 @@
 	<!-- end side bar -->
 	<div class="main-content">
 		<!-- main_header -->
-		<c:if test="${user==null }">
-			<%@ include file="include/main_navbar.jsp"%>
-		</c:if>
-		<c:if test="${user!=null }">
-			<%@ include file="include/main_navbar2.jsp"%>
-		</c:if>
+		<%@ include file="include/main_navbar.jsp"%>
 		<!-- end main header -->
 		<!-- Header -->
 		<%@ include file="include/main_header.jsp"%>
 		<!-- end Header -->
 		<!-- body -->
-		<div class="col-md-4 col-md-offset-4">
+		<div class="col-md-auto">
 			<div class="btn-group">
 				<button type="button" class="btn btn-default dropdown-toggle"
 					data-toggle="dropdown" aria-expanded="false">
@@ -114,6 +109,5 @@
 		</div>
 		<!-- end body -->
 	</div>
-
 </body>
 </html>

@@ -1,24 +1,39 @@
 package kr.co.forearlybird.service;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
+@Component
 public class MemberServiceImpl implements MemberService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
 
 	@Override
-	public int M_login(Map<String, Object> map) throws Exception {
-		String id = (String) map.get("id");
-		String pw = (String) map.get("pw");
+	public Map M_login(HttpServletRequest request) throws Exception {
+		logger.info("login Service");
+		String id = request.getParameter("email");
+		String pw = request.getParameter("password");
+
+		Map<String, Object> map = new HashMap<>();
 		
 		if (!id.equals("admin")) {
-			return -1;
+			return map;
 		}
-		if (!pw.equals("admin")) {
-			return 0;
+		if (!pw.equals("123")) {
+			return map;
 		}
-		return 1;
+		map.put("id", id);
+		map.put("pw", pw);
+		logger.info(map.toString());
+		return map;
 	}
 
 }
