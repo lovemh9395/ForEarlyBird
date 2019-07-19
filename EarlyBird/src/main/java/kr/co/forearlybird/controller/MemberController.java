@@ -1,16 +1,18 @@
 package kr.co.forearlybird.controller;
 
+import java.util.HashMap;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.forearlybird.MainController;
 import kr.co.forearlybird.service.MemberService;
@@ -22,26 +24,33 @@ private static final Logger logger = LoggerFactory.getLogger(MainController.clas
 
 	@Autowired
 	MemberService service;
-
+	
 	//로그인으로 이동 (사용자,관리자 레벨로 이동)
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	@RequestMapping(value = "/M_login", method = RequestMethod.GET)
 	public String M_login(Model model) {
 		logger.info("로그인 페이지");
 		return "member/M_login";
 	}
 	
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ModelAndView login(@RequestBody Map<String,Object> params) throws Exception {
-		logger.info("로그인 하기");
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("");
-		mav.addObject("result", service.M_login(params));
-		return mav;
+	@RequestMapping(value = "/M_login", method = RequestMethod.POST)
+	public String login(HttpServletRequest request, HttpSession session) throws Exception {
+		logger.info("login 처리");
+		//  서비스로 호출
+		Map map= service.login(request);
+		logger.info("==============");
+		if(map == null) {
+			return "redirect:login";
+		} else {
+			// 세션부여
+			session.setAttribute("user", map);
+			logger.info("==============");
+			return "redirect:../";
+		}
 	}
 
 	
 	//회원가입으로 이동
-	@RequestMapping(value = "/make", method = RequestMethod.GET)
+	@RequestMapping(value = "/M_make", method = RequestMethod.GET)
 	public String M_make(Model model) {
 		logger.info("회원가입 페이지");
 		

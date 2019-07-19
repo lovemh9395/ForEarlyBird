@@ -34,10 +34,11 @@
 	<!-- end side bar -->
 	<div class="main-content">
 		<!-- main_header -->
-		<c:if test="${user==null }">
+		<c:set var="user" value="${user}" />
+		<c:if test="${empty user}">
 			<%@ include file="include/main_navbar.jsp"%>
 		</c:if>
-		<c:if test="${user!=null }">
+		<c:if test="${!empty user}">
 			<%@ include file="include/main_navbar2.jsp"%>
 		</c:if>
 		<!-- end main header -->

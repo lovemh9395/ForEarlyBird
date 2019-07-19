@@ -8,25 +8,25 @@
 </style>
 <script>
 	$(document).ready(function() {
-		$("#M_login").click(function() {
+		$("#login").click(function() {
 			var id = $("#email").val();
 			var pw = $("#password").val();
-			var query = {
-				"id" : id,
-				"pw" : pw
-			}
 			$.ajax({
 				type : "get",
-				url : "member/login",
-				data : query,
+				datatype:"text",
+				url : "member/M_login",
+				data : {id:id,
+						pw:pw},
 				success : function(data) {
+					alert(data);
 					if (data == -1) {
 						alert("아이디가 존재하지 않습니다.")
-					} else if (data == 0) {
+					} else if (data ==0) {
 						alert("비밀번호가 일치하지 않습니다.")
 					} else {
+						did:$("#email");
+						dpw:$("#password");
 						alert("로그인 성공!");
-						sessionStorage.setItem('user', id);
 						window.location.href = "/";
 						// response.sendRedirect("main.jsp");
 					}
@@ -80,7 +80,7 @@
 									for=" customCheckLogin"><span>Remember me</span></label>
 							</div>
 							<div class="text-center">
-								<button type="button" id="M_login" class="btn btn-primary my-4">로그인</button>
+								<button type="button" id="login" class="btn btn-primary my-4">로그인</button>
 								<button type="button" class="btn btn-primary my-4">ID/PW찾기</button>
 							</div>
 						</form>
