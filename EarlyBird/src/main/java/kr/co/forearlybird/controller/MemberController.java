@@ -46,6 +46,7 @@ public class MemberController {
 			// 세션 부여
 			logger.info(map.toString() + "2");
 			session.setAttribute("user", map);
+			return "A_mainpage";
 		}
 		return "redirect:/";
 	}
