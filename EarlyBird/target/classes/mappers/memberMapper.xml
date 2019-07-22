@@ -5,9 +5,37 @@
 <mapper namespace="member">
 
 	<!-- 로그인 처리(Map) : id,pass -> 아이디와 이름 결과 -->
-	<select id="login" parameterType="Map" resultType="Map">
-		select mem_userid,mem_password
+	<select id="login" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		select mem_userid,mem_password,mem_username                                                                                                                  
 		from member
-		where id=#{id} and pw=#{pw}
+		where mem_userid=#{id} and mem_password=#{pw}
 	</select>
+
+	<!-- 회원가입하기 -->
+	<insert id="make" parameterType="kr.co.forearlybird.domain.Member">
+		insert into
+		member(mem_userid,mem_password,mem_nickname,mem_username,mem_phone,mem_birthday)
+		values(#{mem_userid},#{mem_password},#{mem_nickname},#{mem_username},#{mem_phone},#{mem_birthday})
+	</insert>
+	
+	<!-- 내 정보 보기 처리(Map) : id,username,nickname,tel,birth -->
+	<select id="detail" parameterType="String"
+		resultType="kr.co.forearlybird.domain.Member">
+		select *
+		from member
+		where mem_userid=#{id}
+	</select>
+	
+	<update id="update" parameterType="java.util.Map">
+		update member
+		set mem_nickname=#{nick},mem_phone=#{phone}
+		where mem_userid=#{id}
+	</update>
+	
+	<update id="delete" parameterType="java.lang.Integer">
+		update member
+		set mem_level=2
+		where mem_userid=#{id}
+	</update>
 </mapper>

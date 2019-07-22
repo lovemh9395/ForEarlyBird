@@ -2,27 +2,18 @@ package kr.co.forearlybird.dao;
 
 import java.util.Map;
 
-public interface MemberDAO {
-	// 게시글 개수
-	public int maxNum();
+import javax.servlet.http.HttpServletRequest;
+
+import kr.co.forearlybird.domain.Member;
+
+public interface MemberDAO  {
+	public Map login(Map<String, Object> map) throws Exception;
 	
-	public static Map login(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	// 게시판 목록보기
-//	public List<Board> list();
+	public int make(Member member);
 	
-	// 게시판 상세정보를 처리
-//	public int updateReadcnt(int bno);
-//	public Board getDetail(int bno);
+	public Member detail(String id);
 	
-	// 글쓰기 정보처리
-//	public int register(Board board);
+	public Map update(Map<String, Object> map);
 	
-	//글삭제 정보처리
-//	public int delete(int bno);
-	
-	// 글수정 정보처리
-//	public int update(int bno);
+	public int delete(String id);
 }

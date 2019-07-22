@@ -7,6 +7,9 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html lang="en">
+	<!--   Core   -->
+	<%@ include file="../include/core.jsp"%>
+	<!--  end Core -->
 <!-- head -->
 <%@ include file="../include/head.jsp"%>
 <!-- end head -->
@@ -22,10 +25,9 @@
 		<%@ include file="../include/main_header.jsp"%>
 		<!-- end Header -->
 		<!-- body -->
+		
 		<!-- end body -->
 	</div>
-	<!--   Core   -->
-	<%@ include file="../include/core.jsp"%>
-	<!--  end Core -->
+
 </body>
 </html>
