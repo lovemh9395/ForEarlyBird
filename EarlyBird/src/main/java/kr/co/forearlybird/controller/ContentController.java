@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import kr.co.forearlybird.MainController;
 
 @Controller
+@RequestMapping(value = "controller", method = {RequestMethod.GET,RequestMethod.POST})
 public class ContentController {
 	private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 	

@@ -1,9 +1,7 @@
 package kr.co.forearlybird.controller;
 
-import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -40,7 +38,7 @@ public class MemberController {
 		logger.info("login 처리");
 		Map map = service.M_login(request);
 
-		if (map.toString().equals("{}")) { // 관리자급이 아닙니다.
+		if (map.toString().equals("{}")) { // 로그인실패
 			logger.info(map.toString() + "1");
 		} else {
 			// 세션 부여
@@ -109,10 +107,10 @@ public class MemberController {
 
 	// 로그아웃
 	@RequestMapping(value = "/M_logout", method = RequestMethod.GET)
-	public String M_logout(Model model) {
+	public String M_logout(HttpSession session, Model model) {
 		logger.info("로그아웃 페이지");
-
-		return "M_logout";
+		session.invalidate();
+		return "redirect:/";
 	}
 
 	// 회원탈퇴

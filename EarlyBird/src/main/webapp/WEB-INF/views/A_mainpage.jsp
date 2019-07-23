@@ -32,7 +32,6 @@
 		<%@ include file="include/main_header.jsp"%>
 		<!-- end Header -->
 		<!-- body -->
-
 		<div class="nav-wrapper">
 			<ul class="nav nav-pills nav-fill flex-column flex-md-row"
 				id="tabs-icons-text" role="tablist">
@@ -59,12 +58,12 @@
 					<div class="tab-pane fade show active" id="tabs-icons-text-1"
 						role="tabpanel" aria-labelledby="tabs-icons-text-1-tab"></div>
 					<div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel"
-						aria-labelledby="tabs-icons-text-2-tab">
-					</div>
+						aria-labelledby="tabs-icons-text-2-tab"></div>
 				</div>
 			</div>
 		</div>
-		<!-- end of body -->
+	</div>
+	<!-- end of body -->
 </body>
 <!--   Core   -->
 <%@ include file="include/core.jsp"%>
