@@ -14,7 +14,7 @@ import kr.co.forearlybird.MainController;
 @Controller
 @RequestMapping(value = "admin", method = { RequestMethod.GET, RequestMethod.POST })
 public class AdminController {
-	private static final Logger logger = LoggerFactory.getLogger(MainController.class);
+	private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
 	// 게시판 별 관리자 보기
 	@RequestMapping(value = "/A_adminList", method = RequestMethod.GET)

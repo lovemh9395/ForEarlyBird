@@ -23,10 +23,10 @@
 <%@ include file="include/head.jsp"%>
 <!-- end head -->
 <body class="">
-	<%@ include file="include/admin/A_left_navbar.jsp"%>
+	<%@ include file="admin/include/A_left_navbar.jsp"%>
 	<div class="main-content">
 		<!-- main_header -->
-		<%@ include file="include/admin/A_main_navbar.jsp"%>
+		<%@ include file="admin/include/A_main_navbar.jsp"%>
 		<!-- end main header -->
 		<!-- Header -->
 		<%@ include file="include/main_header.jsp"%>
