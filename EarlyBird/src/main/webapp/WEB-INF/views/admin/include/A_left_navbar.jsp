@@ -67,7 +67,7 @@
 						카테고리 관리
 				</a></li>
 				<li class="nav-item"><a id="1" class="nav-link"
-					href="../admin/A_adminList"> 
+					href="../admin/A_postList"> 
 					<i class="ni ni-bullet-list-67 text-rainbow"></i>
 						게시판 관리
 				</a></li>
@@ -75,11 +75,6 @@
 					href="../content/C_list"> 
 					<i class="ni ni-controller text-teal"></i>
 						컨텐츠 관리
-				</a></li>
-				<li class="nav-item"><a id="1" class="nav-link"
-					href="../admin/A_adminList"> 
-					<i class="ni ni-badge text-purple"></i>
-						관리자 설정
 				</a></li>
 			</ul>
 			<hr class="my-3">
