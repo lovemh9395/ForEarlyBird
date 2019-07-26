@@ -10,6 +10,8 @@ import kr.co.forearlybird.domain.LargeCategory;
 public interface AdminService {
 
 	//대분류 카테고리 리스트 불러오기
-	List<LargeCategory> largeCategoryList(String largeCategoryName);
+	List<LargeCategory> largeCategoryList();
+
+	int makeCategoryList(String largeCategoryName);
 
 }

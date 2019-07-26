@@ -24,7 +24,7 @@ public class AdminController {
 
 	@Autowired
 	AdminService service;
-	
+
 	// 게시판 별 관리자 보기
 	@RequestMapping(value = "/A_adminList", method = RequestMethod.GET)
 	public String A_adminList(HttpSession session, Model model) {
@@ -127,14 +127,27 @@ public class AdminController {
 	@RequestMapping(value = "/A_categoryList", method = RequestMethod.GET)
 	public String A_categoryList1(HttpSession session, Model model) {
 		logger.info("카테고리 보기 페이지");
+		List<LargeCategory> list = service.largeCategoryList();
+		if (!list.isEmpty()) {
+			model.addAttribute("isNull", false);
+			model.addAttribute("list", list);
+		} else {
+			model.addAttribute("isNull", true);
+		}
 		return "admin/A_categoryList";
 	}
-	
+
 	@RequestMapping(value = "/A_largeCategoryList", method = RequestMethod.POST)
 	public String A_categoryList2(@RequestParam("largeCategoryName") String largeCategoryName, Model model) {
 		logger.info("카테고리 보기 페이지");
-		List<LargeCategory> result = service.largeCategoryList(largeCategoryName);
-		model.addAttribute(result);
+		int result = service.makeCategoryList(largeCategoryName);
+		if (result > 0) {
+			model.addAttribute("isNull", false);
+			List<LargeCategory> list = service.largeCategoryList();
+			model.addAttribute("list", list);
+		} else {
+			model.addAttribute("isNull", true);
+		}
 		return "redirect:A_categoryList";
 	}
 
