@@ -29,7 +29,14 @@
 			<div class="col">
 				<div class="card bg-default shadow">
 					<div class="card-header bg-transparent border-0">
-						<h3 class="text-white mb-0">자유 게시판</h3>
+						<div class="row">
+							<div class="col-1">
+								<h3 class="text-white mb-0">자유 게시판</h3>
+							</div>
+							<div class="col-11" align="right">
+								<button type="button" class="btn btn-primary">글쓰기</button>
+							</div>
+						</div>
 					</div>
 					<div class="table-responsive">
 						<table class="table align-items-center table-dark table-flush">
@@ -59,7 +66,8 @@
 										</th>
 										<th scope="row">
 											<div class="media-body">
-												<a href="${contextPath }/post/P_detail"><span
+												<a
+													href="${contextPath }/post/P_detail?page=${index}&post_id=${list.post_id}"><span
 													class="mb-0 text-lg">${list.post_title}</span></a>
 											</div>
 										</th>
@@ -82,19 +90,20 @@
 					<div class="card bg-default shadow">
 						<nav aria-label="...">
 							<ul class="pagination justify-content-end mb-0">
-								<li class="page-item disabled"><a class="page-link"
-									href="#" tabindex="-1"> <i class="fas fa-angle-left"></i> <span
-										class="sr-only">Previous</span>
+								<li class="page-item"><a class="page-link"
+									href="${contextPath }/post/P_list?page=${pageMaker.startPage - 1}&perPageNum=${pageMaker.cri.perPageNum}">
+										<i class="fas fa-angle-left"></i> <span class="sr-only">Previous</span>
 								</a></li>
-								<li class="page-item active"><a class="page-link" href="#">1</a>
-								</li>
-								<li class="page-item"><a class="page-link" href="#">2 <span
-										class="sr-only">(current)</span></a></li>
-								<li class="page-item"><a class="page-link" href="#">3</a></li>
-								<li class="page-item"><a class="page-link" href="#">4</a></li>
-								<li class="page-item"><a class="page-link" href="#">5</a></li>
-								<li class="page-item"><a class="page-link" href="#"> <i
-										class="fas fa-angle-right"></i> <span class="sr-only">Next</span>
+								<c:forEach begin="${pageMaker.startPage }"
+									end="${pageMaker.endPage }" var="index">
+									<li class="page-item active"><a class="page-link"
+										href="${contextPath }/post/P_list?page=${index}&perPageNum=${pageMaker.cri.perPageNum}">${index }</a>
+									</li>
+								</c:forEach>
+
+								<li class="page-item"><a class="page-link"
+									href="${contextPath }/post/P_list?page=${pageMaker.endPage + 1}&perPageNum=${pageMaker.cri.perPageNum}">
+										<i class="fas fa-angle-right"></i> <span class="sr-only">Next</span>
 								</a></li>
 							</ul>
 						</nav>

@@ -29,7 +29,20 @@
 			<div class="col">
 				<div class="card bg-default shadow">
 					<div class="card-header bg-transparent border-0">
-						<h3 class="text-white mb-0">자유 게시판</h3>
+						<div class="row">
+							<div class="col-1">
+								<h3 class="text-white mb-0">자유 게시판</h3>
+							</div>
+							<div class="col-11" align="right">
+								<a
+									href="${contextPath }/post/P_detail?post_id=${P_detail.post_id - 1}"><button
+										type="button" class="btn btn-primary">이전글</button></a> <a
+									href="${contextPath }/post/P_list"><button type="button"
+										class="btn btn-primary">목록보기</button></a> <a
+									href="${contextPath }/post/P_detail?post_id=${P_detail.post_id + 1}"><button
+										type="button" class="btn btn-primary">다음글</button></a>
+							</div>
+						</div>
 					</div>
 					<div class="table-responsive">
 						<table class="table align-items-center table-dark table-flush">
@@ -53,25 +66,42 @@
 								<tr>
 									<th scope="row">
 										<div class="media-body">
-											<span class="mb-0 text-lg">${list.post_id}</span>
+											<span class="mb-0 text-lg">${P_detail.post_id }</span>
 										</div>
 									</th>
 									<th scope="row">
 										<div class="media-body">
-											<a href="${contextPath }/post/P_detail"><span
-												class="mb-0 text-lg">${list.post_title}</span></a>
+											<span class="mb-0 text-lg">${P_detail.post_title }</span>
 										</div>
 									</th>
 									<td>
 										<div class="avatar-group">
-											<span class="mb-0 text-lg">${list.mem_userid}</span>
+											<span class="mb-0 text-lg">${P_detail.mem_userid }</span>
 										</div>
 									</td>
 									<td><span class="badge badge-dot mr-4"> <i
-											class="bg-warning"></i> ${list.post_hit}
+											class="bg-warning"></i> ${P_detail.post_hit }
 									</span></td>
 									<td><span class="badge badge-dot mr-4"> <i
-											class="bg-warning"></i> ${list.post_like}
+											class="bg-warning"></i> ${P_detail.post_like }
+									</span></td>
+								</tr>
+							</tbody>
+						</table>
+						<table class="table align-items-center table-dark table-flush">
+							<colgroup>
+								<col style="width: 100%">
+							</colgroup>
+							<thead class="thead-dark" align="center">
+								<tr>
+									<th scope="col" style="font-size: 15px">글 내용</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td style="font-size: 20px; height: 556px"><span
+										class="badge badge-dot mr-4"> <i class="mb-0 text-lg"></i>
+											${P_detail.post_content }
 									</span></td>
 								</tr>
 							</tbody>

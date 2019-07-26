@@ -1,19 +1,25 @@
 package kr.co.forearlybird.controller;
 
+
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.forearlybird.MainController;
 import kr.co.forearlybird.domain.Post;
+import kr.co.forearlybird.paging.Criteria;
+import kr.co.forearlybird.paging.PageMaker;
 import kr.co.forearlybird.service.PostService;
 
 @Controller
@@ -26,18 +32,15 @@ public class PostController {
 	
 	
 	// 게시글 목록 보기
-	@RequestMapping(value = "/P_list", method = {RequestMethod.GET,RequestMethod.POST})
-	public ModelAndView P_list() {
-		ModelAndView mav = new ModelAndView();
+	@RequestMapping(value = "/P_detail", method = {RequestMethod.GET,RequestMethod.POST})
+	public String P_detail(Model model,HttpServletRequest request) {
 		logger.info("게시글 목록 보기 페이지");
-		List<Post> P_list=new ArrayList<>();
-		P_list = service.P_list();
-		System.out.println(P_list);
-		mav.setViewName("post/P_list");
-		logger.info("1");
-		mav.addObject("list",P_list);
-		logger.info("2");
-		return mav;
+		int post_id = Integer.parseInt(request.getParameter("post_id"));
+		logger.info("P_detail controller:"+post_id);
+		Post P_detail = service.P_detail(post_id);
+		System.out.println(P_detail);
+		model.addAttribute("P_detail",P_detail);
+		return "post/P_detail";
 	}
 
 	// 게시글 등록
@@ -72,13 +75,13 @@ public class PostController {
 		return "P_search";
 	}
 
-	// 게시글 상세보기
-	@RequestMapping(value = "/P_detail", method = RequestMethod.GET)
-	public String P_detail(Model model) {
-		logger.info("게시글 상세보기 페이지");
-
-		return "post/P_detail";
-	}
+//	// 게시글 상세보기
+//	@RequestMapping(value = "/P_detail", method = RequestMethod.GET)
+//	public String P_detail(Model model) {
+//		logger.info("게시글 상세보기 페이지");
+//
+//		return "post/P_detail";
+//	}
 
 	// 게시글 추천하기
 	@RequestMapping(value = "/P_recommend", method = RequestMethod.GET)
@@ -86,5 +89,21 @@ public class PostController {
 		logger.info("게시글 추천하기 페이지");
 
 		return "P_recommend";
+	}
+	
+	//페이징 처리해보장
+	@RequestMapping(value = "/P_list", method = RequestMethod.GET)
+	public String listPage(@ModelAttribute("cri") Criteria cri, Model model) throws Exception {
+		logger.info("페이징 처리 페이지");
+		logger.info(cri.toString());
+		
+		model.addAttribute("list", service.listCriteria(cri));  // 게시판의 글 리스트
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(service.listCountCriteria(cri));
+		
+		model.addAttribute("pageMaker", pageMaker);  // 게시판 하단의 페이징 관련, 이전페이지, 페이지 링크 , 다음 페이지
+		
+		return "post/P_list";
 	}
 }

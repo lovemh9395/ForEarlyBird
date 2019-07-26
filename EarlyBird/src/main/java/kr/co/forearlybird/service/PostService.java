@@ -3,7 +3,16 @@ package kr.co.forearlybird.service;
 import java.util.List;
 
 import kr.co.forearlybird.domain.Post;
+import kr.co.forearlybird.paging.Criteria;
 
 public interface PostService {
+	public Post P_detail(int post_id);
+	
 	public List<Post> P_list();
+
+	public List<Post> listAll() throws Exception;
+
+	public List<Post> listCriteria(Criteria cri) throws Exception;
+	
+	public int listCountCriteria(Criteria cri) throws Exception;
 }
