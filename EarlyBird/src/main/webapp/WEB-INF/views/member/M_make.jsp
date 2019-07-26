@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+%>
 <!-- Modal -->
-<style>
-.modal-backdrop {
-	z-index: -1;
-}
-</style>
+
 <script>
 	$(document).ready(function() {
 		$("#join").click(function() {
@@ -13,8 +13,6 @@
 		});
 	});
 </script>
-<button type="button" class="btn btn-block btn-info" data-toggle="modal"
-	data-target="#modal-register">회원가입</button>
 <div class="modal fade" id="modal-register" tabindex="-1" role="dialog"
 	aria-labelledby="modal-form" aria-hidden="true">
 	<div class="modal-dialog modal- modal-dialog-centered modal-sm"
@@ -39,7 +37,7 @@
 											class="ni ni-email-83"></i></span>
 									</div>
 									<input class="form-control" placeholder="Email" type="email"
-										id="email" name="makeemail">
+										id="mem_userid" name="mem_userid">
 								</div>
 							</div>
 							<div class="form-group">
@@ -49,7 +47,7 @@
 											class="ni ni-lock-circle-open"></i></span>
 									</div>
 									<input class="form-control" placeholder="Password"
-										type="password" id="makepassword" name="makepassword">
+										type="password" id="mem_password" name="mem_password">
 								</div>
 							</div>
 							<div class="form-group">
@@ -59,7 +57,7 @@
 											class="ni ni-lock-circle-open"></i></span>
 									</div>
 									<input class="form-control" placeholder="Password2"
-										type="password" id="password2" name="makepassword2">
+										type="password" id="mem_password2" name="mem_password2">
 								</div>
 							</div>
 							<div class="form-group mb-3">
@@ -69,7 +67,7 @@
 											class="ni ni-ruler-pencil"></i></span>
 									</div>
 									<input class="form-control" placeholder="nickName" type="text"
-										id="name" name="makenickname">
+										id="mem_nickname" name="mem_nickname">
 								</div>
 							</div>
 							<div class="form-group mb-3">
@@ -79,7 +77,7 @@
 											class="ni ni-ruler-pencil"></i></span>
 									</div>
 									<input class="form-control" placeholder="userName" type="text"
-										id="name" name="makename">
+										id="mem_username" name="mem_username">
 								</div>
 							</div>
 							<div class="form-group mb-3">
@@ -89,7 +87,7 @@
 											class="ni ni-air-baloon"></i></span>
 									</div>
 									<input class="form-control" placeholder="Tel" type="tel"
-										id="tel" name="maketel">
+										id="mem_phone" name="mem_phone">
 								</div>
 							</div>
 							<div class="form-group mb-3">
@@ -98,7 +96,7 @@
 										<span class="input-group-text"><i class="ni ni-like-2"></i></span>
 									</div>
 									<input class="form-control" placeholder="Birth" type="text"
-										id="birth" name="makebirth">
+										id="mem_birthday" name="mem_birthday">
 								</div>
 							</div>
 							<div

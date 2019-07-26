@@ -9,17 +9,15 @@
 <script>
 	$(document).ready(function() {
 		$("#loginbutton").click(function() {
-			document.getElementById('form').submit();
+			$('#loginform').submit();
 		});
 	});
 </script>
-<button type="button" class="btn btn-block btn-info" data-toggle="modal"
-	data-target="#modal-form">로그인</button>
-<div class="modal fade" id="modal-form" tabindex="-1" role="dialog"
+<div class="modal fade" id="modal-login" tabindex="-1" role="dialog"
 	aria-labelledby="modal-form" aria-hidden="true">
-	<div class="modal-dialog modal- modal-dialog-centered modal-sm"
-		role="document">
-		<div class="modal-content">
+	<div id="modal-login"
+		class="modal-dialog modal-dialog-centered modal-sm" role="document">
+		<div class="modal-content" id="modal-content-login">
 			<div class="modal-body p-0">
 				<div class="card bg-secondary shadow border-0">
 					<div class="card-body px-lg-5 py-lg-5">
@@ -30,7 +28,8 @@
 								style="width: 200px; height: auto;">
 							</a>
 						</div>
-						<form role="form" id="form" action="member/M_login" method="post">
+						<form role="form" id="loginform" action="member/M_login"
+							method="post">
 							<div class="form-group mb-3">
 								<div class="input-group input-group-alternative">
 									<div class="input-group-prepend">
@@ -60,7 +59,18 @@
 							<div class="text-center">
 								<button type="button" id="loginbutton"
 									class="btn btn-primary my-4">로그인</button>
-								<button type="button" class="btn btn-primary my-4">ID/PW찾기</button>
+								<div class=row>
+									<div class="col-md-6">
+										<button type="button" class="btn btn-block btn-info"
+											data-toggle="modal" id="searchID"
+											data-target="#searchIDmodal">ID찾기</button>
+									</div>
+									<div class="col-md-6">
+										<button type="button" class="btn btn-block btn-info"
+											data-toggle="modal" id="searchPW"
+											data-target="#modal-searchPWD">PW찾기</button>
+									</div>
+								</div>
 							</div>
 						</form>
 					</div>
@@ -69,3 +79,5 @@
 		</div>
 	</div>
 </div>
+<%@ include file="M_searchID.jsp"%>
+<%@ include file="M_searchPWD.jsp"%>

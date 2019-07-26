@@ -124,7 +124,7 @@
 			<hr class="my-3">
 			<ul class="navbar-nav">
 				<li class="nav-item"><a class="nav-link"
-					href="./examples/register.html"> <i
+					href="${contextPath }/post/P_list"> <i
 						class="ni ni-circle-08 text-pink"></i> 자유게시판
 				</a></li>
 				<li class="nav-item"><a class="nav-link"

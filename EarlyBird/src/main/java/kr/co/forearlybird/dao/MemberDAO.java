@@ -16,4 +16,16 @@ public interface MemberDAO  {
 	public Map update(Map<String, Object> map);
 	
 	public int delete(String id);
+	
+	public int profile(Map middlemap);
+	
+	public String searchID(Member member);
+	
+	public void insertUser(Member vo) throws Exception;
+	
+	public void createAuthKey(String user_email, String user_authcode) throws Exception;
+	
+	public void userAuth(String user_email) throws Exception;
+	
+	public void searchPWD(Member vo, String mem_password) throws Exception;
 }

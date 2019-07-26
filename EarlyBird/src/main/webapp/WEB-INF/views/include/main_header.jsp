@@ -5,7 +5,7 @@
 	request.setCharacterEncoding("UTF-8");
 %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
-<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
+<div class="header bg-gradient-primary pt-5 pt-md-8">
 	<div class="container-fluid">
 		<div class="header-body">
 			<!-- Card stats -->

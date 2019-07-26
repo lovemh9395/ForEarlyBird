@@ -24,5 +24,15 @@
 	<context:component-scan base-package="kr.co.forearlybird" />
 	
 	
+	<!-- Multi Part Resolver -->
+	<beans:bean id = "multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	<!-- 최대 업로드 가능한 바이트 크기 -->
+	<beans:property name="maxUploadSize" value="52428800" />
+	<!--  디스크에 임시 파일을 생성하기 전에 메모리에 보관할 수 있는 최대 바이트 크기 -->
+	<!--  property name = "maxInMemorySize" value="52428800" / -->
+	
+	<!-- defaultEncoding -->
+	<beans:property name="defaultEncoding" value="utf-8" />
+	</beans:bean>
 	
 </beans:beans>

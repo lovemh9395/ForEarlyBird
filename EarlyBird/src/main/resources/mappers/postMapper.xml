@@ -2,4 +2,22 @@
 <!DOCTYPE mapper
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="post"></mapper>
+<mapper namespace="post">
+	<!-- 게시글 출력 -->
+	<select id="P_list" resultType="kr.co.forearlybird.domain.Post">
+		select * from post
+	</select>
+
+	<!-- criteria 를 적용한 게시판 페이징 조회 -->
+	<select id="listCriteria" resultType="BoardVO">
+	<![CDATA[
+	select
+   	bno, title, content, writer, regdate, viewcnt
+	from
+    tbl_board
+	where bno > 0
+	order by bno desc, regdate desc
+	limit #{pageStart}, #{perPageNum}
+	]]>
+	</select>
+</mapper>

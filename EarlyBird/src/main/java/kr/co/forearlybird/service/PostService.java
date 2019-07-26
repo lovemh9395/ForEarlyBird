@@ -1,5 +1,9 @@
 package kr.co.forearlybird.service;
 
-public interface PostService {
+import java.util.List;
 
+import kr.co.forearlybird.domain.Post;
+
+public interface PostService {
+	public List<Post> P_list();
 }

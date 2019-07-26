@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.forearlybird.domain.Member;
 
@@ -26,4 +29,15 @@ public interface MemberService {
 	// 수정을 하기 위한 메소드
 
 	public Map update(Map<String, Object> map);
+
+	public Map restore(Map postmap,HttpSession session) throws Exception;
+	
+	public String searchID(HttpServletRequest request);
+
+	void create(Member vo) throws Exception;
+	
+	public void userAuth(String userEmail) throws Exception;
+	
+	void serachPWD(Member vo) throws Exception;
+
 }
