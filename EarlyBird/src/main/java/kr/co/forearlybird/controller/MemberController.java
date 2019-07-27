@@ -86,7 +86,7 @@ public class MemberController {
 		System.out.println("++++++++++++-------------------------------------------"+id);
 		
 		session.setAttribute("FindId", id);
-		
+		logger.info(session.getAttribute("FindId").toString());
 		return "member/M_detailSearchID";
 	}
 

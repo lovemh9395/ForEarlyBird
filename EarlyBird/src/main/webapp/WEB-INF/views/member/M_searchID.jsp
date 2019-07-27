@@ -7,15 +7,27 @@
 <script>
 	$(document).ready(function() {
 		$("#UsersearchID").click(function() {
-			document.getElementById('UsersearchForm').submit();
-			$("#searchIDmodal").modal("hide");
-			$("body").css({"padding-right": "0px"}).removeClass("modal-open");
-			$(".modal-backdrop").remove();
+			var username = $("#IDsearchName").val();
+			var userbirth = $("#IDsearchBirth").val();
+			var userphone = $("#IDsearchTel").val();
+			$.ajax({
+				async:false,
+				type:"post",
+				url:"${contextPath}/member/M_searchID",
+				data:{"mem_username":username,
+						"mem_birthday":userbirth,
+						"mem_phone":userphone},
+						success:function(data){
+							alert(data);
+							$(data).modal();
+							<%session.removeAttribute("FindId");%>
+						}
+			})
 		})
-	})
+	});
 </script>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
-<base target="_self"/>
+<base target="_self" />
 <div class="modal fade" id="searchIDmodal" tabindex="-1" role="dialog"
 	aria-labelledby="modal-form" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-sm"
@@ -31,9 +43,7 @@
 								style="width: 200px; height: auto;">
 							</a>
 						</div>
-						<iframe src="#detailSearchID" name="iframe" style="width:1px; height:1px; border:0; visibility:hidden;"></iframe>
-						<form role="form" id="UsersearchForm" action = "member/M_searchID" target="iframe"
-							method="post">
+						<form id="UsersearchForm" method="post">
 							<div class="form-group mb-3">
 								<div class="input-group input-group-alternative">
 									<div class="input-group-prepend">
@@ -71,9 +81,9 @@
 									for=" customCheckLogin"><span>아이디를 저장합니다.</span></label>
 							</div>
 							<div class="text-center">
-								<a href="#detailSearchID" data-toggle="modal"><button type="button" class="btn btn-primary my-4"
-									id="UsersearchID">아이디 찾기</button>
-									</a>
+								<button
+										type="button" class="btn btn-primary my-4" id="UsersearchID" data-dismiss="modal">아이디
+										찾기</button>
 								<button type="button" class="btn btn-primary my-4"
 									data-dismiss="modal">취소하기</button>
 							</div>

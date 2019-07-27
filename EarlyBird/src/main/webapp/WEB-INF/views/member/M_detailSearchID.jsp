@@ -5,7 +5,6 @@
 	request.setCharacterEncoding("UTF-8");
 %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
-<base target="_self"/>
 <div class="modal fade" id="detailSearchID" tabindex="-1" role="dialog"
 	aria-labelledby="modal-form" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-sm"

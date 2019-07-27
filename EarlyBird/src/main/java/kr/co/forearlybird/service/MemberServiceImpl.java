@@ -182,9 +182,9 @@ public class MemberServiceImpl implements MemberService {
 	public String searchID(HttpServletRequest request) {
 		logger.info("ID 찾기 service");
 		Member member = new Member();
-		member.setMem_username(request.getParameter("IDsearchName"));
-		member.setMem_birthday(request.getParameter("IDsearchBirth"));
-		member.setMem_phone(request.getParameter("IDsearchTel"));
+		member.setMem_username(request.getParameter("mem_username"));
+		member.setMem_birthday(request.getParameter("mem_birthday"));
+		member.setMem_phone(request.getParameter("mem_phone"));
 		return memberDAO.searchID(member);
 	}
 

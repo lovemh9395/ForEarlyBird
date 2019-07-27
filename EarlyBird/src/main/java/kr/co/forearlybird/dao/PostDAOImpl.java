@@ -1,6 +1,7 @@
 package kr.co.forearlybird.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -62,6 +63,11 @@ public class PostDAOImpl implements PostDAO {
 	public Post P_detail(int post_id) {
 		logger.info("게시글 상세보기 DAO");
 		return sqlSession.selectOne("post.P_detail",post_id);
+	}
+
+	@Override
+	public void P_make(Map map) {
+		sqlSession.insert("post.P_make",map);
 	}
 
 }

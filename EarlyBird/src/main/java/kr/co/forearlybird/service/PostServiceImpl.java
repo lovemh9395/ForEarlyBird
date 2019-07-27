@@ -1,6 +1,7 @@
 package kr.co.forearlybird.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -50,5 +51,10 @@ public class PostServiceImpl implements PostService {
 		logger.info(post_id+"");
 		logger.info("게시글 상세보기 service");
 		return postDAO.P_detail(post_id);
+	}
+
+	@Override
+	public void P_make(Map map) {
+		postDAO.P_make(map);
 	}
 }

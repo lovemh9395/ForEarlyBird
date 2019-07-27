@@ -34,7 +34,7 @@
 								<h3 class="text-white mb-0">자유 게시판</h3>
 							</div>
 							<div class="col-11" align="right">
-								<button type="button" class="btn btn-primary">글쓰기</button>
+								<a href="${contextPath }/post/P_make"><button type="button" class="btn btn-primary">글쓰기</button></a>
 							</div>
 						</div>
 					</div>

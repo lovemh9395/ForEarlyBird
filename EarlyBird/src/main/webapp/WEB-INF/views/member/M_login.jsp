@@ -3,7 +3,7 @@
 <!-- Modal -->
 <style>
 .modal-backdrop {
-	z-index: -1;
+	z-index: auto;
 }
 </style>
 <script>

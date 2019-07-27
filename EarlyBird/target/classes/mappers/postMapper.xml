@@ -35,4 +35,9 @@
 		where post_id = #{post_id}
 	</select>
 
+	<insert id="P_make" parameterType="java.util.Map">
+		insert into 
+		post(mem_userid,post_title,post_content)
+		values(#{mem_userid},#{post_title},#{post_content})
+	</insert>
 </mapper>

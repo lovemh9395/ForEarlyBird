@@ -1,6 +1,7 @@
 package kr.co.forearlybird.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import kr.co.forearlybird.domain.Post;
 import kr.co.forearlybird.paging.Criteria;
@@ -22,4 +23,6 @@ public interface PostDAO {
 	public int countPaging(Criteria cri) throws Exception;
 	
 	public Post P_detail(int post_id);
+	
+	public void P_make(Map map);
 }
