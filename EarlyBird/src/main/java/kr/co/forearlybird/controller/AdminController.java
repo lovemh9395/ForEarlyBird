@@ -1,7 +1,10 @@
 package kr.co.forearlybird.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -12,9 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import kr.co.forearlybird.MainController;
-import kr.co.forearlybird.domain.LargeCategory;
 import kr.co.forearlybird.service.AdminService;
 
 @Controller
@@ -124,40 +126,63 @@ public class AdminController {
 	}
 
 	// 카테고리 보기
-	@RequestMapping(value = "/A_categoryList", method = RequestMethod.GET)
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/A_categoryList", method = { RequestMethod.GET, RequestMethod.POST })
 	public String A_categoryList1(HttpSession session, Model model) {
 		logger.info("카테고리 보기 페이지");
-		List<LargeCategory> list = service.largeCategoryList();
-		if (!list.isEmpty()) {
+		List<Map> largeList = service.largeCategoryList();
+		List<Map> smallList = service.CategoryList();
+		model.addAttribute("isNull", true);
+		if (!largeList.isEmpty()) {
+			model.addAttribute("largeList", largeList);
+		}
+		if (!smallList.isEmpty()) {
+			model.addAttribute("smallList", smallList);
+		}
+		if (!largeList.isEmpty()&&!smallList.isEmpty()) {
 			model.addAttribute("isNull", false);
-			model.addAttribute("list", list);
-		} else {
-			model.addAttribute("isNull", true);
 		}
 		return "admin/A_categoryList";
 	}
 
-	@RequestMapping(value = "/A_largeCategoryList", method = RequestMethod.POST)
-	public String A_categoryList2(@RequestParam("largeCategoryName") String largeCategoryName, Model model) {
-		logger.info("카테고리 보기 페이지");
-		int result = service.makeCategoryList(largeCategoryName);
-		if (result > 0) {
-			model.addAttribute("isNull", false);
-			List<LargeCategory> list = service.largeCategoryList();
-			model.addAttribute("list", list);
-		} else {
-			model.addAttribute("isNull", true);
-		}
+	// 대분류 카테고리 생성
+	@ResponseBody
+	@RequestMapping(value = "/A_largeCategoryMake", method = RequestMethod.POST)
+	public void A_largeCategoryMake(HttpServletRequest request, Model model) throws Exception {
+		logger.info("대분류 카테고리 생성");
+		request.setCharacterEncoding("UTF-8");
+		String large_name = request.getParameter("large_name");
+		
+		int result = service.makeLargeCategory(large_name);
+		model.addAttribute("result", result);
+		logger.info("대분류 카테고리 생성 결과 : "+result);
+	}
+	
+	// 카테고리 생성
+	@RequestMapping(value = "/A_categoryMake", method = RequestMethod.POST)
+	public String A_categoryMake(HttpServletRequest request, Model model) {
+		logger.info("카테고리 생성");
+		int large_id = Integer.parseInt(request.getParameter("large_id"));
+		String category_name = request.getParameter("category_name");
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("large_id", large_id);
+		map.put("category_name", category_name);
+		
+		int result = service.makeCategory(large_id,category_name);
+		model.addAttribute("result", result);
 		return "redirect:A_categoryList";
 	}
 
-	// 카테고리 생성
-	@RequestMapping(value = "/A_categoryMake", method = RequestMethod.GET)
-	public String A_categoryMake(HttpSession session, Model model) {
-		logger.info("카테고리 생성 페이지");
-		return "admin/A_categoryMake";
+	// 카테고리 삭제
+	@ResponseBody
+	@RequestMapping(value = "/A_largeCategoryDelete", method = RequestMethod.GET)
+	public void A_LargeCategoryDelete(@RequestParam("large_id") int large_id,  Model model) {
+		logger.info("카테고리 삭제 페이지");
+		int result = service.leaveLargeCategory(large_id);
+		model.addAttribute("result",result);
 	}
-
+	
 	// 카테고리 삭제
 	@RequestMapping(value = "/A_categoryDelete", method = RequestMethod.GET)
 	public String A_categoryDelete(HttpSession session, Model model) {

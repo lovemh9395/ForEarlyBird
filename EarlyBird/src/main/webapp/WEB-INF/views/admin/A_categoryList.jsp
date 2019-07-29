@@ -1,6 +1,78 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+
 <%@include file="include/A_header.jsp"%>
+<script>
+$(document).ready(function(){
+	$("#largeCategoryAddButton").click(function(){
+		var large_name = $("#largeCategoryName").val()
+		if (large_name!="") {
+			$.ajax({
+				async:false,
+				type:"post",
+				url:"${contextPath}/admin/A_largeCategoryMake",
+				data:{"large_name":large_name},
+				success:function(data){
+					if (data==1) {
+						alert("success");
+					} else if (data<0){
+						alert("fail");
+					}
+					window.location.reload();
+				}
+			});
+		} else {
+			alert("올바른 값을 입력하여 주십시오");
+		};
+		
+	});
+	
+	/* $("#CategoryAddButton").click(function(){
+		$.ajax(function(){
+			type:"post",
+			url:"A_categoryMake",
+			data:{},
+			success:function(data){}
+		});
+	}); */
+});
+
+
+function largeDelete(large_id){
+	var childNum = "";
+	if (large_id<=9) {
+		childNum+="childNum0"+large_id;
+	} else { 
+		childNum = "childNum"+large_id;
+	}
+	var childNum = document.getElementById(childNum).value;
+	
+	if (childNum!=0) {
+		$("#modal-notificationChildCategoryExist").modal();
+	} else {
+		$.ajax({
+			async:false,
+			type:"post",
+			url:"${contextPath}/admin/A_largeCategoryDelete",
+			data:{"large_id":large_id},
+			success:function(data){
+				if (data==1) {
+					alert("success");
+				} else if (data<0){
+					alert("fail");
+				}
+				window.location.reload();
+			}
+		});
+	}
+};
+
+ 
+ 
+function smallDelete(category_id){
+	
+};
+</script>
 <!-- body -->
 <!-- Dark table -->
 <div class="container">
@@ -11,7 +83,8 @@
 	<div class="row">
 		<div class="col-md-6">
 			<div>
-				<form id="largeCategoryForm" method="post" class="form-inline">
+				<form name="largeCategoryForm" method="post" class="form-inline"
+					action="#">
 					<div class="form-group col-md-auto">
 						<br>
 						<h4>대분류 추가</h4>
@@ -21,50 +94,124 @@
 							name="largeCategoryName">
 					</div>
 					<button type="button" class="btn btn-default"
-						id="largeCategoryAddButton">Add</button>
+						id="largeCategoryAddButton">추가</button>
 				</form>
 			</div>
 			<hr>
-			<div>
-				<jsp:include page="include/A_categoryListTable.jsp">
-					<jsp:param value="대분류" name="category" />
-				</jsp:include>
+			<div id="largeCategoryListDIV">
+				<div class="row mt-5">
+					<div class="col">
+						<div class="card bg-default shadow">
+							<div class="card-header bg-transparent border-0">
+								<h3 class="text-white mb-0">대분류 목록</h3>
+							</div>
+							<div class="table-responsive">
+								<table class="table align-items-center table-dark table-flush">
+									<colgroup>
+										<col style="width: 20px">
+										<col style="width: 300px">
+										<col style="width: 20px">
+									</colgroup>
+									<thead class="thead-dark">
+										<tr>
+											<th scope="col">대분류코드</th>
+											<th scope="col">대분류명</th>
+											<th scope="col">하위 소분류 갯수</th>
+											<th scope="col"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<c:forEach items='${largeList }' var="list">
+											<tr>
+												<td>${list.id }</td>
+												<td>${list.name }</td>
+												<td align="center">${list.childNum }<input
+													type="hidden" id="childNum${list.id }"
+													value="${list.childNum }">
+												</td>
+												<td><button id="largeDel${list.id }"
+														class="btn btn-default"
+														style="padding: 1px; margin: 1px; border: 1px;"
+														value="${list.id }" onclick="largeDelete(${list.id });">삭제</button></td>
+											</tr>
+										</c:forEach>
+										<!-- c:foreach 끝 -->
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-
 		<!-- 소분류 -->
 		<div class="col-md-6">
 			<div class="row">
-				<form method="post" class="form-inline">
+				<form name="categoryForm" method="post" class="form-inline"
+					action="A_categoryMake">
 					<div class="form-group col-md-auto">
-						<select class="form-control" name="categorykey" id="categorykey">
-							<!-- c:foreach 대분류카테고리명 -->
-							<option value="update">대분류명</option>
+						<select class="form-control" name="large_id" id="large_id">
+							<c:forEach items='${largeList }' var="list">
+								<option value="${list.id }">${list.name }</option>
+							</c:forEach>
 							<!-- 대분류 카테고리명으로 검색 -->
 						</select>
 					</div>
 					<div class="form-group col-md-auto">
-						<input type="text" class="form-control" id="categorykeyword"
-							name="categorykeyword">
+						<input type="text" class="form-control" id="category_name"
+							name="category_name">
 					</div>
-					<button type="button" class="btn btn-default" onclick="">Search</button>
+					<button type="button" class="btn btn-default"
+						id="CategoryAddButton">추가</button>
 				</form>
 			</div>
 			<hr>
-			<div>
-				<jsp:include page="include/A_categoryListTable.jsp">
-					<jsp:param value="분류" name="category" />
-				</jsp:include>
+			<div id="categoryListDIV">
+				<div class="row mt-5">
+					<div class="col">
+						<div class="card bg-default shadow">
+							<div class="card-header bg-transparent border-0">
+								<h3 class="text-white mb-0">분류목록</h3>
+							</div>
+							<div class="table-responsive">
+								<table class="table align-items-center table-dark table-flush">
+									<colgroup>
+										<col style="width: 20px">
+										<col style="width: 20px">
+										<col style="width: 250px">
+									</colgroup>
+									<thead class="thead-dark">
+										<tr>
+											<th scope="col">분류코드</th>
+											<th scope="col">대분류명</th>
+											<th scope="col">분류명</th>
+											<th scope="col"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<c:forEach items='${smallList }' var="list">
+											<tr>
+												<td>${list.id }</td>
+												<td>${list.large_name }
+												<td>${list.name }</td>
+												<td><button id="categoryDel${list.id }"
+														class="btn btn-default"
+														style="padding: 1px; margin: 1px; border: 1px;"
+														value="${list.id }" onclick="smallDelete(${list.id });">삭제</button></td>
+											</tr>
+										</c:forEach>
+										<!-- c:foreach 끝 -->
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
 <!-- end of body -->
-<script>
-	$(document).ready(function() {
-		$("#largeCategoryAddButton").click(function() {
-			$("#largeCategoryForm").submit();
-		});
-	});
-</script>
+
 <%@include file="include/A_footer.jsp"%>
+<%@include file="A_categoryDelete.jsp"%>

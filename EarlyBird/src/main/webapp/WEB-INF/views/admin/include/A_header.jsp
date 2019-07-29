@@ -7,6 +7,9 @@
 <!-- head -->
 <%@ include file="../../include/head.jsp"%>
 <!-- end head -->
+<!--   Core   -->
+<%@ include file="../../include/core.jsp"%>
+<!--  end Core -->
 <body class="">
 	<%@ include file="A_left_navbar.jsp"%>
 	<div class="main-content">
