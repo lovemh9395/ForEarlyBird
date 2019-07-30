@@ -3,7 +3,6 @@ package kr.co.forearlybird.controller;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -27,22 +26,19 @@ public class MemberController {
 
 	// 로그인으로 이동 (사용자,관리자 레벨로 이동)
 	@RequestMapping(value = "/M_login", method = RequestMethod.GET)
-	public String M_login(Model model) {
+	public String M_login() {
 		logger.info("로그인 페이지");
 		return "member/M_login";
 	}
 
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/M_login", method = RequestMethod.POST)
-	public String login(HttpServletRequest request, HttpServletResponse response, HttpSession session)
-			throws Exception {
+	public String login(HttpServletRequest request, HttpSession session) throws Exception {
 		logger.info("login 처리");
 		Map map = service.M_login(request);
 
-		if (map.toString().equals("{}")) { // 로그인실패
-			logger.info(map.toString() + "1");
-		} else {
+		if (!map.toString().equals("{}")) { // 로그인실패
 			// 세션 부여
-			logger.info(map.toString() + "2");
 			session.setAttribute("user", map);
 			return "A_mainpage";
 		}

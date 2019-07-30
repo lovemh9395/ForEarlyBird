@@ -9,25 +9,29 @@
 			<div class="modal-body p-0">
 				<div class="card bg-secondary shadow border-0">
 					<div class="card-header px-lg-20 py-lg-20">
-						<h2>
-							관리자설정 <small>ver1.0</small>
-						</h2>
-						<form role="form" id="adminMake" action="A_adminMake"
-							method="post">
-							<div class="form-group"
-								style="padding: 1px; margin: 1px; border: 1px;">
-								<div class="input-group">
-									<select class="form-control" name="searchFilter"
-										id="searchFilter">
-										<option value="all">전체</option>
-										<option value="id">아이디</option>
-										<option value="nickname">닉네임</option>
-									</select> <input class="form-control" placeholder="검색할 키워드 입력"
-										type="text" id="searchAdmin" name="searchAdmin"> <input
-										type="button" class="btn btn-default" value="검색">
-								</div>
+						<div class="row">
+							<h2 class="col-11">
+								관리자설정 <small>ver1.0</small>
+							</h2>
+							<div class="col-1" style="float: 'right'">
+								<input type="button"
+									style="float: 'right'; padding: 1px; margin: 1px; border: 1px;"
+									class="btn btn-default" data-dismiss="modal"
+									value="&nbsp;X&nbsp;">
 							</div>
-						</form>
+						</div>
+						<div style="padding: 1px; margin: 1px; border: 1px;">
+							<div class="input-group">
+								<select name="searchFilter" id="searchFilter"
+									style="width: 100px">
+									<option value="mem_id">아이디</option>
+									<option value="mem_nickname">닉네임</option>
+									<option value="mem_levelname">권한</option>
+								</select>&nbsp;&nbsp;&nbsp;<input type="text" placeholder="검색할 키워드 입력"
+									id="searchMemberForAdmin">&nbsp;&nbsp;&nbsp;<input
+									type="button" class="btn btn-default" value="검색">
+							</div>
+						</div>
 					</div>
 					<div class="card-body px-lg-20 py-lg-20">
 						<div class="table-responsive">
@@ -41,21 +45,24 @@
 										<th scope="col">checkbox</th>
 									</tr>
 								</thead>
-								<div class="row" style="width:750px">
-									<div class="col-auto">현재 관리자</div>
-									<div class="col-auto">admin</div>
-									<div class="col-auto" style="width: 550px">
-										<input type="button" style="float: right" class="btn btn-default" id="changebutton" value="변경">
+								<div style="width: 746px" class="row">
+									<div class="col-2">현재 관리자</div>
+									<div class="col-2">admin</div>
+									<div class="col-8">
+										<input type="button" style="float: right"
+											class="btn btn-default" id="changebutton" onclick="changeAdmin()" value="변경">
 									</div>
 								</div>
 								<tbody>
-									<tr>
-										<td>1</td>
-										<td>admin@admin.admin</td>
-										<td>admin</td>
-										<td>관리자</td>
-										<td><input type="checkbox" value="1"></td>
-									</tr>
+									<c:forEach items="${adminList }" var="list">
+										<tr>
+											<td>${list.index }</td>
+											<td>${list.mem_id }</td>
+											<td>${list.mem_nickname }</td>
+											<td>${list.mem_levelname }</td>
+											<td><input type="checkbox" name="checkbox" data-dismiss="modal" value="${list.mem_id }"></td>
+										</tr>
+									</c:forEach>
 								</tbody>
 							</table>
 						</div>

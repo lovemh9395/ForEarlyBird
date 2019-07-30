@@ -2,4 +2,14 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="board"></mapper>
+<mapper namespace="board">
+	<select id="getBoardList" resultType="kr.co.forearlybird.domain.Board">
+		SELECT * FROM board
+	</select>
+	
+	<select id="getNumberOfBoardUnderCategory"
+		parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT COUNT(brd_id) FROM
+		board WHERE category_id = #{category_id}
+	</select>
+</mapper>

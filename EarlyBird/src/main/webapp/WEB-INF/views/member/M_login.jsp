@@ -38,7 +38,7 @@
 											class="ni ni-email-83"></i></span>
 									</div>
 									<input class="form-control" placeholder="Email" type="email"
-										id="email" name="email">
+										id="mem_id" name="mem_id">
 								</div>
 							</div>
 							<div class="form-group">
@@ -48,14 +48,14 @@
 											class="ni ni-lock-circle-open"></i></span>
 									</div>
 									<input class="form-control" placeholder="Password"
-										type="password" id="password" name="password">
+										type="password" id="mem_password" name="mem_password">
 								</div>
 							</div>
 							<div
 								class="custom-control custom-control-alternative custom-checkbox">
 								<input class="custom-control-input" id=" customCheckLogin"
 									type="checkbox"> <label class="custom-control-label"
-									for=" customCheckLogin"><span>Remember me</span></label>
+									for=" customCheckLogin"><span>아이디를 저장합니다.</span></label>
 							</div>
 							<div class="text-center">
 								<button type="button" id="loginbutton"

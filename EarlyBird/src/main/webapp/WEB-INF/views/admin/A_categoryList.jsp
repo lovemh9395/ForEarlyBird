@@ -24,28 +24,36 @@ $(document).ready(function(){
 		} else {
 			alert("올바른 값을 입력하여 주십시오");
 		};
-		
 	});
 	
-	/* $("#CategoryAddButton").click(function(){
-		$.ajax(function(){
+	$("#CategoryAddButton").click(function(){
+		var large_id = document.getElementById("large_id").value;
+		var category_name = document.getElementById("category_name").value;
+		$.ajax({
 			type:"post",
-			url:"A_categoryMake",
-			data:{},
-			success:function(data){}
+			url:"${contextPath}/admin/A_categoryMake",
+			data:{"large_id":large_id ,"category_name":category_name},
+			success:function(data){
+				if (data==1) {
+					alert("success");
+				} else if (data<0){
+					alert("fail");
+				}
+				window.location.reload();
+			}
 		});
-	}); */
+	}); 
 });
 
 
 function largeDelete(large_id){
-	var childNum = "";
+	var childNumID = "";
 	if (large_id<=9) {
-		childNum+="childNum0"+large_id;
+		childNumID = "childNum0"+large_id;
 	} else { 
-		childNum = "childNum"+large_id;
+		childNumID = "childNum"+large_id;
 	}
-	var childNum = document.getElementById(childNum).value;
+	var childNum = childNum+document.getElementById(childNumID).value;
 	
 	if (childNum!=0) {
 		$("#modal-notificationChildCategoryExist").modal();
@@ -69,8 +77,29 @@ function largeDelete(large_id){
 
  
  
-function smallDelete(category_id){
-	
+function smallDelete(index){
+	var categoryID = "categoryID"+index;
+	var category_id = document.getElementById(categoryID).value;
+	var boardNumID = "childBoardNum"+index;
+	var boardNum = document.getElementById(boardNumID).value;
+	if (boardNum!=0) {
+		$("#modal-notificationChildBoardCategoryExist").modal();
+	} else {
+		$.ajax({
+			async:false,
+			type:"post",
+			url:"${contextPath}/admin/A_categoryDelete",
+			data:{"category_id":category_id},
+			success:function(data){
+				if (data==1) {
+					alert("success");
+				} else if (data<0){
+					alert("fail");
+				}
+				window.location.reload();
+			}
+		});
+	}
 };
 </script>
 <!-- body -->
@@ -129,10 +158,9 @@ function smallDelete(category_id){
 													type="hidden" id="childNum${list.id }"
 													value="${list.childNum }">
 												</td>
-												<td><button id="largeDel${list.id }"
-														class="btn btn-default"
+												<td><button class="btn btn-default"
 														style="padding: 1px; margin: 1px; border: 1px;"
-														value="${list.id }" onclick="largeDelete(${list.id });">삭제</button></td>
+														onclick="largeDelete(${list.id });">삭제</button></td>
 											</tr>
 										</c:forEach>
 										<!-- c:foreach 끝 -->
@@ -175,29 +203,27 @@ function smallDelete(category_id){
 							</div>
 							<div class="table-responsive">
 								<table class="table align-items-center table-dark table-flush">
-									<colgroup>
-										<col style="width: 20px">
-										<col style="width: 20px">
-										<col style="width: 250px">
-									</colgroup>
 									<thead class="thead-dark">
 										<tr>
 											<th scope="col">분류코드</th>
 											<th scope="col">대분류명</th>
 											<th scope="col">분류명</th>
+											<th scope="col">하위 게시판수</th>
 											<th scope="col"></th>
 										</tr>
 									</thead>
 									<tbody>
 										<c:forEach items='${smallList }' var="list">
 											<tr>
-												<td>${list.id }</td>
+												<td>${list.id }<input type="hidden"
+													id="categoryID${list.index }" value="${list.id }"></td>
 												<td>${list.large_name }
 												<td>${list.name }</td>
-												<td><button id="categoryDel${list.id }"
-														class="btn btn-default"
+												<td>${list.boardNum }<input type="hidden"
+													id="childBoardNum${list.index }" value="${list.boardNum }"></td>
+												<td><button class="btn btn-default"
 														style="padding: 1px; margin: 1px; border: 1px;"
-														value="${list.id }" onclick="smallDelete(${list.id });">삭제</button></td>
+														onclick="smallDelete(${list.index });">삭제</button></td>
 											</tr>
 										</c:forEach>
 										<!-- c:foreach 끝 -->

@@ -21,4 +21,8 @@ public interface AdminService {
 
 	int leaveLargeCategory(int large_id);
 
+	int leaveCategory(int category_id);
+
+	List<Map> getBoardList();
+
 }

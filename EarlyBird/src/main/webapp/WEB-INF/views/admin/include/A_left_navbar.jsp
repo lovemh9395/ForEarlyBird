@@ -67,7 +67,7 @@
 						카테고리 관리
 				</a></li>
 				<li class="nav-item"><a id="1" class="nav-link"
-					href="../admin/A_postList"> 
+					href="../admin/A_boardList"> 
 					<i class="ni ni-bullet-list-67 text-rainbow"></i>
 						게시판 관리
 				</a></li>

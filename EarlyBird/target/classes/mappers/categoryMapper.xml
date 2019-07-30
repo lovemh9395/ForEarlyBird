@@ -9,14 +9,30 @@
 		SELECT * FROM category
 	</select>
 	<!-- 컬럼 생성 -->
-	<insert id="makeCategory" parameterType="java.lang.String">
+	<insert id="makeCategory" parameterType="java.util.Map">
 		INSERT INTO
 		category
-		(category_name) VALUES (#{categoryName});
+		(category_id,large_id,category_name) VALUES
+		(#{category_id},#{large_id},#{category_name});
 	</insert>
 	<select id="getNumberOfChildCategory"
 		parameterType="java.lang.Integer" resultType="java.lang.Integer">
 		SELECT COUNT(category_id)
 		FROM category WHERE large_id=#{large_id}
+	</select>
+	<delete id="leaveCategory" parameterType="java.lang.Integer">
+		DELETE FROM category
+		WHERE category_id = #{category_id}
+	</delete>
+	<select id="getLastNumberOfCategoryUnderLargeCategory"
+		parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT MAX(category_id)
+		FROM category WHERE
+		large_id=#{large_id}
+	</select>
+	<select id="getCategoryName" parameterType="java.lang.Integer"
+		resultType="java.lang.String">
+		SELECT category_name FROM category WHERE
+		category_id=#{category_id}
 	</select>
 </mapper>

@@ -139,7 +139,7 @@ public class AdminController {
 		if (!smallList.isEmpty()) {
 			model.addAttribute("smallList", smallList);
 		}
-		if (!largeList.isEmpty()&&!smallList.isEmpty()) {
+		if (!largeList.isEmpty() && !smallList.isEmpty()) {
 			model.addAttribute("isNull", false);
 		}
 		return "admin/A_categoryList";
@@ -152,42 +152,45 @@ public class AdminController {
 		logger.info("대분류 카테고리 생성");
 		request.setCharacterEncoding("UTF-8");
 		String large_name = request.getParameter("large_name");
-		
+
 		int result = service.makeLargeCategory(large_name);
 		model.addAttribute("result", result);
-		logger.info("대분류 카테고리 생성 결과 : "+result);
+		logger.info("대분류 카테고리 생성 결과 : " + result);
 	}
-	
+
 	// 카테고리 생성
+	@ResponseBody
 	@RequestMapping(value = "/A_categoryMake", method = RequestMethod.POST)
-	public String A_categoryMake(HttpServletRequest request, Model model) {
+	public void A_categoryMake(HttpServletRequest request, Model model) {
 		logger.info("카테고리 생성");
 		int large_id = Integer.parseInt(request.getParameter("large_id"));
 		String category_name = request.getParameter("category_name");
-		
+
 		Map<String, Object> map = new HashMap<>();
 		map.put("large_id", large_id);
 		map.put("category_name", category_name);
-		
-		int result = service.makeCategory(large_id,category_name);
+
+		int result = service.makeCategory(large_id, category_name);
 		model.addAttribute("result", result);
-		return "redirect:A_categoryList";
 	}
 
 	// 카테고리 삭제
 	@ResponseBody
 	@RequestMapping(value = "/A_largeCategoryDelete", method = RequestMethod.GET)
-	public void A_LargeCategoryDelete(@RequestParam("large_id") int large_id,  Model model) {
+	public void A_LargeCategoryDelete(@RequestParam("large_id") int large_id, Model model) {
 		logger.info("카테고리 삭제 페이지");
 		int result = service.leaveLargeCategory(large_id);
-		model.addAttribute("result",result);
+		model.addAttribute("result", result);
 	}
-	
+
 	// 카테고리 삭제
+	@ResponseBody
 	@RequestMapping(value = "/A_categoryDelete", method = RequestMethod.GET)
-	public String A_categoryDelete(HttpSession session, Model model) {
+	public void A_categoryDelete(@RequestParam("category_id") int category_id, Model model) {
 		logger.info("카테고리 삭제 페이지");
-		return "admin/A_categoryDelete";
+		logger.info(category_id + "");
+		int result = service.leaveCategory(category_id);
+		model.addAttribute("result", result);
 	}
 
 	// 게시판 글 보기
@@ -223,5 +226,15 @@ public class AdminController {
 	public String A_postLeave(HttpSession session, Model model) {
 		logger.info("게시판 글 삭제 페이지");
 		return "admin/A_postLeave";
+	}
+
+	// 게시판 관리페이지 보기
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/A_boardList", method = RequestMethod.GET)
+	public String A_boardList(HttpSession session, Model model) {
+		logger.info("게시판 목록 페이지");
+		List<Map> boardList = service.getBoardList();
+		model.addAttribute("boardList", boardList);
+		return "admin/A_boardList";
 	}
 }

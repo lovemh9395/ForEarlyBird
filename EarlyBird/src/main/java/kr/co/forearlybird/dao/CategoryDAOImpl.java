@@ -1,6 +1,7 @@
 package kr.co.forearlybird.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
@@ -24,14 +25,33 @@ public class CategoryDAOImpl implements CategoryDAO {
 	}
 
 	@Override
-	public int makeCategory(String categoryName) {
-		logger.info("setCategoryDAO");
-		return sqlsession.insert("category.makeCategory", categoryName);
+	public int makeCategory(@SuppressWarnings("rawtypes") Map map) {
+		logger.info("makeCategoryDAO");
+		return sqlsession.insert("category.makeCategory", map);
 	}
 
 	@Override
 	public int getNumberOfChildCategory(int large_id) {
+		logger.info("getNumberOfChildCategoryDAO");
 		return sqlsession.selectOne("category.getNumberOfChildCategory",large_id);
+	}
+
+	@Override
+	public int leaveCategory(int category_id) {
+		logger.info("leaveCategoryDAO");
+		return sqlsession.delete("category.leaveCategory",category_id);
+	}
+
+	@Override
+	public int getLastNumberOfCategoryUnderLargeCategory(int large_id) {
+		logger.info("getLastNumberOfCategoryUnderLargeCategoryDAO");
+		return sqlsession.selectOne("category.getLastNumberOfCategoryUnderLargeCategory", large_id);
+	}
+
+	@Override
+	public String getCategoryName(Integer category_id) {
+		logger.info("getCategoryNameDAO");
+		return sqlsession.selectOne("category.getCategoryName", category_id);
 	}
 
 }
