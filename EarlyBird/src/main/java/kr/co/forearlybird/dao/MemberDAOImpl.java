@@ -97,4 +97,9 @@ public class MemberDAOImpl implements MemberDAO {
 		vo.setMem_password(mem_password);
 		sqlSession.selectOne("member.searchPWD", vo);
 	}
+
+	@Override
+	public String getrawPw(Map map) {
+		return sqlSession.selectOne("member.rawPw",map);
+	}
 }

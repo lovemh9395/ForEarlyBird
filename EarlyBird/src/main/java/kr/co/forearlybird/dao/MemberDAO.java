@@ -28,4 +28,6 @@ public interface MemberDAO  {
 	public void userAuth(String user_email) throws Exception;
 	
 	public void searchPWD(Member vo, String mem_password) throws Exception;
+
+	public String getrawPw(Map map);
 }

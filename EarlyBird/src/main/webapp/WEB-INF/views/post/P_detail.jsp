@@ -10,6 +10,21 @@
 <!--   Core   -->
 <%@ include file="../include/core.jsp"%>
 <!--  end Core -->
+<script>
+	$(document).ready(function(){
+		$("#P_recommand").click(function(){
+			var post_id= <%= request.getParameter("post_id") %>
+			$.ajax({
+				type:"post",
+				url:"${contextPath}/post/P_recommand",
+				data:{post_id:post_id},
+				success:function(data){
+					location.reload();
+				}
+			})
+		})
+	});
+</script>
 <!-- head -->
 <%@ include file="../include/head.jsp"%>
 <!-- end head -->
@@ -106,6 +121,21 @@
 								</tr>
 							</tbody>
 						</table>
+
+						<div class="row">
+							<div align="right" class="col-6">
+								<button type="button" class="btn btn-primary" id="P_recommand">추천하기</button>
+							</div>
+							<c:if test="${useridd eq P_detail.mem_userid }">
+								<div align="right" class="col-6">
+									<a
+										href="${contextPath }/post/P_update?post_id=${P_detail.post_id}"><button
+											type="button" class="btn btn-primary">수정하기</button></a>
+									<button type="button" class="btn btn-primary"
+										data-toggle="modal" id="deletPost" data-target="#P_delete">삭제하기</button>
+								</div>
+							</c:if>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -113,4 +143,5 @@
 		<!-- end body -->
 	</div>
 </body>
+<%@ include file="P_delete.jsp"%>
 </html>

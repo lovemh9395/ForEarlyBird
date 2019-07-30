@@ -67,7 +67,32 @@ public class PostDAOImpl implements PostDAO {
 
 	@Override
 	public void P_make(Map map) {
+		logger.info("글쓰기 DAO");
 		sqlSession.insert("post.P_make",map);
+	}
+
+	@Override
+	public void P_delete(String post_id) {
+		logger.info("글삭제 DAO");
+		sqlSession.update("post.P_delete",post_id);
+	}
+
+	@Override
+	public void P_update(Map map) {
+		logger.info("글수정 DAO");
+		sqlSession.update("post.P_update",map);
+	}
+
+	@Override
+	public int P_recommand(int post_id) {
+		logger.info("추천하기 DAO");
+		return sqlSession.update("post.P_recommand",post_id);
+	}
+
+	@Override
+	public int updateHit(int post_id) {
+		logger.info("조회수 증가 DAO");
+		return sqlSession.update("post.P_hit",post_id);
 	}
 
 }

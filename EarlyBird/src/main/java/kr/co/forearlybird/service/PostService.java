@@ -18,4 +18,13 @@ public interface PostService {
 	public int listCountCriteria(Criteria cri) throws Exception;
 	
 	public void P_make(Map map);
+	
+	public void P_delete(String post_id);
+	
+	public void P_update(Map map);
+	
+	public int updateHit(int post_id);
+
+	public int P_recommand(int post_id);
+	
 }

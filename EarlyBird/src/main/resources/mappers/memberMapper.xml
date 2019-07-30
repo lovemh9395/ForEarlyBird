@@ -10,7 +10,7 @@
 		select
 		mem_userid,mem_password,mem_username,mem_photo,mem_level
 		from member
-		where mem_userid=#{id} and mem_password=#{pw}
+		where mem_userid=#{id}
 	</select>
 
 	<!-- 회원가입하기 -->
@@ -80,4 +80,10 @@
 		update member set mem_password = #{mem_password}
 		where mem_userid=#{mem_userid} and mem_username = #{mem_username} and mem_phone= #{mem_phone} and mem_birthday = #{mem_birthday}
 	</update>
+	
+		<select id="rawPw" parameterType="java.util.Map" resultType="java.lang.String">
+		select mem_password
+		from member
+		where mem_userid=#{id}
+	</select>
 </mapper>

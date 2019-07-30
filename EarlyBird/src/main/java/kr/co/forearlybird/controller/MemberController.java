@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
 import kr.co.forearlybird.MainController;
 import kr.co.forearlybird.domain.Member;
 import kr.co.forearlybird.service.MemberService;
@@ -39,6 +38,7 @@ public class MemberController {
 		logger.info("로그인 페이지");
 		return "member/M_login";
 	}
+
 	// 로그인 처리하기
 	@RequestMapping(value = "/M_login", method = RequestMethod.POST)
 	public String login(HttpServletRequest request, HttpServletResponse response, HttpSession session)
@@ -50,9 +50,9 @@ public class MemberController {
 		logger.info(request.getParameter("name"));
 		Map map = service.login(request);
 		System.out.println("------------+++++++++++++-----------------------" + map);
-		if(map == null) {
+		if (map == null) {
 			return "redirect:/";
-		} else if(map.get("level").equals("4")) {
+		} else if (map.get("level").equals("4")) {
 			return "Mainpage";
 		} else if (map.toString().equals("{}")) { // 관리자급이 아닙니다.
 			logger.info(map.toString() + "1");
@@ -62,10 +62,10 @@ public class MemberController {
 			session.setAttribute("user", map);
 			session.setAttribute("profilephoto", map.get("profilephoto"));
 			session.setAttribute("useridd", map.get("id"));
-			if(session.getAttribute("FindId")!=null) {
+			if (session.getAttribute("FindId") != null) {
 				session.removeAttribute("FindId");
 			}
-			
+
 		}
 		return "Mainpage";
 	}
@@ -79,12 +79,13 @@ public class MemberController {
 //	}
 
 	// 아이디 찾기
-	@RequestMapping(value = "/M_searchID", method = {RequestMethod.GET,RequestMethod.POST})
-	public String M_searchID(HttpServletRequest request,HttpSession session) {
+	@RequestMapping(value = "/M_searchID", method = { RequestMethod.GET, RequestMethod.POST })
+	public String M_searchID(HttpServletRequest request, HttpSession session, Member member) {
 		logger.info("아이디 찾기 페이지");
+
 		String id = service.searchID(request);
-		System.out.println("++++++++++++-------------------------------------------"+id);
-		
+		System.out.println("++++++++++++-------------------------------------------" + id);
+
 		session.setAttribute("FindId", id);
 		logger.info(session.getAttribute("FindId").toString());
 		return "member/M_detailSearchID";
@@ -97,17 +98,17 @@ public class MemberController {
 		String id = (String) session.getAttribute("useridd");
 		ModelAndView mav = new ModelAndView();
 		Member info = service.detail(id);
-		System.out.println("fdsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"+info);
-		mav.addObject("info",info);
+		System.out.println("fdsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + info);
+		mav.addObject("info", info);
 		session.setAttribute("mem_profilephoto", info.getMem_photo());
 		mav.setViewName("member/M_info");
-		
+
 		return mav;
 	}
 
 	// 개인정보수정
-	@RequestMapping(value = "/M_update", method = {RequestMethod.GET,RequestMethod.POST})
-	public String M_update(Member member,HttpSession session) {
+	@RequestMapping(value = "/M_update", method = { RequestMethod.GET, RequestMethod.POST })
+	public String M_update(Member member, HttpSession session) {
 		logger.info("정보수정 페이지");
 		String nick = member.getMem_nickname();
 		String phone = member.getMem_phone();
@@ -115,14 +116,14 @@ public class MemberController {
 		logger.info(id);
 		logger.info(phone);
 		logger.info(nick);
-		
+
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", session.getAttribute("useridd"));
 		map.put("nick", nick);
 		map.put("phone", phone);
-		
+
 		service.update(map);
-		
+
 		return "redirect:../";
 	}
 
@@ -135,7 +136,7 @@ public class MemberController {
 	}
 
 	// 로그아웃
-	@RequestMapping(value = "/M_logout", method = {RequestMethod.GET,RequestMethod.POST})
+	@RequestMapping(value = "/M_logout", method = { RequestMethod.GET, RequestMethod.POST })
 	public String M_logout(HttpSession session) {
 		logger.info("로그아웃 페이지");
 		session.invalidate();
@@ -143,30 +144,32 @@ public class MemberController {
 	}
 
 	// 회원탈퇴
-	@RequestMapping(value = "/M_delete", method = {RequestMethod.GET,RequestMethod.POST})
+	@RequestMapping(value = "/M_delete", method = { RequestMethod.GET, RequestMethod.POST })
 	public String M_delete(HttpSession session) {
 		logger.info("회원탈퇴 페이지");
-		
+
 		String id = (String) session.getAttribute("useridd");
 		int result = service.delete(id);
-		if(result == 0) {
+		if (result == 0) {
 			return "Mainpage";
 		} else {
-		session.invalidate();
-		return "Mainpage";
+			session.invalidate();
+			return "Mainpage";
 		}
 	}
-	
+
+	//프로필 변경하장
 	@RequestMapping(value = "/M_profileUpload", method = RequestMethod.GET)
 	public String upload() {
 		logger.info("프로필 변경");
-		
+
 		return "member/M_profileUpload";
 	}
-	
+
+	//프로필 업로드 입니당
 	@RequestMapping(value = "/upload")
-	public String upload(HttpSession session,Model model,@RequestParam("file1") MultipartFile file) throws Exception {
-		
+	public String upload(HttpSession session, Model model, @RequestParam("file1") MultipartFile file) throws Exception {
+
 		Map<Object, Object> postmap = new HashMap<>();
 		postmap.put("user", session.getAttribute("useridd"));
 		postmap.put("file", file);
@@ -176,21 +179,21 @@ public class MemberController {
 		session.setAttribute("profilephoto", map.get("ProfileName"));
 		model.addAllAttributes(map);
 		String path = session.getServletContext().getRealPath("/");
-		System.out.println("path::::::::::::::::::"+path);
+		System.out.println("path::::::::::::::::::" + path);
 		return "redirect:M_info";
 	}
-	
-	
-	//이메일 인증
+
+	// 이메일 인증
 	@RequestMapping(value = "/M_make", method = RequestMethod.POST)
 	public String RegisterPost(@ModelAttribute Member user, RedirectAttributes rttr) throws Exception {
 		logger.info("회원가입...");
 		logger.info(user.toString());
 		service.create(user);
-		rttr.addFlashAttribute("authmsg" , "가입시 사용한 이메일로 인증해주 3");
+		rttr.addFlashAttribute("authmsg", "가입시 사용한 이메일로 인증해주 3");
 		return "redirect:/";
 	}
-	//이메일 인증~
+
+	// 이메일 인증~
 	@RequestMapping(value = "/M_newJoin", method = RequestMethod.GET)
 	public String emailConfirm(String user_email, Model model) throws Exception { // 이메일인증
 		service.userAuth(user_email);
@@ -198,18 +201,18 @@ public class MemberController {
 
 		return "member/M_newJoin";
 	}
-	
+
 	// 비밀번호 찾기
-	@RequestMapping(value="/M_searchPWD", method = RequestMethod.POST)
+	@RequestMapping(value = "/M_searchPWD", method = RequestMethod.POST)
 	public String M_searchPWD(@ModelAttribute Member user, RedirectAttributes rttr) throws Exception {
 		logger.info("비밀번호 찾기 페이지");
 		logger.info(user.toString());
 		service.serachPWD(user);
-		rttr.addFlashAttribute("authmsg" , "가입시 사용한 이메일로 인증해주 3");
-		
+		rttr.addFlashAttribute("authmsg", "가입시 사용한 이메일로 인증해주 3");
+
 		return "redirect:/";
 	}
-	
+
 	// 비밀번호 찾기 상세페이지
 	@RequestMapping(value = "/M_detailPWD", method = RequestMethod.GET)
 	public String M_detailPWD(Model model) {

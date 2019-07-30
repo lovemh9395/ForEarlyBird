@@ -55,6 +55,31 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public void P_make(Map map) {
+		logger.info("글쓰기 service");
 		postDAO.P_make(map);
 	}
+
+	@Override
+	public void P_delete(String post_id) {
+		logger.info("글삭제 service");
+		postDAO.P_delete(post_id);
+	}
+
+	@Override
+	public void P_update(Map map) {
+		logger.info("글수정 service");
+		postDAO.P_update(map);
+	}
+
+	@Override
+	public int P_recommand(int post_id) {
+		logger.info("추천하기 service");
+		return postDAO.P_recommand(post_id);
+	}
+
+	@Override
+	public int updateHit(int post_id) {
+		logger.info("조회수 증가 service");
+		return postDAO.updateHit(post_id);
+	}	
 }

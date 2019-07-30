@@ -40,4 +40,29 @@
 		post(mem_userid,post_title,post_content)
 		values(#{mem_userid},#{post_title},#{post_content})
 	</insert>
+	
+	<update id="P_delete" parameterType="java.lang.String">
+		update post
+		set post_del=1
+		where post_id=#{post_id}
+	</update>
+	
+	<update id="P_update" parameterType="java.util.Map">
+		update post
+		set post_title=#{post_title},post_content=#{post_content}
+		where post_id=#{post_id}
+	</update>
+	
+	<update id="P_recommand" parameterType="java.lang.Integer">
+		update post
+		set post_like = post_like + 1
+		where post_id=#{post_id}
+	</update>
+	
+	<update id="P_hit" parameterType="java.lang.Integer">
+		update post
+		set post_hit = post_hit + 1
+		where post_id = #{post_id}
+	</update>
+
 </mapper>

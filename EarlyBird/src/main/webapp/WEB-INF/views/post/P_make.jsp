@@ -27,7 +27,20 @@
 		<script>
 			$(document).ready(function() {
 				$("#addP_make").click(function() {
-					$("#P_make").submit();
+					var title = $("#newPost_title").val();
+					var content = $("#newPost_content").val();
+					$.ajax({
+						async : false,
+						type : "post",
+						url : "${contextPath}/post/P_make",
+						data : {
+							post_title : title,
+							post_content : content
+						},
+						success : function(data) {
+							location.href = "P_list";
+						}
+					})
 				})
 			})
 		</script>
@@ -49,27 +62,27 @@
 						</div>
 					</div>
 					<div class="table-responsive">
-						<table class="table align-items-center table-dark table-flush">
-							<colgroup>
-								<col style="width: 100%">
-							</colgroup>
-							<thead class="thead-dark">
-								<tr>
-									<th scope="col" style="font-size: 15px">글 제목</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<th scope="row" style="padding-left: 40px">
-										<div class="media-body">
-											<span class="mb-0 text-lg"><input type="text"
-												name="newPost_title" style="width: 1500px;"></span>
-										</div>
-									</th>
-								</tr>
-							</tbody>
-						</table>
 						<form id="P_make" name="P_make" method="post" action="P_make">
+							<table class="table align-items-center table-dark table-flush">
+								<colgroup>
+									<col style="width: 100%">
+								</colgroup>
+								<thead class="thead-dark">
+									<tr>
+										<th scope="col" style="font-size: 15px">글 제목</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row" style="padding-left: 40px">
+											<div class="media-body">
+												<span class="mb-0 text-lg"><input type="text"
+													id="newPost_title" style="width: 1500px;"></span>
+											</div>
+										</th>
+									</tr>
+								</tbody>
+							</table>
 							<table class="table align-items-center table-dark table-flush">
 								<colgroup>
 									<col style="width: 100%">
@@ -83,7 +96,7 @@
 									<tr>
 										<td style="font-size: 20px; height: 556px"><span
 											class="badge badge-dot mr-4"> <i class="mb-0 text-lg"></i>
-												<input type="text" name="newPost_content"
+												<input type="text" id="newPost_content"
 												style="width: 1500px; height: 500px; font-size: 25px;"></span></td>
 									</tr>
 								</tbody>

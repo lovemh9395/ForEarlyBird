@@ -50,7 +50,7 @@
 							<div class="media align-items-center">
 								<span class="avatar avatar-sm rounded-circle"> <img
 									alt="Image placeholder"
-									src="/resources/uploadimage/${mem_profilephoto}">
+									src="/resources/uploadimage/${profilephoto}">
 								</span>
 								<div class="media-body ml-2 d-none d-lg-block">
 									<span class="mb-0 text-sm  font-weight-bold">${user.name}</span>

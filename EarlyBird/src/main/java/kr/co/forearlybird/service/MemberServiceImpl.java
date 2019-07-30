@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +29,10 @@ import kr.co.forearlybird.email.TempKey;
 @Service
 public class MemberServiceImpl implements MemberService {
 	private static final Logger logger = LoggerFactory.getLogger(MemberDAO.class);
+
+	@Inject
+	PasswordEncoder passwordEncoder;
+
 	@Autowired
 	private MemberDAO memberDAO;
 
@@ -40,13 +45,25 @@ public class MemberServiceImpl implements MemberService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", id);
 		map.put("pw", pw);
+		
+		String rawPw = memberDAO.getrawPw(map);
+		logger.info("암호화 비밀번호" + rawPw);
+		logger.info("비밀번호" + pw);
+		
+		
 		Map temp = memberDAO.login(map);
-		if (temp == null) {
-			return null;
-		}
+		
 		Map result = new HashMap();
+		
+		if (passwordEncoder.matches(pw, rawPw)) {
+			logger.info("비밀번호 일치");
+			result.put("pw", temp.get("mem_password"));
+		} else {
+			logger.info("비밀번호 불일치");
+		}
+
 		result.put("id", temp.get("mem_userid"));
-		result.put("pw", temp.get("mem_password"));
+//		result.put("pw", temp.get("mem_password"));
 		result.put("name", temp.get("mem_username"));
 		result.put("profilephoto", temp.get("mem_photo"));
 		result.put("level", temp.get("mem_level"));
@@ -59,25 +76,27 @@ public class MemberServiceImpl implements MemberService {
 		return null;
 	}
 
-	@Override
-	public int make(HttpServletRequest request) {
-		logger.info("회원가입 service");
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Member member = new Member();
-		member.setMem_userid(request.getParameter("makeemail"));
-		member.setMem_password(request.getParameter("makepassword"));
-		member.setMem_nickname(request.getParameter("makenickname"));
-		member.setMem_phone(request.getParameter("maketel"));
-		member.setMem_birthday(request.getParameter("makebirth"));
-		member.setMem_username(request.getParameter("makename"));
-		// 클라이언트 아이피 주소 받기
-		return memberDAO.make(member);
-	}
+//	@Override
+//	public int make(HttpServletRequest request) {
+//		logger.info("회원가입 service");
+//		try {
+//			request.setCharacterEncoding("UTF-8");
+//		} catch (UnsupportedEncodingException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		String encPassword = passwordEncoder.encode(request.getParameter("makepassword"));
+//		logger.info("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"+encPassword);
+//		Member member = new Member();
+//		member.setMem_userid(request.getParameter("makeemail"));
+//		member.setMem_password(encPassword);
+//		member.setMem_nickname(request.getParameter("makenickname"));
+//		member.setMem_phone(request.getParameter("maketel"));
+//		member.setMem_birthday(request.getParameter("makebirth"));
+//		member.setMem_username(request.getParameter("makename"));
+//		// 클라이언트 아이피 주소 받기
+//		return memberDAO.make(member);
+//	}
 
 	@Override
 	public Member detail(String id) {
@@ -194,6 +213,10 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional
 	@Override
 	public void create(Member vo) throws Exception {
+		String encPassword = passwordEncoder.encode(vo.getMem_password());
+		logger.info("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" + encPassword);
+		vo.setMem_password(encPassword);
+
 		memberDAO.insertUser(vo); // 회원가입 DAO
 
 		String key = new TempKey().getKey(50, false); // 인증키 생성
@@ -209,7 +232,7 @@ public class MemberServiceImpl implements MemberService {
 		sendMail.setTo(vo.getMem_userid());
 		sendMail.send();
 	}
-	
+
 	@Override
 	public void userAuth(String userEmail) throws Exception {
 		memberDAO.userAuth(userEmail);
@@ -218,10 +241,10 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public void serachPWD(Member vo) throws Exception {
 		logger.info("비밀번호 찾기 service");
-		System.out.println("+++++++++++++++++++++++++++++++++"+vo);
+		System.out.println("+++++++++++++++++++++++++++++++++" + vo);
 		String key = new TempKey().getKey(10, false); // 인증키 생성
 
-		System.out.println("---------------------vo :"+ vo+"---------key"+key);
+		System.out.println("---------------------vo :" + vo + "---------key" + key);
 		memberDAO.searchPWD(vo, key); // 인증키 DB저장 비밀번호로
 		logger.info("2");
 		MailHandler sendMail = new MailHandler(mailSender);
@@ -229,7 +252,7 @@ public class MemberServiceImpl implements MemberService {
 		sendMail.setSubject("[ForEarlyBird 서비스 이메일 인증]");
 		logger.info("4");
 		sendMail.setText(new StringBuffer().append("<h1>메일인증</h1>")
-				.append("회원님의 임시 비밀번호는 "+vo.getMem_password()+" 입니다.")
+				.append("회원님의 임시 비밀번호는 " + vo.getMem_password() + " 입니다.")
 				.append("<a href='http://localhost:9002/member/M_newJoin?user_email=").append(vo.getUser_authcode())
 				.append("&key=").append(key).append("' target='_blenk'>이메일 인증 확인</a>").toString());
 		logger.info("5");

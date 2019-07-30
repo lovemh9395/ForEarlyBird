@@ -21,8 +21,16 @@ public interface PostDAO {
 
 	// 토탈카운트를 반환?
 	public int countPaging(Criteria cri) throws Exception;
-	
+
 	public Post P_detail(int post_id);
-	
+
 	public void P_make(Map map);
+
+	public void P_delete(String post_id);
+
+	public void P_update(Map map);
+
+	public int P_recommand(int post_id);
+	
+	public int updateHit(int post_id);
 }

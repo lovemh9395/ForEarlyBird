@@ -17,8 +17,7 @@ public interface MemberService {
 	// 전체 목록을 가져오는 메소드
 	public List<Member> list();
 
-	// 회원가입을 위한 메소드
-	public int make(HttpServletRequest request);
+
 
 	// 상세보기를 위한 메소드
 	public Member detail(String id);
@@ -34,6 +33,7 @@ public interface MemberService {
 	
 	public String searchID(HttpServletRequest request);
 
+	// 회원가입을 위한 메소드
 	void create(Member vo) throws Exception;
 	
 	public void userAuth(String userEmail) throws Exception;
