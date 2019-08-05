@@ -24,10 +24,12 @@ public interface PostDAO {
 
 	public Post P_detail(int post_id);
 
+	@SuppressWarnings("rawtypes")
 	public void P_make(Map map);
 
 	public void P_delete(String post_id);
 
+	@SuppressWarnings("rawtypes")
 	public void P_update(Map map);
 
 	public int P_recommand(int post_id);

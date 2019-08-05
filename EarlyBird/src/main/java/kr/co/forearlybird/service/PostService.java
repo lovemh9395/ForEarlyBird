@@ -17,10 +17,12 @@ public interface PostService {
 	
 	public int listCountCriteria(Criteria cri) throws Exception;
 	
+	@SuppressWarnings("rawtypes")
 	public void P_make(Map map);
 	
 	public void P_delete(String post_id);
 	
+	@SuppressWarnings("rawtypes")
 	public void P_update(Map map);
 	
 	public int updateHit(int post_id);

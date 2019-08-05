@@ -61,27 +61,31 @@
 	</select>
 
 	<insert id="insertUser">
-		insert into member(mem_userid,mem_password,mem_nickname,mem_username,mem_phone,mem_birthday)
+		insert into
+		member(mem_userid,mem_password,mem_nickname,mem_username,mem_phone,mem_birthday)
 		values(#{mem_userid},#{mem_password},#{mem_nickname},#{mem_username},#{mem_phone},#{mem_birthday})
 	</insert>
 
 	<update id="createAuthKey">
-		update member set user_authcode = #{user_authcode}
-		where user_email =
-		#{user_email}
+		update member set mem_profile_content = #{mem_profile_content}
+		where mem_adminmemo =
+		#{mem_adminmemo}
 	</update>
-	
+
 	<update id="userAuth" parameterType="java.lang.String">
-		update member set mem_level=3
+		update member set
+		mem_level=3
 		where mem_userid=#{user_email}
 	</update>
 
 	<update id="searchPWD">
 		update member set mem_password = #{mem_password}
-		where mem_userid=#{mem_userid} and mem_username = #{mem_username} and mem_phone= #{mem_phone} and mem_birthday = #{mem_birthday}
+		where mem_userid=#{mem_userid} and mem_username = #{mem_username} and
+		mem_phone= #{mem_phone} and mem_birthday = #{mem_birthday}
 	</update>
-	
-		<select id="rawPw" parameterType="java.util.Map" resultType="java.lang.String">
+
+	<select id="rawPw" parameterType="java.util.Map"
+		resultType="java.lang.String">
 		select mem_password
 		from member
 		where mem_userid=#{id}

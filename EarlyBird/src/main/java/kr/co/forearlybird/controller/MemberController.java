@@ -40,6 +40,7 @@ public class MemberController {
 	}
 
 	// 로그인 처리하기
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/M_login", method = RequestMethod.POST)
 	public String login(HttpServletRequest request, HttpServletResponse response, HttpSession session)
 			throws Exception {
@@ -47,7 +48,6 @@ public class MemberController {
 		logger.info(request.toString());
 		logger.info(request.getParameter("email"));
 		logger.info(request.getParameter("password"));
-		logger.info(request.getParameter("name"));
 		Map map = service.login(request);
 		System.out.println("------------+++++++++++++-----------------------" + map);
 		if (map == null) {
@@ -167,6 +167,7 @@ public class MemberController {
 	}
 
 	//프로필 업로드 입니당
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/upload")
 	public String upload(HttpSession session, Model model, @RequestParam("file1") MultipartFile file) throws Exception {
 

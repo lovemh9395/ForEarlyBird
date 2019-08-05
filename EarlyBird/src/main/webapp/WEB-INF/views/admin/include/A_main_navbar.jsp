@@ -24,29 +24,25 @@
 			</div>
 		</form>
 		<!-- User -->
-		<ul class="navbar-nav align-items-center d-none d-md-flex">
-			<li class="nav-item dropdown"><a class="nav-link pr-0" href="#"
-				role="button" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false">
-					<div class="media align-items-center">
-						<button class="btn btn-info" type="button">로그인</button>
-						<button class="btn btn-info" type="button">회원가입</button>
-					</div>
-			</a>
+		<div class="row">
+			<div class="col-md-auto">
+				<button class="btn" data-toggle="dropdown" aria-haspopup="true"
+					aria-expanded="false">${user.id}님환영합니다</button>
 				<div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
 					<div class=" dropdown-header noti-title">
-						<h6 class="text-overflow m-0">환영합니다.!</h6>
+						<h6 class="text-overflow m-0">회원님의 정보</h6>
 					</div>
-					<a href="${contextPath}/member/M_info" class="dropdown-item"> <i
+					<a href="./examples/profile.html" class="dropdown-item"> <i
 						class="ni ni-single-02"></i> <span>내 정보 보기</span>
-					</a> <a href="${contextPath}/member/M_list" class="dropdown-item">
-						<i class="ni ni-settings-gear-65"></i> <span>내 글 보기</span>
+					</a> <a href="./examples/profile.html" class="dropdown-item"> <i
+						class="ni ni-settings-gear-65"></i> <span>내 글 보기</span>
 					</a>
-					<div class="${contextPath}/"></div>
-					<a href="#!" class="dropdown-item"> <i class="ni ni-user-run"></i>
-						<span>Logout</span>
-					</a>
-				</div></li>
-		</ul>
+				</div>
+			</div>
+			<div class="col-md-auto">
+				<a href="${contextPath}/member/M_logout"><button
+						class="btn btn-info" type="button">로그아웃</button></a>
+			</div>
+		</div>
 	</div>
 </nav>

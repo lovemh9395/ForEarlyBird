@@ -2,7 +2,6 @@ package kr.co.forearlybird.service;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +35,7 @@ public class MemberServiceImpl implements MemberService {
 	@Autowired
 	private MemberDAO memberDAO;
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Map login(HttpServletRequest request) throws Exception {
 		logger.info("로그인 service");
@@ -111,6 +111,7 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.delete(id);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Map update(Map<String, Object> map) {
 		logger.info("정보수정 service");
@@ -119,6 +120,7 @@ public class MemberServiceImpl implements MemberService {
 
 	private static final String SAVE_PATH = "D:/Project/ForEarlyBird/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/EarlyBird/resources/uploadimage/";
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Map restore(Map postmap, HttpSession session) {
 		logger.info("프로필 업로드 service");
@@ -253,7 +255,7 @@ public class MemberServiceImpl implements MemberService {
 		logger.info("4");
 		sendMail.setText(new StringBuffer().append("<h1>메일인증</h1>")
 				.append("회원님의 임시 비밀번호는 " + vo.getMem_password() + " 입니다.")
-				.append("<a href='http://localhost:9002/member/M_newJoin?user_email=").append(vo.getUser_authcode())
+				.append("<a href='http://localhost:9002/member/M_newJoin?user_email=").append(vo.getMem_profile_content())
 				.append("&key=").append(key).append("' target='_blenk'>이메일 인증 확인</a>").toString());
 		logger.info("5");
 		sendMail.setFrom("lovemh9395", "ForEarlyBird");

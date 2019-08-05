@@ -2,8 +2,6 @@ package kr.co.forearlybird.dao;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +16,7 @@ public class MemberDAOImpl implements MemberDAO {
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 	@Autowired
 	private SqlSession sqlSession;
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Map login(Map<String, Object> map) throws Exception {
 		logger.info("로그인 DAO");
@@ -38,6 +37,7 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectOne("member.detail", id);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Map update(Map<String, Object> map) {
 		logger.info("정보수정 dao");
@@ -50,6 +50,7 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.insert("member.delete", id);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public int profile(Map middlemap) {
 		logger.info("프로필업로드 dao");
@@ -79,8 +80,8 @@ public class MemberDAOImpl implements MemberDAO {
 	public void createAuthKey(String user_email, String user_authcode) throws Exception {
 		// TODO Auto-generated method stub
 		Member vo = new Member();
-		vo.setUser_authcode(user_authcode);
-		vo.setUser_email(user_email);
+		vo.setMem_profile_content(user_authcode);
+		vo.setMem_adminmemo(user_email);
 
 		sqlSession.selectOne("member.createAuthKey", vo);
 	}
@@ -98,6 +99,7 @@ public class MemberDAOImpl implements MemberDAO {
 		sqlSession.selectOne("member.searchPWD", vo);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public String getrawPw(Map map) {
 		return sqlSession.selectOne("member.rawPw",map);

@@ -6,12 +6,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import kr.co.forearlybird.domain.Member;
 
 public interface MemberService {
 	// 로그인을 처리하기 위한 메소드
+	@SuppressWarnings("rawtypes")
 	public Map login(HttpServletRequest request) throws Exception;
 
 	// 전체 목록을 가져오는 메소드
@@ -27,8 +26,10 @@ public interface MemberService {
 
 	// 수정을 하기 위한 메소드
 
+	@SuppressWarnings("rawtypes")
 	public Map update(Map<String, Object> map);
 
+	@SuppressWarnings("rawtypes")
 	public Map restore(Map postmap,HttpSession session) throws Exception;
 	
 	public String searchID(HttpServletRequest request);

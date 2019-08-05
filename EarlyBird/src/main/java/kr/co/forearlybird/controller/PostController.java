@@ -10,7 +10,6 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -47,6 +46,7 @@ public class PostController {
 //	}
 
 	// 게시글 등록
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/P_make", method = RequestMethod.POST)
 	public String P_make(HttpServletRequest request, HttpSession session, Map map) {
 		logger.info("게시글 등록 페이지");
@@ -72,6 +72,7 @@ public class PostController {
 	}
 
 	// 게시글 수정
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value = "/P_update", method = RequestMethod.POST)
 	public String P_update(HttpServletRequest request, Map map) {
 		logger.info("게시글 수정 페이지");

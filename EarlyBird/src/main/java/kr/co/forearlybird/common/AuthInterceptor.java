@@ -1,5 +1,7 @@
 package kr.co.forearlybird.common;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -19,12 +21,13 @@ public class AuthInterceptor implements HandlerInterceptor {
 			throws Exception {
 		// 클라이언트에 부여한 세션을 가지고 온다
 		HttpSession session = request.getSession();
-		
-		logger.info(session.getAttribute("user").toString());
-		if (session.getAttribute("user") == null) {// 로그인되지 않았다면
-			response.sendRedirect(request.getContextPath() + "/");
-			return false;
-		}
+//		if (session.getAttribute("user") != null) {
+//			Map map = (Map) session.getAttribute("user");
+//			if ((Integer) map.get("mem_level") == 9) {// 관리자아이디라면
+//				response.sendRedirect("/admin"); // <-- 07.29 오후 2시
+//				return false;
+//			}
+//		}
 		return true;
 	}
 

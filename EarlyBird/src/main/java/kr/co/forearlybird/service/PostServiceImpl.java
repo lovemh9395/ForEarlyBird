@@ -3,8 +3,6 @@ package kr.co.forearlybird.service;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +51,7 @@ public class PostServiceImpl implements PostService {
 		return postDAO.P_detail(post_id);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void P_make(Map map) {
 		logger.info("글쓰기 service");
@@ -65,6 +64,7 @@ public class PostServiceImpl implements PostService {
 		postDAO.P_delete(post_id);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void P_update(Map map) {
 		logger.info("글수정 service");

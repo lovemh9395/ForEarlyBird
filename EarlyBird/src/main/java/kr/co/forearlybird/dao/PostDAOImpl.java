@@ -3,8 +3,6 @@ package kr.co.forearlybird.dao;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +63,7 @@ public class PostDAOImpl implements PostDAO {
 		return sqlSession.selectOne("post.P_detail",post_id);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void P_make(Map map) {
 		logger.info("글쓰기 DAO");
@@ -77,6 +76,7 @@ public class PostDAOImpl implements PostDAO {
 		sqlSession.update("post.P_delete",post_id);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void P_update(Map map) {
 		logger.info("글수정 DAO");
