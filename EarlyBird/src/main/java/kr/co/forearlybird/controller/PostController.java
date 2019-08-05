@@ -50,7 +50,7 @@ public class PostController {
 	@RequestMapping(value = "/P_make", method = RequestMethod.POST)
 	public String P_make(HttpServletRequest request, HttpSession session, Map map) {
 		logger.info("게시글 등록 페이지");
-		
+
 		map.put("post_title", request.getParameter("post_title"));
 		map.put("post_content", request.getParameter("post_content"));
 		map.put("mem_userid", session.getAttribute("useridd"));
@@ -198,7 +198,7 @@ public class PostController {
 			@RequestParam int post_id) {
 		logger.info("게시물 목록보기 및 조회수 증가 방지 --------");
 		// 해당 게시판 번호를 받아 리뷰 상세페이지로 넘겨줌
-		Post p_list = service.P_detail(post_id);
+
 		ModelAndView view = new ModelAndView();
 
 		Cookie[] cookie = request.getCookies();
@@ -217,41 +217,41 @@ public class PostController {
 			}
 		}
 
+		// 만일 viewCookie가 null일 경우 쿠키를 생성해서 조회수 증가 로직을 처리함.
+		if (viewCookie == null) {
+			logger.info("게시물 목록보기 및 조회수 증가 방지 --------cookie 없음");
+
+			// 쿠키 생성(이름, 값)
+			Cookie newCookie = new Cookie("cookie" + post_id, "|" + post_id + "|");
+
+			// 쿠키 추가
+			response.addCookie(newCookie);
+
+			// 쿠키를 추가 시키고 조회수 증가시킴
+			int result = service.updateHit(post_id);
+
+			if (result > 0) {
+				logger.info("게시물 목록보기 및 조회수 증가 방지 --------조회수 증가");
+			} else {
+				logger.info("게시물 목록보기 및 조회수 증가 방지 --------조회수 증가 에러");
+			}
+		}
+		// viewCookie가 null이 아닐경우 쿠키가 있으므로 조회수 증가 로직을 처리하지 않음.
+		else {
+			logger.info("게시물 목록보기 및 조회수 증가 방지 --------cookie 있음");
+
+			// 쿠키 값 받아옴.
+			String value = viewCookie.getValue();
+
+			logger.info("게시물 목록보기 및 조회수 증가 방지 --------cookie 값 : " + value);
+
+		}
+		Post p_list = service.P_detail(post_id);
 		if (p_list != null) {
 			logger.info("게시물 목록보기 및 조회수 증가 방지 --------System - 해당 상세 리뷰페이지로 넘어감");
 
 			view.addObject("P_detail", p_list);
 			logger.info(view.toString());
-
-			// 만일 viewCookie가 null일 경우 쿠키를 생성해서 조회수 증가 로직을 처리함.
-			if (viewCookie == null) {
-				logger.info("게시물 목록보기 및 조회수 증가 방지 --------cookie 없음");
-
-				// 쿠키 생성(이름, 값)
-				Cookie newCookie = new Cookie("cookie" + post_id, "|" + post_id + "|");
-
-				// 쿠키 추가
-				response.addCookie(newCookie);
-
-				// 쿠키를 추가 시키고 조회수 증가시킴
-				int result = service.updateHit(post_id);
-
-				if (result > 0) {
-					logger.info("게시물 목록보기 및 조회수 증가 방지 --------조회수 증가");
-				} else {
-					logger.info("게시물 목록보기 및 조회수 증가 방지 --------조회수 증가 에러");
-				}
-			}
-			// viewCookie가 null이 아닐경우 쿠키가 있으므로 조회수 증가 로직을 처리하지 않음.
-			else {
-				logger.info("게시물 목록보기 및 조회수 증가 방지 --------cookie 있음");
-
-				// 쿠키 값 받아옴.
-				String value = viewCookie.getValue();
-
-				logger.info("게시물 목록보기 및 조회수 증가 방지 --------cookie 값 : " + value);
-
-			}
 
 			view.setViewName("post/P_detail");
 			return view;
