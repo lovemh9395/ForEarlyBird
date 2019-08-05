@@ -8,8 +8,12 @@
 		class="org.apache.log4j.ConsoleAppender">
 		<param name="Target" value="System.out" />
 		<layout class="org.apache.log4j.PatternLayout">
+<<<<<<< HEAD
 			<param name="ConversionPattern"
 				value="[%d{HH:mm:ss}]%-5p: %c - %m%n" />
+=======
+			<param name="ConversionPattern" value="[%d{HH:mm:ss}]%-5p: %c - %m%n" />
+>>>>>>> branch-to-kcy
 		</layout>
 	</appender>
 

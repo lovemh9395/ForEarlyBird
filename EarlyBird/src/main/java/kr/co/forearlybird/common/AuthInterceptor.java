@@ -21,12 +21,22 @@ public class AuthInterceptor implements HandlerInterceptor {
 			throws Exception {
 		// 클라이언트에 부여한 세션을 가지고 온다
 		HttpSession session = request.getSession();
+<<<<<<< HEAD
 		Map map = (Map) session.getAttribute("user");
 		if ((Integer) map.get("mem_level") <= 8) {// 관리자가 아니라면
 			response.sendRedirect("/"); // <-- 07.29 오후 2시
 			return false;
 		}
 		logger.info("관리자명 :" + map.get("mem_userid").toString());
+=======
+//		if (session.getAttribute("user") != null) {
+//			Map map = (Map) session.getAttribute("user");
+//			if ((Integer) map.get("mem_level") == 9) {// 관리자아이디라면
+//				response.sendRedirect("/admin"); // <-- 07.29 오후 2시
+//				return false;
+//			}
+//		}
+>>>>>>> branch-to-kcy
 		return true;
 	}
 

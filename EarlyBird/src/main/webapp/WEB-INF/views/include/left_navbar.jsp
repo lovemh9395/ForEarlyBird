@@ -93,7 +93,11 @@
 			</form>
 			<!-- Navigation -->
 			<ul class="navbar-nav">
+<<<<<<< HEAD
 				<li class="nav-item"  class="active"><a
+=======
+				<li class="nav-item" class="active"><a
+>>>>>>> branch-to-kcy
 					class=" nav-link active " href="${contextPath}/member/M_login">
 						<i class="ni ni-tv-2 text-primary"></i> 공지사항
 				</a></li>
@@ -124,7 +128,11 @@
 			<hr class="my-3">
 			<ul class="navbar-nav">
 				<li class="nav-item"><a class="nav-link"
+<<<<<<< HEAD
 					href="./examples/register.html"> <i
+=======
+					href="${contextPath }/post/P_list"> <i
+>>>>>>> branch-to-kcy
 						class="ni ni-circle-08 text-pink"></i> 자유게시판
 				</a></li>
 				<li class="nav-item"><a class="nav-link"

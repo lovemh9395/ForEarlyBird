@@ -4,6 +4,8 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -22,8 +24,13 @@ public class MainController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
+<<<<<<< HEAD:EarlyBird/src/main/java/kr/co/forearlybird/MainController.java
 	@RequestMapping(value = "/", method = {RequestMethod.GET,RequestMethod.POST})
 	public String home(Locale locale, Model model) {
+=======
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String home(Locale locale, Model model,HttpSession session) {
+>>>>>>> branch-to-kcy:EarlyBird/src/main/java/kr/co/forearlybird/MainController.java
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
 		Date date = new Date();
@@ -32,7 +39,10 @@ public class MainController {
 		String formattedDate = dateFormat.format(date);
 		
 		model.addAttribute("serverTime", formattedDate );
+<<<<<<< HEAD:EarlyBird/src/main/java/kr/co/forearlybird/MainController.java
 		
+=======
+>>>>>>> branch-to-kcy:EarlyBird/src/main/java/kr/co/forearlybird/MainController.java
 		return "Mainpage";
 	}
 	

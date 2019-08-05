@@ -2,8 +2,14 @@
 <!DOCTYPE configuration
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<<<<<<< HEAD
 <configuration>
 	<settings>
 		<setting name="returnInstanceForEmptyRow" value="true" />
 	</settings>
 </configuration>
+=======
+  <configuration>
+  	
+  </configuration>
+>>>>>>> branch-to-kcy

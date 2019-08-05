@@ -22,12 +22,21 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html lang="en">
+<<<<<<< HEAD
 <!-- head -->
 <%@ include file="include/head.jsp"%>
 <!-- end head -->
 <!--   Core   -->
 <%@ include file="include/core.jsp"%>
 <!--  end Core -->
+=======
+<!--   Core   -->
+<%@ include file="include/core.jsp"%>
+<!--  end Core -->
+<!-- head -->
+<%@ include file="include/head.jsp"%>
+<!-- end head -->
+>>>>>>> branch-to-kcy
 <body class="">
 	<!-- side bar -->
 	<%@ include file="include/left_navbar.jsp"%>
@@ -47,9 +56,15 @@
 					게임 <span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu" role="menu">
+<<<<<<< HEAD
 					<li><a href="#"></a></li>
 					<li><a href="#"></a></li>
 					<li><a href="#">Something else here</a></li>
+=======
+					<li><a href="#">클로즈 베타</a></li>
+					<li><a href="#">오픈 베타</a></li>
+					<li><a href="#">사전 예약</a></li>
+>>>>>>> branch-to-kcy
 					<li class="divider"></li>
 					<li><a href="#">Separated link</a></li>
 				</ul>

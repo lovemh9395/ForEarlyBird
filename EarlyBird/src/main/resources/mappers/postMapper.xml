@@ -1,5 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
+<<<<<<< HEAD
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="post"></mapper>
+=======
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="post">
+	<!-- 게시글 출력 -->
+	<select id="P_list" resultType="kr.co.forearlybird.domain.Post">
+		select * from post
+	</select>
+
+	<!-- criteria 를 적용한 게시판 페이징 조회 -->
+	<select id="listCriteria"
+		resultType="kr.co.forearlybird.domain.Post">
+	<![CDATA[
+	select
+   	post_id, post_title, post_content, mem_userid, post_like, post_hit
+	from
+    post
+	where post_id > 0
+	order by post_id desc
+	limit #{pageStart}, #{perPageNum}
+	]]>
+	</select>
+
+	<select id="countPaging" resultType="java.lang.Integer">
+		select count(post_id)
+		as cnt
+		from post
+	</select>
+
+	<select id="P_detail" parameterType="java.lang.Integer"
+		resultType="kr.co.forearlybird.domain.Post">
+		select * 
+		from post
+		where post_id = #{post_id}
+	</select>
+
+	<insert id="P_make" parameterType="java.util.Map">
+		insert into 
+		post(mem_userid,post_title,post_content)
+		values(#{mem_userid},#{post_title},#{post_content})
+	</insert>
+	
+	<update id="P_delete" parameterType="java.lang.String">
+		update post
+		set post_del=1
+		where post_id=#{post_id}
+	</update>
+	
+	<update id="P_update" parameterType="java.util.Map">
+		update post
+		set post_title=#{post_title},post_content=#{post_content}
+		where post_id=#{post_id}
+	</update>
+	
+	<update id="P_recommand" parameterType="java.lang.Integer">
+		update post
+		set post_like = post_like + 1
+		where post_id=#{post_id}
+	</update>
+	
+	<update id="P_hit" parameterType="java.lang.Integer">
+		update post
+		set post_hit = post_hit + 1
+		where post_id = #{post_id}
+	</update>
+
+</mapper>
+>>>>>>> branch-to-kcy

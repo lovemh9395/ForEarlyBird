@@ -23,6 +23,10 @@ public interface AdminService {
 
 	int leaveCategory(int category_id);
 
+<<<<<<< HEAD
+=======
+	@SuppressWarnings("rawtypes")
+>>>>>>> branch-to-kcy
 	List<Map> getBoardList();
 
 }
