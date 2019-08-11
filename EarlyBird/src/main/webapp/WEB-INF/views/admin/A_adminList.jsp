@@ -1,9 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!-- body -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+%>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <div class="modal fade" id="modal-admin" tabindex="-1" role="dialog"
 	aria-labelledby="modal-form" aria-hidden="true">
-	<div class="modal-dialog modal- modal-dialog-centered modal-lg"
+	<div class="modal-dialog modal-dialog-centered modal-lg"
 		role="document">
 		<div class="modal-content">
 			<div class="modal-body p-0">
@@ -24,12 +28,14 @@
 							<div class="input-group">
 								<select name="searchFilter" id="searchFilter"
 									style="width: 100px">
-									<option value="mem_id">아이디</option>
+									<option value="mem_userid">아이디</option>
 									<option value="mem_nickname">닉네임</option>
-									<option value="mem_levelname">권한</option>
-								</select>&nbsp;&nbsp;&nbsp;<input type="text" placeholder="검색할 키워드 입력"
-									id="searchMemberForAdmin">&nbsp;&nbsp;&nbsp;<input
-									type="button" class="btn btn-default" value="검색">
+									<option value="mem_levelname">권한명</option>
+								</select>&nbsp;&nbsp;&nbsp; <input type="text" placeholder="키워드 입력"
+									id="searchkeyword" style="width: 200px">
+								&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-default"
+									onclick="searchMemberForAdmin(${brd_id});" data-dismiss="modal"
+									data-backdrop="false" value="검색">
 							</div>
 						</div>
 					</div>
@@ -42,25 +48,28 @@
 										<th scope="col">ID</th>
 										<th scope="col">닉네임</th>
 										<th scope="col">현재권한</th>
-										<th scope="col">checkbox</th>
+										<th scope="col"></th>
 									</tr>
 								</thead>
 								<div style="width: 746px" class="row">
 									<div class="col-2">현재 관리자</div>
-									<div class="col-2">admin</div>
-									<div class="col-8">
-										<input type="button" style="float: right"
-											class="btn btn-default" id="changebutton" onclick="changeAdmin()" value="변경">
+									<div class="col-auto">
+										<c:forEach items="${adminNicknames }" var="list">
+											<c:out value="${list }  " />
+										</c:forEach>
 									</div>
 								</div>
 								<tbody>
-									<c:forEach items="${adminList }" var="list">
+									<c:forEach items="${adminList }" var="list" varStatus="status">
 										<tr>
-											<td>${list.index }</td>
-											<td>${list.mem_id }</td>
+											<td>${status.count }</td>
+											<td>${list.mem_userid }</td>
 											<td>${list.mem_nickname }</td>
 											<td>${list.mem_levelname }</td>
-											<td><input type="checkbox" name="checkbox" data-dismiss="modal" value="${list.mem_id }"></td>
+											<td><input type="button" style="float: right"
+												class="btn btn-default"
+												onclick="changeAdmin('${list.mem_userid}', ${brd_id});"
+												data-backdrop="false" value="추가"></td>
 										</tr>
 									</c:forEach>
 								</tbody>

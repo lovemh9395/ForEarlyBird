@@ -2,4 +2,20 @@
 <!DOCTYPE mapper
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="boardAdmin"></mapper>
+<mapper namespace="boardAdmin">
+	<select id="getAdminID" parameterType="java.lang.Integer"
+		resultType="java.lang.String">
+		SELECT mem_userid FROM boardadmin WHERE brd_id = #{brd_id}
+	</select>
+
+	<select id="checkAdminId" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT IFNULL(SUM(bam_id) ,0) FROM boardadmin WHERE brd_id = #{brd_id}
+		AND mem_userid = #{mem_userid}
+	</select>
+
+	<insert id="makeAdmin" parameterType="java.util.Map">
+		INSERT INTO
+		boardadmin(brd_id, mem_userid) VALUES(#{brd_id},#{mem_userid})
+	</insert>
+</mapper>

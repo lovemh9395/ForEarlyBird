@@ -115,7 +115,7 @@
 							</div>
 							<div class="text-center">
 								<button type="button" id="join" class="btn btn-primary my-4">가입하기</button>
-								<button type="button" class="btn btn-primary my-4">취소하기</button>
+								<button type="button" class="btn btn-primary my-4" data-dismiss="modal">취소하기</button>
 							</div>
 						</form>
 					</div>

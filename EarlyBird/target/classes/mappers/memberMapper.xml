@@ -67,7 +67,8 @@
 	</insert>
 
 	<update id="createAuthKey">
-		update member set mem_profile_content = #{mem_profile_content}
+		update member set mem_profile_content =
+		#{mem_profile_content}
 		where mem_adminmemo =
 		#{mem_adminmemo}
 	</update>
@@ -89,5 +90,41 @@
 		select mem_password
 		from member
 		where mem_userid=#{id}
+	</select>
+
+	<select id="getMemberNickName" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT mem_nickname FROM member WHERE
+		mem_userid=#{mem_userid}
+	</select>
+
+	<select id="getMemberListById" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT mem_userid, mem_nickname, mem_level FROM member
+		WHERE
+		mem_userid=#{mem_userid}
+	</select>
+
+	<select id="getMemberListByNickname"
+		parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT mem_userid,
+		mem_nickname,
+		mem_level FROM member WHERE
+		mem_nickname=#{mem_nickname}
+	</select>
+
+	<select id="getMemberListBylevel" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT mem_userid,
+		mem_nickname, mem_level FROM member WHERE
+		mem_level=#{mem_level}
+	</select>
+
+	<select id="getMemberListByMinLevel"
+		parameterType="java.lang.Integer" resultType="java.util.Map">
+		<![CDATA[
+		SELECT mem_userid,
+		mem_nickname, mem_level FROM member WHERE mem_level>=#{mem_level}
+		]]>
 	</select>
 </mapper>

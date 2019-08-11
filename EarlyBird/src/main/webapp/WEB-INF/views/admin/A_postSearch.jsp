@@ -51,7 +51,7 @@
 								<option value="">전체목록</option>
 								<option value="1">공지사항</option>
 								<option value="4">상품 사용후기</option>
-								<option value="6">상품 Q&A</option>
+								<option value="6">상품 QnA</option>
 								<option value="5">자유게시판</option>
 								<option value="8">갤러리</option>
 								<option value="2">뉴스/이벤트</option>

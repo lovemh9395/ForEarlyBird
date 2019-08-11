@@ -16,18 +16,19 @@ public class AuthInterceptor implements HandlerInterceptor {
 	private static final Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
 
 	// controller에 요청을 보내기 전에 호출되는 메소드
+	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		// 클라이언트에 부여한 세션을 가지고 온다
 		HttpSession session = request.getSession();
-//		if (session.getAttribute("user") != null) {
-//			Map map = (Map) session.getAttribute("user");
-//			if ((Integer) map.get("mem_level") == 9) {// 관리자아이디라면
-//				response.sendRedirect("/admin"); // <-- 07.29 오후 2시
-//				return false;
-//			}
-//		}
+		if (session.getAttribute("user") != null) {
+			Map map = (Map) session.getAttribute("user");
+			if ((Integer) map.get("mem_level") == 9) {// 관리자아이디가 아니라면
+				response.sendRedirect("/admin"); // <-- 07.29 오후 2시
+				return false;
+			}
+		}
 		return true;
 	}
 

@@ -7,7 +7,7 @@ public interface AdminService {
 
 	// 대분류 카테고리 리스트 불러오기
 	@SuppressWarnings("rawtypes")
-	List<Map> largeCategoryList();
+	List<Map> largeCategoryList() throws Exception;
 
 	// 소분류 카테고리 리스트 불러오기
 	@SuppressWarnings("rawtypes")
@@ -25,5 +25,24 @@ public interface AdminService {
 
 	@SuppressWarnings("rawtypes")
 	List<Map> getBoardList();
+
+	List<String> getAdminNickname(int brd_id);
+
+	@SuppressWarnings("rawtypes")
+	List<Map> getMemberListForBoardAdmin();
+
+	@SuppressWarnings("rawtypes")
+	int updateAdmin(Map map);
+
+	int checkAdminId(int brd_id, String mem_userid);
+
+	@SuppressWarnings("rawtypes")
+	List<Map> searchMembersForBoardAdmin(Map map);
+
+	@SuppressWarnings("rawtypes")
+	void makeBoard(Map map);
+
+	@SuppressWarnings("rawtypes")
+	List<Map> CategoryList(int large_id);
 
 }

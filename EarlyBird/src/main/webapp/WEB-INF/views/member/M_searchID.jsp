@@ -94,4 +94,3 @@
 		</div>
 	</div>
 </div>
-<%@ include file="M_detailSearchID.jsp"%>

@@ -8,6 +8,10 @@
 		resultType="kr.co.forearlybird.domain.Category">
 		SELECT * FROM category
 	</select>
+	<select id="getCategoryListUnderLargeID" parameterType="java.lang.Integer"
+		resultType="kr.co.forearlybird.domain.Category">
+		SELECT * FROM category WHERE large_id = #{large_id}
+	</select>
 	<!-- 컬럼 생성 -->
 	<insert id="makeCategory" parameterType="java.util.Map">
 		INSERT INTO
@@ -17,8 +21,8 @@
 	</insert>
 	<select id="getNumberOfChildCategory"
 		parameterType="java.lang.Integer" resultType="java.lang.Integer">
-		SELECT COUNT(category_id)
-		FROM category WHERE large_id=#{large_id}
+		SELECT COUNT(*) FROM
+		category WHERE large_id=#{large_id}
 	</select>
 	<delete id="leaveCategory" parameterType="java.lang.Integer">
 		DELETE FROM category
@@ -34,5 +38,10 @@
 		resultType="java.lang.String">
 		SELECT category_name FROM category WHERE
 		category_id=#{category_id}
+	</select>
+	<select id="getCategoryID" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT category_id FROM category WHERE
+		category_name=#{category_name} and large_id = #{large_id}
 	</select>
 </mapper>

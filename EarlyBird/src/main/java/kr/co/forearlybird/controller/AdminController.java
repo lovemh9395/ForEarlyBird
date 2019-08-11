@@ -1,5 +1,6 @@
 package kr.co.forearlybird.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,17 +29,76 @@ public class AdminController {
 	AdminService service;
 
 	// 게시판 별 관리자 보기
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/A_adminList", method = RequestMethod.GET)
-	public String A_adminList(HttpSession session, Model model) {
+	public String A_adminList(@RequestParam("brd_id") int brd_id, HttpSession session, Model model) {
 		logger.info("게시판 별 관리자 보기 페이지");
+		logger.info("게시판 아이디 : " + brd_id);
+		List<String> adminNicknames = service.getAdminNickname(brd_id);
+		List<Map> adminList = service.getMemberListForBoardAdmin();
+
+		model.addAttribute("brd_id", brd_id);
+		model.addAttribute("adminNicknames", adminNicknames);
+		model.addAttribute("adminList", adminList);
+
 		return "admin/A_adminList";
 	}
 
+	@RequestMapping(value = "/A_checkAdminId", method = RequestMethod.POST)
+	@ResponseBody
+	public String A_checkAdminId(@RequestParam("brd_id") int brd_id, @RequestParam("mem_userid") String mem_userid,
+			HttpSession session, Model model) {
+		logger.info("게시판 관리자 선정 여부 체크");
+		int tmp = service.checkAdminId(brd_id, mem_userid);
+		logger.info("service :" + tmp);
+		String result = tmp + "";
+		return result;
+	}
+
 	// 게시판 별 관리자 설정
-	@RequestMapping(value = "/A_adminMake", method = RequestMethod.GET)
-	public String A_adminMake(HttpSession session, Model model) {
-		logger.info("게시판 별 관리자 설정 페이지");
-		return "admin/A_adminMake";
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value = "/A_boardAdminUpdate", method = { RequestMethod.GET, RequestMethod.POST })
+	public String A_boardAdminUpdate(HttpServletRequest request, HttpSession session, Model model) {
+		logger.info("게시판 관리자 변경 페이지");
+		int brd_id = Integer.parseInt(request.getParameter("brd_id"));
+		String mem_userid = request.getParameter("mem_userid");
+
+		Map map = new HashMap();
+		map.put("brd_id", brd_id);
+		map.put("mem_userid", mem_userid);
+
+		service.updateAdmin(map);
+
+		List<String> adminNicknames = service.getAdminNickname(brd_id);
+		List<Map> adminList = service.getMemberListForBoardAdmin();
+
+		model.addAttribute("brd_id",brd_id);
+		model.addAttribute("adminNicknames", adminNicknames);
+		model.addAttribute("adminList", adminList);
+
+		return "admin/A_adminList";
+	}
+
+	// 게시판 별 관리자 설정을 위한 후보자 목록 검색
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value = "/A_searchMemberForAdmin", method = { RequestMethod.GET, RequestMethod.POST })
+	public String A_searchMemberForAdmin(HttpServletRequest request, HttpSession session, Model model) {
+		logger.info("게시판 관리자 변경 페이지");
+		int brd_id = Integer.parseInt(request.getParameter("brd_id"));
+		String searchFilter = request.getParameter("searchFilter");
+		String searchkeyword = request.getParameter("searchkeyword");
+
+		Map map = new HashMap();
+		map.put("brd_id", brd_id);
+		map.put("searchFilter", searchFilter);
+		map.put("searchkeyword", searchkeyword);
+
+		List<Map> adminList = service.searchMembersForBoardAdmin(map);
+
+		model.addAttribute("brd_id",brd_id);
+		model.addAttribute("adminNicknames", service.getAdminNickname(brd_id));
+		model.addAttribute("adminList", adminList);
+		return "admin/A_adminList";
 	}
 
 	// 회원 검색
@@ -128,7 +188,7 @@ public class AdminController {
 	// 카테고리 보기
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/A_categoryList", method = { RequestMethod.GET, RequestMethod.POST })
-	public String A_categoryList1(HttpSession session, Model model) {
+	public String A_categoryList(HttpSession session, Model model) throws Exception {
 		logger.info("카테고리 보기 페이지");
 		List<Map> largeList = service.largeCategoryList();
 		List<Map> smallList = service.CategoryList();
@@ -231,10 +291,35 @@ public class AdminController {
 	// 게시판 관리페이지 보기
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/A_boardList", method = RequestMethod.GET)
-	public String A_boardList(HttpSession session, Model model) {
+	public String A_boardList(HttpSession session, Model model) throws Exception {
 		logger.info("게시판 목록 페이지");
 		List<Map> boardList = service.getBoardList();
+		List<Map> largeList = service.largeCategoryList();
+		
+		List<List> categorylist = new ArrayList<>();
+		for (int i = 0; i < largeList.size(); i++) {
+			categorylist.add(service.CategoryList((int)largeList.get(i).get("large_id")));
+		}
 		model.addAttribute("boardList", boardList);
+		model.addAttribute("largeList", largeList);
+		model.addAttribute("categorylist", categorylist);
 		return "admin/A_boardList";
 	}
+	
+	// 게시판 추가하기
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value = "/A_makeBoard", method = RequestMethod.GET)
+	public String A_makeBoard(HttpServletRequest request, HttpSession session, Model model) {
+		logger.info("게시판 제작하기");
+		Map map = new HashMap();
+		map.put("large_id",Integer.parseInt(request.getParameter("large_id")));
+		map.put("category_id",Integer.parseInt(request.getParameter("category_id")));
+		map.put("brd_readauth",Integer.parseInt(request.getParameter("brd_readauth")));
+		map.put("brd_writeauth",Integer.parseInt(request.getParameter("brd_writeauth")));
+		map.put("brd_name",(String) request.getParameter("brd_name"));
+		System.out.println("map : "+map.toString());
+		service.makeBoard(map);
+		return "admin/A_boardList";
+	}
+
 }

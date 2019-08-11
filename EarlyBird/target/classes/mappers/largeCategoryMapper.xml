@@ -25,6 +25,12 @@
 	</insert>
 
 	<!-- 코드로 분류명 가져오기 -->
+	<select id="getLargeID" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT large_id FROM largecategory where large_name =
+		#{large_name}
+	</select>
+	
 	<select id="getLargeName" parameterType="java.lang.Integer"
 		resultType="java.lang.String">
 		SELECT large_name FROM largecategory where large_id =

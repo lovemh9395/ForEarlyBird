@@ -50,13 +50,16 @@ public class MemberController {
 		logger.info(request.getParameter("password"));
 		Map map = service.login(request);
 		System.out.println("------------+++++++++++++-----------------------" + map);
-		if (map == null) {
+
+		if (map == null) { // map 가져오기 오류
 			return "redirect:/";
-		} else if (map.get("level").equals("4")) {
+		}
+
+		if (map.get("level").toString().equals("1")) { // 차단회원인 경우
 			return "Mainpage";
-		} else if (map.toString().equals("{}")) { // 관리자급이 아닙니다.
-			logger.info(map.toString() + "1");
-		} else {
+		} else if (map.get("level").toString().equals("4")) { // 탈퇴회원인 경우
+			return "Mainpage";
+		} else if (map.get("level").toString().equals("9")) { // 관리자인 경우
 			// 세션 부여
 			logger.info(map.toString() + "2");
 			session.setAttribute("user", map);
@@ -65,7 +68,20 @@ public class MemberController {
 			if (session.getAttribute("FindId") != null) {
 				session.removeAttribute("FindId");
 			}
-
+			return "A_mainpage";
+		} else {
+			if (map.toString().equals("{}")) { // 가입정보가 없는 경우
+				logger.info("1");
+			} else {
+				// 세션 부여
+				logger.info(map.toString() + "2");
+				session.setAttribute("user", map);
+				session.setAttribute("profilephoto", map.get("profilephoto"));
+				session.setAttribute("useridd", map.get("id"));
+				if (session.getAttribute("FindId") != null) {
+					session.removeAttribute("FindId");
+				}
+			}
 		}
 		return "Mainpage";
 	}
@@ -158,7 +174,7 @@ public class MemberController {
 		}
 	}
 
-	//프로필 변경하장
+	// 프로필 변경하장
 	@RequestMapping(value = "/M_profileUpload", method = RequestMethod.GET)
 	public String upload() {
 		logger.info("프로필 변경");
@@ -166,7 +182,7 @@ public class MemberController {
 		return "member/M_profileUpload";
 	}
 
-	//프로필 업로드 입니당
+	// 프로필 업로드 입니당
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/upload")
 	public String upload(HttpSession session, Model model, @RequestParam("file1") MultipartFile file) throws Exception {

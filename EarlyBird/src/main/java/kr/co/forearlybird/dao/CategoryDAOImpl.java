@@ -33,7 +33,14 @@ public class CategoryDAOImpl implements CategoryDAO {
 	@Override
 	public int getNumberOfChildCategory(int large_id) {
 		logger.info("getNumberOfChildCategoryDAO");
-		return sqlsession.selectOne("category.getNumberOfChildCategory",large_id);
+		Integer result = sqlsession.selectOne("category.getNumberOfChildCategory",large_id);
+		logger.info(result+"");
+		if (result!=null) {
+			return result;
+		}
+		else {
+			return 0;
+		}
 	}
 
 	@Override
@@ -54,4 +61,17 @@ public class CategoryDAOImpl implements CategoryDAO {
 		return sqlsession.selectOne("category.getCategoryName", category_id);
 	}
 
+	@SuppressWarnings("rawtypes")
+	@Override
+	public int getCategoryID(Map map) {
+		logger.info("getCategoryIDDAO");
+		return sqlsession.selectOne("category.getCategoryID",map);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List<Map> getCategoryList(int large_id) {
+		logger.info("getCategoryListDAO");
+		return sqlsession.selectList("category.getCategoryListUnderLargeID", large_id);
+	}
 }

@@ -1,5 +1,6 @@
 package kr.co.forearlybird.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -16,18 +17,18 @@ public class MemberDAOImpl implements MemberDAO {
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 	@Autowired
 	private SqlSession sqlSession;
+
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Map login(Map<String, Object> map) throws Exception {
 		logger.info("로그인 DAO");
-		Map result = sqlSession.selectOne("member.login",map);
+		Map result = sqlSession.selectOne("member.login", map);
 		return result;
 	}
-	
+
 	@Override
 	public int make(Member member) {
 		logger.info("회원가입 DAO");
-		// TODO Auto-generated method stub
 		return sqlSession.insert("member.make", member);
 	}
 
@@ -56,21 +57,18 @@ public class MemberDAOImpl implements MemberDAO {
 		logger.info("프로필업로드 dao");
 		logger.info(middlemap.toString());
 		System.out.println(middlemap.get("url"));
-		return sqlSession.update("member.profileupdate",middlemap);
+		return sqlSession.update("member.profileupdate", middlemap);
 	}
 
 	@Override
 	public String searchID(Member member) {
 		logger.info("PW 찾기 dao");
-		return sqlSession.selectOne("member.searchID",member);
+		return sqlSession.selectOne("member.searchID", member);
 	}
-	
-	
+
 	@Override
 	public void insertUser(Member vo) throws Exception {
-		// TODO Auto-generated method stub
-
-		logger.info("dao "+vo);
+		logger.info("dao " + vo);
 		System.out.println("DAO 로그 : 회원가입 중");
 		sqlSession.insert("member.insertUser", vo);
 //			System.out.println(vo.toString());
@@ -78,23 +76,21 @@ public class MemberDAOImpl implements MemberDAO {
 
 	@Override
 	public void createAuthKey(String user_email, String user_authcode) throws Exception {
-		// TODO Auto-generated method stub
 		Member vo = new Member();
 		vo.setMem_profile_content(user_authcode);
 		vo.setMem_adminmemo(user_email);
 
 		sqlSession.selectOne("member.createAuthKey", vo);
 	}
-	
+
 	@Override
 	public void userAuth(String user_email) throws Exception {
-		// TODO Auto-generated method stub
 		sqlSession.update("member.userAuth", user_email);
 	}
 
 	@Override
 	public void searchPWD(Member vo, String mem_password) throws Exception {
-		System.out.println("++++++++++++++++++++++++++"+vo+"-------------------"+mem_password);
+		System.out.println("++++++++++++++++++++++++++" + vo + "-------------------" + mem_password);
 		vo.setMem_password(mem_password);
 		sqlSession.selectOne("member.searchPWD", vo);
 	}
@@ -102,6 +98,34 @@ public class MemberDAOImpl implements MemberDAO {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public String getrawPw(Map map) {
-		return sqlSession.selectOne("member.rawPw",map);
+		return sqlSession.selectOne("member.rawPw", map);
 	}
+
+	@Override
+	public String getMemberNickName(String mem_userid) {
+		logger.info("getMemberNickNameDAO");
+		return sqlSession.selectOne("member.getMemberNickName", mem_userid);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List<Map> getMemberListByMinLevel(int mem_level) {
+		logger.info("getMemberListByMinLevelDAO");
+		return sqlSession.selectList("member.getMemberListByMinLevel", mem_level);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List<Map> getMemberList(Map map) {
+		logger.info("getMemberListDAO");
+		if (map.get("index").equals("mem_userid")) {
+			return sqlSession.selectList("member.getMemberListById", map);
+		} else if (map.get("index").equals("mem_level")) {
+			return sqlSession.selectList("member.getMemberListBylevel", map);
+		} else {
+			return sqlSession.selectList("member.getMemberListByNickname", map);
+		}
+
+	}
+
 }

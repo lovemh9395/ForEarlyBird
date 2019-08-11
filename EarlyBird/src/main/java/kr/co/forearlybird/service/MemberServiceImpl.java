@@ -45,16 +45,15 @@ public class MemberServiceImpl implements MemberService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", id);
 		map.put("pw", pw);
-		
+
 		String rawPw = memberDAO.getrawPw(map);
 		logger.info("암호화 비밀번호" + rawPw);
 		logger.info("비밀번호" + pw);
-		
-		
+
 		Map temp = memberDAO.login(map);
-		
+
 		Map result = new HashMap();
-		
+
 		if (passwordEncoder.matches(pw, rawPw)) {
 			logger.info("비밀번호 일치");
 			result.put("pw", temp.get("mem_password"));
@@ -253,10 +252,11 @@ public class MemberServiceImpl implements MemberService {
 		logger.info("3");
 		sendMail.setSubject("[ForEarlyBird 서비스 이메일 인증]");
 		logger.info("4");
-		sendMail.setText(new StringBuffer().append("<h1>메일인증</h1>")
-				.append("회원님의 임시 비밀번호는 " + vo.getMem_password() + " 입니다.")
-				.append("<a href='http://localhost:9002/member/M_newJoin?user_email=").append(vo.getMem_profile_content())
-				.append("&key=").append(key).append("' target='_blenk'>이메일 인증 확인</a>").toString());
+		sendMail.setText(
+				new StringBuffer().append("<h1>메일인증</h1>").append("회원님의 임시 비밀번호는 " + vo.getMem_password() + " 입니다.")
+						.append("<a href='http://localhost:9002/member/M_newJoin?user_email=")
+						.append(vo.getMem_profile_content()).append("&key=").append(key)
+						.append("' target='_blenk'>이메일 인증 확인</a>").toString());
 		logger.info("5");
 		sendMail.setFrom("lovemh9395", "ForEarlyBird");
 		logger.info("6");

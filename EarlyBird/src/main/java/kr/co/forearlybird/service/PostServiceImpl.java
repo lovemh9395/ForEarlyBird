@@ -81,5 +81,5 @@ public class PostServiceImpl implements PostService {
 	public int updateHit(int post_id) {
 		logger.info("조회수 증가 service");
 		return postDAO.updateHit(post_id);
-	}	
+	}
 }

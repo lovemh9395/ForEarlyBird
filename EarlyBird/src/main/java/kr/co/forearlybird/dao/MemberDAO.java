@@ -1,5 +1,6 @@
 package kr.co.forearlybird.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import kr.co.forearlybird.domain.Member;
@@ -32,4 +33,12 @@ public interface MemberDAO  {
 
 	@SuppressWarnings("rawtypes")
 	public String getrawPw(Map map);
+	
+	public String getMemberNickName(String mem_userid);
+
+	@SuppressWarnings("rawtypes")
+	public List<Map> getMemberList(Map map);
+
+	@SuppressWarnings("rawtypes")
+	public List<Map> getMemberListByMinLevel(int minlevel);
 }
