@@ -19,21 +19,13 @@
 							style="background: #FFFFFF; padding: 5px">
 							<div class="container">
 								<div class="row">
-									<label for="large_name"> 대분류 : <select
-										name="large_name" id="large_name" style="width: 100px">
-											<c:forEach items="${largeList}" var="list1">
-												<option value="${list1.id }">${list1.name }</option>
-											</c:forEach>
+									<label for="large_List"> 대분류 : <select
+										name="large_List" id="large_List" style="width: 100px">
+											<option value="">대분류</option>
 									</select> &nbsp;&nbsp;
-									</label> <label for="category_name"> 소분류 : <select
-										name="category_name" id="category_name" style="width: 100px">
-											<%-- TODO <c:forEach items="${categoryList}" var="categorylist">
-												<c:if test="">
-													<c:forEach items="">
-														<option value="${list1.id }">${list1.name }</option>
-													</c:forEach>
-												</c:if>
-											</c:forEach> --%>
+									</label> <label for="category_List"> 소분류 : <select
+										name="category_List" id="category_List" style="width: 100px">
+											<option value="">소분류</option>
 									</select>
 									</label>
 								</div>
@@ -80,8 +72,8 @@
 </div>
 <script>
 	function makeBoard() {
-		var large_id = document.getElementById("large_name").value;
-		var category_id = document.getElementById("category_name").value;
+		var large_id = document.getElementById("large_List").value;
+		var category_id = document.getElementById("category_List").value;
 		var brd_readauth = $("input[name='RadioRead']:checked").val();
 		var brd_writeauth = $("input[name='RadioWrite']:checked").val();
 		var brd_name = document.getElementById("brd_name").value;
@@ -106,11 +98,6 @@
 				window.location.reload();
 			}
 		});
-	}
-
-	function findCategoryList(large_id) {
-		var large_id = $("#large_name").val();
-
 	}
 </script>
 

@@ -30,39 +30,147 @@
 
 	<select id="P_detail" parameterType="java.lang.Integer"
 		resultType="kr.co.forearlybird.domain.Post">
-		select * 
+		select *
 		from post
 		where post_id = #{post_id}
 	</select>
 
 	<insert id="P_make" parameterType="java.util.Map">
-		insert into 
-		post(mem_userid,post_title,post_content)
-		values(#{mem_userid},#{post_title},#{post_content})
+		insert into
+		post(mem_userid,post_title,post_content,post_datetime,post_updated_datetime,post_comment_updated_datetime)
+		values(#{mem_userid},#{post_title},#{post_content},now(),now(),now())
 	</insert>
-	
-	<update id="P_delete" parameterType="java.lang.String">
+
+	<update id="P_delete" parameterType="java.lang.Integer">
 		update post
 		set post_del=1
 		where post_id=#{post_id}
 	</update>
-	
+
+	<update id="P_reView" parameterType="java.lang.Integer">
+		update post
+		set post_del=0
+		where post_id=#{post_id}
+	</update>
+
 	<update id="P_update" parameterType="java.util.Map">
 		update post
-		set post_title=#{post_title},post_content=#{post_content}
-		where post_id=#{post_id}
+		set
+		post_title=#{post_title},post_content=#{post_content}
+		where
+		post_id=#{post_id}
 	</update>
-	
+
 	<update id="P_recommand" parameterType="java.lang.Integer">
 		update post
-		set post_like = post_like + 1
+		set post_like
+		= post_like + 1
 		where post_id=#{post_id}
 	</update>
-	
+
 	<update id="P_hit" parameterType="java.lang.Integer">
 		update post
-		set post_hit = post_hit + 1
+		set post_hit =
+		post_hit + 1
 		where post_id = #{post_id}
 	</update>
 
+	<select id="countPostList" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT count(*) FROM post WHERE brd_id=#{brd_id}
+	</select>
+
+	<select id="getPostList" parameterType="java.util.Map"
+		resultType="kr.co.forearlybird.domain.Post">
+		SELECT * FROM post WHERE brd_id=#{brd_id}
+	</select>
+
+	<select id="getPostList2" parameterType="java.util.Map"
+		resultType="kr.co.forearlybird.domain.Post">
+		<include refid="getPostList2sql"></include>
+	</select>
+
+	<insert id="createView2FromGetPostList2"
+		parameterType="java.util.Map">
+		CREATE VIEW view2 AS
+		<include refid="getPostList2sql"></include>
+	</insert>
+
+	<delete id="deleteView2">
+		DROP VIEW IF EXISTS view2;
+	</delete>
+
+	<select id="lookView2"
+		resultType="kr.co.forearlybird.domain.Post">
+		SELECT * FROM view2
+	</select>
+
+	<select id="countView2" resultType="java.lang.Integer">
+		SELECT count(post_id) FROM
+		view2
+	</select>
+
+	<sql id="getPostList2sql">
+	<![CDATA[
+		SELECT * FROM post WHERE post_datetime>=#{dateFrom} and post_datetime<=#{dateTo}]]>
+		<include refid="searchKeywordToType"></include>
+		<include refid="what_is_post_notice"></include>
+		<include refid="what_is_post_del"></include>
+		and brd_id=#{brd_id} order by post_id desc
+	</sql>
+
+	<sql id="searchKeywordToType">
+		<if test="keywordType!='allthing'.toString()">
+			<if test="keyword!=null">
+				<if test="keywordType=='post_title'.toString()">
+					and post_title like concat('%', #{keyword}, '%')
+				</if>
+				<if test="keywordType=='post_content'.toString()">
+					and post_content like concat('%', #{keyword}, '%')
+				</if>
+				<if test="keywordType=='mem_userid'.toString()">
+					and mem_userid like concat('%', #{keyword}, '%')
+				</if>
+				<if test="keywordType=='post_ip'.toString()">
+					and post_ip like concat('%', #{keyword}, '%')
+				</if>
+			</if>
+		</if>
+		<if test="keywordType=='allthing'.toString()">
+		</if>
+	</sql>
+
+	<sql id="what_is_post_notice">
+		<if test="post_notice==null">
+
+		</if>
+		<if test="post_notice!=null">
+			and post_notice = #{post_notice}
+		</if>
+	</sql>
+
+	<sql id="what_is_post_del">
+		<if test="post_del==null">
+
+		</if>
+		<if test="post_del!=null">
+			and post_del = #{post_del}
+		</if>
+	</sql>
+
+	<select id="getPostNumUnderBoard"
+		parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM post
+		WHERE brd_id = #{brd_id}
+	</select>
+
+	<select id="getPostNumUnderBoardInToday"
+		parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM post WHERE brd_id = #{brd_id} and <![CDATA[post_datetime>=curdate() and post_datetime<=DATE_ADD(curdate(),INTERVAL 1 DAY)]]>
+	</select>
+
+	<update id="changeParamNotice" parameterType="java.util.Map">
+		UPDATE post SET
+		post_notice=#{post_notice} WHERE post_id=#{post_id}
+	</update>
 </mapper>

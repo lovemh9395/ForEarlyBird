@@ -128,4 +128,11 @@ public class MemberDAOImpl implements MemberDAO {
 
 	}
 
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getMemberListLikesThisName(String keyword) {
+		logger.info("getMemberListLikesThisNameDAO");
+		return sqlSession.selectList("member.getMemberListLikesThisName",keyword);
+	}
+
 }

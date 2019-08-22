@@ -8,7 +8,8 @@
 		resultType="kr.co.forearlybird.domain.Category">
 		SELECT * FROM category
 	</select>
-	<select id="getCategoryListUnderLargeID" parameterType="java.lang.Integer"
+	<select id="getCategoryListUnderLargeID"
+		parameterType="java.lang.Integer"
 		resultType="kr.co.forearlybird.domain.Category">
 		SELECT * FROM category WHERE large_id = #{large_id}
 	</select>
@@ -30,7 +31,8 @@
 	</delete>
 	<select id="getLastNumberOfCategoryUnderLargeCategory"
 		parameterType="java.lang.Integer" resultType="java.lang.Integer">
-		SELECT MAX(category_id)
+		SELECT
+		IFNULL(MAX(category_id), 0)
 		FROM category WHERE
 		large_id=#{large_id}
 	</select>

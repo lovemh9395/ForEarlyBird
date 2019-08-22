@@ -27,7 +27,7 @@ public interface PostDAO {
 	@SuppressWarnings("rawtypes")
 	public void P_make(Map map);
 
-	public void P_delete(String post_id);
+	public void P_delete(int post_id);
 
 	@SuppressWarnings("rawtypes")
 	public void P_update(Map map);
@@ -35,4 +35,18 @@ public interface PostDAO {
 	public int P_recommand(int post_id);
 	
 	public int updateHit(int post_id);
+
+	@SuppressWarnings("rawtypes")
+	public List<Post> getPostList2(Map tmp) throws Exception;
+
+	@SuppressWarnings("rawtypes")
+	public List<Post> getPostList(Map map);
+
+	public int getNewPostNumUnderBoard(int brd_id);
+
+	public int getAllPostNumUnderBoard(int brd_id);
+
+	public void P_reView(int parseInt);
+
+	public void changeParamNotice(int post_id, int post_del);
 }

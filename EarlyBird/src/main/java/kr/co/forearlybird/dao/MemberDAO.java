@@ -41,4 +41,7 @@ public interface MemberDAO  {
 
 	@SuppressWarnings("rawtypes")
 	public List<Map> getMemberListByMinLevel(int minlevel);
+
+	@SuppressWarnings("rawtypes")
+	public List getMemberListLikesThisName(String string);
 }

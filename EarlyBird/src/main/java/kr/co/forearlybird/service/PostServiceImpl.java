@@ -59,7 +59,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public void P_delete(String post_id) {
+	public void P_delete(int post_id) {
 		logger.info("글삭제 service");
 		postDAO.P_delete(post_id);
 	}

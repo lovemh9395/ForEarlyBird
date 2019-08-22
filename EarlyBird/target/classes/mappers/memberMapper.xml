@@ -127,4 +127,10 @@
 		mem_nickname, mem_level FROM member WHERE mem_level>=#{mem_level}
 		]]>
 	</select>
+
+	<select id="getMemberListLikesThisName"
+		parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT mem_userid FROM
+		member WHERE mem_nickname LIKE CONCAT('%', #{keyword}, '%')
+	</select>
 </mapper>

@@ -20,7 +20,7 @@ public interface PostService {
 	@SuppressWarnings("rawtypes")
 	public void P_make(Map map);
 	
-	public void P_delete(String post_id);
+	public void P_delete(int post_id);
 	
 	@SuppressWarnings("rawtypes")
 	public void P_update(Map map);

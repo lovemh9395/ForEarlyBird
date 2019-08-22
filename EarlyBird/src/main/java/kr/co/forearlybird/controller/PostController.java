@@ -88,8 +88,7 @@ public class PostController {
 	@RequestMapping(value = "/P_delete", method = { RequestMethod.GET, RequestMethod.POST })
 	public String P_delete(HttpServletRequest request) {
 		logger.info("게시글 삭제 페이지");
-		String post_id = request.getParameter("post_id");
-		logger.info(post_id);
+		int post_id = Integer.parseInt(request.getParameter("post_id"));
 		service.P_delete(post_id);
 		return "post/P_list";
 	}
@@ -184,12 +183,11 @@ public class PostController {
 	public String listPage(@ModelAttribute("cri") Criteria cri, Model model) throws Exception {
 		logger.info("페이징 처리 페이지");
 		logger.info(cri.toString());
-		model.addAttribute("list", service.listCriteria(cri)); // 게시판의 글 리스트
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
-		pageMaker.setTotalCount(service.listCountCriteria(cri));
+		pageMaker.setTotalCount(service.listCountCriteria(cri)); 
 		model.addAttribute("pageMaker", pageMaker); // 게시판 하단의 페이징 관련, 이전페이지, 페이지 링크 , 다음 페이지
-
+		model.addAttribute("list", service.listCriteria(cri)); // 게시판의 글 리스트
 		return "post/P_list";
 	}
 

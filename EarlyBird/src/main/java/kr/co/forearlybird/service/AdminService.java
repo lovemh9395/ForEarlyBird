@@ -1,7 +1,11 @@
 package kr.co.forearlybird.service;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
+
+import kr.co.forearlybird.domain.A_postListDTO;
+import kr.co.forearlybird.domain.Post;
 
 public interface AdminService {
 
@@ -44,5 +48,24 @@ public interface AdminService {
 
 	@SuppressWarnings("rawtypes")
 	List<Map> CategoryList(int large_id);
+
+	int leaveBoard(int brd_id);
+
+	int changeBoardVisibility(int brd_id, int brd_exposure);
+
+	@SuppressWarnings("rawtypes")
+	List<Post> searchPostToBoard(Map map) throws Exception;
+
+	@SuppressWarnings("rawtypes")
+	List<A_postListDTO> ListPostToBoard(Map map) throws ParseException;
+
+	@SuppressWarnings("rawtypes")
+	void deletePostToBoard(Map map);
+
+	@SuppressWarnings("rawtypes")
+	void reViewPostToBoard(Map map);
+
+	@SuppressWarnings("rawtypes")
+	void updatePostToBoard(Map map);
 
 }
