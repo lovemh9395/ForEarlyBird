@@ -40,7 +40,6 @@
 					<button type="button" class="btn btn-block btn-info"
 						data-toggle="modal" data-target="#modal-register">회원가입</button>
 				</div>
-
 			</c:if>
 			<c:if test="${user!=null }">
 				<ul class="navbar-nav align-items-center d-none d-md-flex">
@@ -64,8 +63,10 @@
 							<a href="${contextPath}/member/M_info?id=${user.id}"
 								class="dropdown-item"> <i class="ni ni-single-02"></i> <span>내
 									정보 보기</span>
-							</a> <a href="${contextPath}/member/M_list" class="dropdown-item">
-								<i class="ni ni-settings-gear-65"></i> <span>내 글 보기</span>
+							</a> <a
+								href="${contextPath}/member/M_list?replypage=1&replyperPageNum=10"
+								class="dropdown-item"> <i class="ni ni-settings-gear-65"></i>
+								<span>내 글 보기</span>
 							</a>
 							<div class="dropdown-divider"></div>
 							<a href="${contextPath}/member/M_logout" class="dropdown-item">

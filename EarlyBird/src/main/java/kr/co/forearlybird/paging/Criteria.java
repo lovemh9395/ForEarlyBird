@@ -12,6 +12,12 @@ public class Criteria {
 		this.page = 1;
 		this.perPageNum = 10;
 	}
+	
+	//댓글 개수 지정해서 보기
+	public Criteria(int perPageNum) {
+		this.page = 1;
+		this.perPageNum = perPageNum;
+	}
 
 	public int getPage() {
 		return page;

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import kr.co.forearlybird.domain.Post;
+import kr.co.forearlybird.domain.Reply;
 import kr.co.forearlybird.paging.Criteria;
 
 public interface PostService {
@@ -13,9 +14,13 @@ public interface PostService {
 
 	public List<Post> listAll() throws Exception;
 
-	public List<Post> listCriteria(Criteria cri) throws Exception;
+	public List<Post> listCriteria(Map map) throws Exception;
 	
-	public int listCountCriteria(Criteria cri) throws Exception;
+	public List<Reply> replyListCriteria(Map map) throws Exception;
+	
+	public int listCountCriteria(Map map) throws Exception;
+	
+	public int replyListCountCriteria(Map map) throws Exception;
 	
 	@SuppressWarnings("rawtypes")
 	public void P_make(Map map);
@@ -29,4 +34,5 @@ public interface PostService {
 
 	public int P_recommand(int post_id);
 	
+	public List<Reply> R_list(int post_id);
 }

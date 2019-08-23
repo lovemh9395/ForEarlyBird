@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import kr.co.forearlybird.domain.Post;
-import kr.co.forearlybird.paging.Criteria;
 
 public interface PostDAO {
 	public List<Post> P_list();
@@ -17,10 +16,13 @@ public interface PostDAO {
 	/* public List<BoardVO> listPage(int page) throws Exception; */
 
 	// 게시판 페이징용 Criteria
-	public List<Post> listCriteria(Criteria cri) throws Exception;
-
+	@SuppressWarnings("rawtypes")
+	public List<Post> listCriteria(Map map) throws Exception;
+	
 	// 토탈카운트를 반환?
-	public int countPaging(Criteria cri) throws Exception;
+	@SuppressWarnings("rawtypes")
+	public int countPaging(Map map) throws Exception;
+
 
 	public Post P_detail(int post_id);
 
@@ -35,4 +37,5 @@ public interface PostDAO {
 	public int P_recommand(int post_id);
 	
 	public int updateHit(int post_id);
+	
 }

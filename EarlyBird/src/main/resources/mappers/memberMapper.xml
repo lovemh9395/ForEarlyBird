@@ -12,7 +12,12 @@
 		from member
 		where mem_userid=#{id}
 	</select>
-
+	
+	<update id="login_time" parameterType="java.lang.String">
+		update member
+		set mem_lastlogin_datetime = now()
+		where mem_userid = #{id}
+	</update>
 	<!-- 회원가입하기 -->
 	<insert id="make"
 		parameterType="kr.co.forearlybird.domain.Member">
@@ -32,8 +37,8 @@
 	<update id="update" parameterType="java.util.Map">
 		update member
 		set
-		mem_nickname=#{nick},mem_phone=#{phone}
-		where mem_userid=#{id}
+		mem_nickname=#{mem_nickname},mem_password=#{mem_password},mem_phone=#{mem_phone},mem_gender=#{mem_gender},mem_zipcode=#{mem_zipcode},mem_address1=#{mem_address1},mem_address2=#{mem_address2},mem_profile_content=#{mem_profile_content}
+		where mem_userid=#{sessionid}
 	</update>
 
 	<update id="delete" parameterType="java.lang.String">
@@ -62,12 +67,13 @@
 
 	<insert id="insertUser">
 		insert into
-		member(mem_userid,mem_password,mem_nickname,mem_username,mem_phone,mem_birthday)
-		values(#{mem_userid},#{mem_password},#{mem_nickname},#{mem_username},#{mem_phone},#{mem_birthday})
+		member(mem_userid,mem_password,mem_nickname,mem_username,mem_phone,mem_birthday,mem_open_profile,mem_register_datetime,mem_lastlogin_datetime,mem_register_ip,mem_lastlogin_ip)
+		values(#{mem_userid},#{mem_password},#{mem_nickname},#{mem_username},#{mem_phone},#{mem_birthday},#{mem_open_profile},now(),now(),now(),now())
 	</insert>
 
 	<update id="createAuthKey">
-		update member set mem_profile_content = #{mem_profile_content}
+		update member set mem_profile_content =
+		#{mem_profile_content}
 		where mem_adminmemo =
 		#{mem_adminmemo}
 	</update>
@@ -75,7 +81,7 @@
 	<update id="userAuth" parameterType="java.lang.String">
 		update member set
 		mem_level=3
-		where mem_userid=#{user_email}
+		where mem_userid=#{mem_profile_content}
 	</update>
 
 	<update id="searchPWD">
@@ -89,5 +95,56 @@
 		select mem_password
 		from member
 		where mem_userid=#{id}
+	</select>
+
+	<!-- 내 글 보기 페이징 및 보여주기 -->
+	<!-- criteria 를 적용한 게시판 페이징 조회 -->
+	<select id="mypostlistCriteria"
+		resultType="kr.co.forearlybird.domain.Post">
+	<![CDATA[
+	select
+   	*
+	from
+    post
+	where post_id > 0 and post_del = 0 and mem_userid = #{sessionId}
+	order by post_id desc
+	limit #{cri.pageStart}, #{cri.perPageNum}
+	]]>
+	</select>
+
+	<select id="mypostcountPaging" resultType="java.lang.Integer">
+		select count(post_id)
+		as cnt
+		from post
+		where post_del = 0 and mem_userid = #{sessionId}
+	</select>
+
+	<!-- criteria 를 적용한 게시판 페이징 조회 -->
+	<select id="myreplylistCriteria" parameterType="java.util.Map"
+		resultType="kr.co.forearlybird.domain.Reply">
+	<![CDATA[
+	select * from reply
+	where rpl_id > 0 and rpl_del = 0 and mem_userid = #{sessionId}
+	order by rpl_id desc
+	limit #{replycri.replypageStart}, #{replycri.replyperPageNum}
+	]]>
+	</select>
+
+	<select id="myreplyCountPaging" resultType="java.lang.Integer">
+		select count(rpl_id)
+		as
+		cnt
+		from reply
+		where rpl_del = 0 and mem_userid = #{sessionId}
+	</select>
+	
+	<select id="CheckId" parameterType="java.lang.String"
+	 resultType="java.lang.Integer">
+		select count(mem_userid) from member where mem_userid = #{formId}
+	</select>
+	
+	<select id="CheckPass" parameterType="java.util.Map"
+	resultType="java.lang.Integer">
+		select count(mem_password) from member where mem_userid = #{id} and mem_password = #{login_pass} 
 	</select>
 </mapper>

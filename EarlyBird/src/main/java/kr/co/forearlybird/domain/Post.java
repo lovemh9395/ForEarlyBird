@@ -1,7 +1,5 @@
 package kr.co.forearlybird.domain;
 
-import java.util.Date;
-
 import lombok.Data;
 
 //Lombok을 이용함(getter,setter 등등 한번에 처리 가능)

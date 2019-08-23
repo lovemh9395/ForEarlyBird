@@ -209,6 +209,20 @@
 			<version>${org.springframework-version}</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/edu.uci.ics/crawler4j -->
+		<dependency>
+			<groupId>edu.uci.ics</groupId>
+			<artifactId>crawler4j</artifactId>
+			<version>4.3</version>
+		</dependency>
+
+		<!-- jsoup HTML parser library @ https://jsoup.rog/ -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.11.3</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>

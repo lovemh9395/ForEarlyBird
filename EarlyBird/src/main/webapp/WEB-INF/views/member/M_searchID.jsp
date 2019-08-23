@@ -7,24 +7,48 @@
 <script>
 	$(document).ready(function() {
 		$("#UsersearchID").click(function() {
-			var username = $("#IDsearchName").val();
-			var userbirth = $("#IDsearchBirth").val();
-			var userphone = $("#IDsearchTel").val();
-			$.ajax({
-				async:false,
-				type:"post",
-				url:"${contextPath}/member/M_searchID",
-				data:{"mem_username":username,
-						"mem_birthday":userbirth,
-						"mem_phone":userphone},
-						success:function(data){
-							alert(data);
-							$(data).modal();
-							<%session.removeAttribute("FindId");%>
-						}
-			})
+			if (searchIDformCheck()) {
+				var username = $("#IDsearchName").val();
+				var userbirth = $("#IDsearchBirth").val();
+				var userphone = $("#IDsearchTel").val();
+				$.ajax({
+					async : false,
+					type : "post",
+					url : "${contextPath}/member/M_searchID",
+					data : {
+						"mem_username" : username,
+						"mem_birthday" : userbirth,
+						"mem_phone" : userphone
+					},
+					success : function(data) {
+						alert(data);
+						$(data).modal();
+						<%session.removeAttribute("FindId");%>
+					}
+				})
+			}
+			return false;
 		})
-	});
+	})
+
+	function searchIDformCheck() {
+		var expname = /^[가-힣]{2,4}$/;
+		if (!expname.test($("#IDsearchName").val())) {
+			alert("이름은 한글만 입력이 가능합니다.");
+			return false;
+		}
+		var exptel1 = /^(19[0-9][0-9]|20\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/;
+		if (!exptel1.test($("#IDsearchBirth").val())) {
+			alert("생년월일을 다시 입력해주세요");
+			return false;
+		}
+		var exptel1 = /(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/g;
+		if (!exptel1.test($("#IDsearchTel").val())) {
+			alert("전화번호를 다시 입력해주세요");
+			return false;
+		}
+		return true;
+	}
 </script>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <base target="_self" />
@@ -74,16 +98,9 @@
 										id="IDsearchTel" name="IDsearchTel">
 								</div>
 							</div>
-							<div
-								class="custom-control custom-control-alternative custom-checkbox">
-								<input class="custom-control-input" id=" customCheckLogin"
-									type="checkbox"> <label class="custom-control-label"
-									for=" customCheckLogin"><span>아이디를 저장합니다.</span></label>
-							</div>
 							<div class="text-center">
-								<button
-										type="button" class="btn btn-primary my-4" id="UsersearchID" data-dismiss="modal">아이디
-										찾기</button>
+								<button type="button" class="btn btn-primary my-4"
+									id="UsersearchID" data-dismiss="modal">아이디 찾기</button>
 								<button type="button" class="btn btn-primary my-4"
 									data-dismiss="modal">취소하기</button>
 							</div>

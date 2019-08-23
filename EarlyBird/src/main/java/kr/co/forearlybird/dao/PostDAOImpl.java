@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import kr.co.forearlybird.domain.Post;
-import kr.co.forearlybird.paging.Criteria;
 
 @Repository
 public class PostDAOImpl implements PostDAO {
@@ -45,17 +44,20 @@ public class PostDAOImpl implements PostDAO {
 	}
 
 	// Criteria 를 적용한 게시판 페이징 조회
+	@SuppressWarnings("rawtypes")
 	@Override
-	public List<Post> listCriteria(Criteria cri) throws Exception {
+	public List<Post> listCriteria(Map map) throws Exception {
 		logger.info("페이징처리3 List DAO");
-		return sqlSession.selectList("post.listCriteria", cri);
+		return sqlSession.selectList("post.listCriteria", map);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public int countPaging(Map map) throws Exception {
+		logger.info("페이징처리4 List DAO");
+		return sqlSession.selectOne("post.countPaging", map);
 	}
 
-	@Override
-	public int countPaging(Criteria cri) throws Exception {
-		logger.info("페이징처리4 List DAO");
-		return sqlSession.selectOne("post.countPaging", cri);
-	}
 
 	@Override
 	public Post P_detail(int post_id) {
@@ -94,5 +96,6 @@ public class PostDAOImpl implements PostDAO {
 		logger.info("조회수 증가 DAO");
 		return sqlSession.update("post.P_hit",post_id);
 	}
+
 
 }

@@ -94,41 +94,42 @@
 			<!-- Navigation -->
 			<ul class="navbar-nav">
 				<li class="nav-item" class="active"><a
-					class=" nav-link active " href="${contextPath}/member/M_login">
-						<i class="ni ni-tv-2 text-primary"></i> 공지사항
+					class=" nav-link active "
+					href="${contextPath }/post/P_list?brd_id=1"> <i
+						class="ni ni-tv-2 text-primary"></i> 공지사항
 				</a></li>
 			</ul>
 			<hr class="my-3">
 			<ul class="navbar-nav">
 				<li class="nav-item"><a class="nav-link "
-					href="./examples/icons.html"> <i class="ni ni-planet text-blue"></i>
-						게임
+					href="${contextPath }/content/C_list_M?brd_id=1"> <i
+						class="ni ni-planet text-blue"></i> 게임
 				</a></li>
 				<li class="nav-item"><a class="nav-link "
-					href="./examples/maps.html"> <i class="ni ni-pin-3 text-orange"></i>
-						영화
+					href="${contextPath }/content/C_list_M?brd_id=2"> <i
+						class="ni ni-pin-3 text-orange"></i> 영화
 				</a></li>
 				<li class="nav-item"><a class="nav-link "
-					href="./examples/profile.html"> <i
+					href="${contextPath }/content/C_list_M?brd_id=3"> <i
 						class="ni ni-single-02 text-yellow"></i> 드라마
 				</a></li>
 				<li class="nav-item"><a class="nav-link "
-					href="./examples/tables.html"> <i
+					href="${contextPath }/content/C_list_M?brd_id=4"> <i
 						class="ni ni-bullet-list-67 text-red"></i> 음악/공연
 				</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="./examples/login.html"> <i class="ni ni-key-25 text-info"></i>
-						IT
+					href="${contextPath }/content/C_list_M?brd_id=5"> <i
+						class="ni ni-key-25 text-info"></i> IT
 				</a></li>
 			</ul>
 			<hr class="my-3">
 			<ul class="navbar-nav">
 				<li class="nav-item"><a class="nav-link"
-					href="${contextPath }/post/P_list"> <i
+					href="${contextPath }/post/P_list?brd_id=2"> <i
 						class="ni ni-circle-08 text-pink"></i> 자유게시판
 				</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="./examples/register.html"> <i
+					href="${contextPath }/post/P_list?brd_id=3"> <i
 						class="ni ni-circle-08 text-pink"></i> 게시판
 				</a></li>
 			</ul>

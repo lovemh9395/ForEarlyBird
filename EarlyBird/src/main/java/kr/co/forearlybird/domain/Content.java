@@ -9,9 +9,9 @@ import lombok.Data;
 public class Content {
 	private int cnt_id; //PK
 	private int brd_id; //게시판 테이블의 ( Board Table )의 PK
-	private int cnt_num; //게시판 정렬을 위한 키
+//	private int cnt_num; //게시판 정렬을 위한 키
 	private String cnt_title; //게시글 제목
-	private int cnt_thumbnail; //첨부된 섬네일 링크
+	private String cnt_thumbnail; //첨부된 섬네일 링크
 	private String cnt_connectLink; //게시글 본문 내용
 	private int cnt_hit; //조회수 
 	private int cnt_like; //추천 회수

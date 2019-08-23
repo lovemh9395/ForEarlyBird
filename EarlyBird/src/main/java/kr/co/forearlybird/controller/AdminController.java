@@ -2,6 +2,7 @@ package kr.co.forearlybird.controller;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +28,14 @@ public class AdminController {
 	@Autowired
 	AdminService service;
 
+	// Admin Main page 이동
+	@RequestMapping(value = "/A_mainpage", method = RequestMethod.GET)
+	public String Adminhome(Locale locale, Model model, HttpSession session) {
+		logger.info("혹시 들어왔...니?");
+		
+		return "A_mainpage";
+	}
+	
 	// 게시판 별 관리자 보기
 	@RequestMapping(value = "/A_adminList", method = RequestMethod.GET)
 	public String A_adminList(HttpSession session, Model model) {
