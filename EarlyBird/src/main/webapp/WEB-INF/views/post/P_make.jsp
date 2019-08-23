@@ -29,20 +29,23 @@
 				$("#addP_make").click(function() {
 					var title = $("#newPost_title").val();
 					var content = $("#newPost_content").val();
+					var brd_id = <%=request.getParameter("brd_id")%>;
 					$.ajax({
 						async : false,
 						type : "post",
 						url : "${contextPath}/post/P_make",
 						data : {
 							post_title : title,
-							post_content : content
+							post_content : content,
+							brd_id : brd_id
 						},
 						success : function(data) {
-							location.href = "P_list";
-						}
-					})
-				})
-			})
+							location.href = "P_list?brd_id=<%=request.getParameter("brd_id")%>
+			";
+																}
+															})
+												})
+							})
 		</script>
 		<!-- body -->
 		<div class="row mt-5">
@@ -56,7 +59,7 @@
 							<div class="col-11" align="right">
 								<button type="button" id="addP_make" class="btn btn-primary">작성하기</button>
 								<a
-									href="${contextPath }/post/P_detail?post_id=${P_detail.post_id + 1}"><button
+									href="${contextPath }/post/P_list?post_id=${P_detail.post_id + 1}&brd_id=<%=request.getParameter("brd_id")%>"><button
 										type="button" class="btn btn-primary">취소하기</button></a>
 							</div>
 						</div>
@@ -97,7 +100,7 @@
 										<td style="font-size: 20px; height: 556px"><span
 											class="badge badge-dot mr-4"> <i class="mb-0 text-lg"></i>
 												<input type="text" id="newPost_content"
-												style="width: 1500px; height: 500px; font-size: 25px;"></span></td>
+												style="width: 1500px; height: 500px; font-size: 25px; padding-top: 0px; padding-bottom: 450px;"></span></td>
 									</tr>
 								</tbody>
 							</table>
@@ -106,6 +109,9 @@
 				</div>
 			</div>
 		</div>
+		<!-- footer -->
+		<%@ include file="../include/main_footer.jsp"%>
+		<!-- end footer -->
 		<!-- end body -->
 	</div>
 </body>

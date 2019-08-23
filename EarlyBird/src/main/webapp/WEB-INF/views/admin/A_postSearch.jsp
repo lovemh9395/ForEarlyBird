@@ -102,63 +102,150 @@
 </div>
 <!-- end of body -->
 <script>
-function makeLargeList(){
-	var largeArray = new Array();
-	var largeObject = new Object();
-	var largeList = ${forlargeList};
+	function makeLargeList() {
+		var largeArray = new Array();
+		var largeObject = new Object();
+		var largeList = ${forlargeList};
 
-	$.each(largeList, function(index, list1) {
-		largeObject = new Object();
-		largeObject.large_id = list1.id;
-		largeObject.large_name = list1.name;
-		largeArray.push(largeObject);
-	});
-	return largeArray;
-}
+		$.each(largeList, function(index, list1) {
+			largeObject = new Object();
+			largeObject.large_id = list1.id;
+			largeObject.large_name = list1.name;
+			largeArray.push(largeObject);
+		});
+		return largeArray;
+	}
 
-function makeCategoryList(){
-	var categoryArray = new Array();
-	var categoryObject = new Object();
-	var categoryList = ${forcategoryList};
-	$.each(categoryList, function(index, list2) {
-		categoryObject = new Object();
-		categoryObject.large_id = list2.large_id;
-		categoryObject.category_id = list2.category_id;
-		categoryObject.category_name = list2.category_name;
-		categoryArray.push(categoryObject);
-	});
-	return categoryArray;
-}
+	function makeCategoryList() {
+		var categoryArray = new Array();
+		var categoryObject = new Object();
+		var categoryList = ${forcategoryList};
+		$.each(categoryList, function(index, list2) {
+			categoryObject = new Object();
+			categoryObject.large_id = list2.large_id;
+			categoryObject.category_id = list2.category_id;
+			categoryObject.category_name = list2.category_name;
+			categoryArray.push(categoryObject);
+		});
+		return categoryArray;
+	}
 
-function makeBrdList(){
-	var brdArray = new Array();
-	var brdObject = new Object();
-	var brdList = ${forbrdList};
-	$.each(brdList, function(index, list3) {
-		brdObject = new Object();
-		brdObject.brd_id = list3.brd_id;
-		brdObject.brd_name = list3.brd_name;
-		brdObject.large_id = list3.large_id;
-		brdObject.category_id = list3.category_id;
-		brdArray.push(brdObject);
-	});
-	return brdArray;
-}
+	function makeBrdList() {
+		var brdArray = new Array();
+		var brdObject = new Object();
+		var brdList = ${forbrdList};
+		$.each(brdList, function(index, list3) {
+			brdObject = new Object();
+			brdObject.brd_id = list3.brd_id;
+			brdObject.brd_name = list3.brd_name;
+			brdObject.large_id = list3.large_id;
+			brdObject.category_id = list3.category_id;
+			brdArray.push(brdObject);
+		});
+		return brdArray;
+	}
+	
+	function getCheckedValue() {
+		var resultArray = [];
+		$("input[name='chk']:checked").each(function() {
+			resultArray.push($(this).val());
+		});
+		return resultArray;
+	}
+
+	function isNoticeWhatChecked() {
+		var resultArray = [];
+		$("input[name='chk']:checked").each(function() {
+			var tmp = "#chk_" + $(this).val();
+			resultArray.push($(tmp).val());
+		});
+		return resultArray;
+	}
+
+	function setToday() {
+		$("#dateFrom").val($("#hiddenToday").val());
+	}
+
+	function set3_days_ago() {
+		var day3 = getDate(0, 3);
+		$("#dateFrom").val(day3);
+	}
+
+	function set7_days_ago() {
+		var day7 = getDate(0, 7);
+		$("#dateFrom").val(day7);
+	}
+
+	function set1_month_ago() {
+		var month1 = getDate(1, 0);
+		$("#dateFrom").val(month1);
+	}
+
+	function getDate(i, j) {
+		var now = new Date();
+		var year = now.getFullYear();
+		var mon = (now.getMonth() + 1 - i) > 9 ? '' + (now.getMonth() + 1 - i)
+				: '0' + (now.getMonth() + 1 - i);
+		var day = (now.getDate() - j) > 9 ? '' + (now.getDate() - j) : '0'
+				+ (now.getDate() - j);
+		var today = year + '-' + mon + '-' + day;
+		return today;
+	}
+
+	function searchPostList() {
+		var dateFrom = $("#dateFrom").val();
+		var dateTo = $("#hiddenTomorrow").val();
+		var large_id = $("#large_List").val();
+		var category_id = $("#category_List").val();
+		var brd_id = $("#brd_List").val();
+		var post_notice = $("#post_notice").val();
+		var post_del = $("#post_del").val();
+		var keywordType = $("#keywordTypeForSearchPost").val();
+		if ($("#keywordForSearchPost").val() == "") {
+			var keyword = "&NotAtAll&";
+		} else {
+			var keyword = $("#keywordForSearchPost").val();
+		}
+
+		var query = {
+			"dateFrom" : dateFrom,
+			"dateTo" : dateTo,
+			"large_id" : large_id,
+			"category_id" : category_id,
+			"brd_id" : brd_id,
+			"post_notice" : post_notice,
+			"keywordType" : keywordType,
+			"keyword" : keyword,
+			"post_del" : post_del
+		};
+
+		$.ajax({
+			async : false,
+			type : "post",
+			url : "${contextPath}/admin/A_postSearch",
+			data : query,
+			success : function(data) {
+				var e = $(data).find("#postListTable");
+				$("#postListTable").html(e).trigger("create");
+			}
+		});
+	}
+	
 	$(document).ready(function() {
 		$(document).on("change","select[name='keywordTypeForSearchPost']",function() {
 			var inputbox = $("input[name='keywordForSearchPost']");
 			var selectValue = $(this).val();
 			if (selectValue != "allthing") {
-				inputbox.attr('style', "width: 300px;display:inline;");
+				inputbox.attr('style',"width: 300px;display:inline;");
 			} else {
-				inputbox.attr('style', "width: 300px;display:none;");
+				inputbox.attr('style',"width: 300px;display:none;");
 			}
 		});
-	
+
 		var largeArray = makeLargeList();
 		var categoryArray = makeCategoryList();
 		var brdArray = makeBrdList();
-		
+
 		//largeSelectBox 만들기
 		var largeSelectBox = $("select[name='large_List']");
 		for (var i = 0; i < largeArray.length; i++) {
@@ -173,7 +260,7 @@ function makeBrdList(){
 			brdSelectBox.append("<option value='0'>전체목록</option>");
 			var categorySelectBox = $("select[name='category_List']");
 			categorySelectBox.children().remove();
-			
+
 			//선택한 첫번째 박스의 값을 가져와 일치하는 값을 두번째 셀렉트 박스에 넣는다.
 			$("option:selected", this).each(function() {
 				var selectValue = $(this).val();
@@ -185,13 +272,13 @@ function makeBrdList(){
 				}
 			});
 		});
-		
+
 		//brdSelectBox 만들기
 		$(document).on("change","select[name='category_List']",function() {
 			//세번째 셀렉트 박스를 삭제 시킨다.
 			var brdSelectBox = $("select[name='brd_List']");
 			brdSelectBox.children().remove();
-			
+
 			//선택한 두번째 박스의 값을 가져와 일치하는 값을 세번째 셀렉트 박스에 넣는다.
 			$("option:selected", this).each(function() {
 				var selectValue = $(this).val();
@@ -203,167 +290,89 @@ function makeBrdList(){
 				}
 			});
 		});
-		
+
 		var today = getDate(0, 0);
 		var oMG = getDate(1, 0);
-		var tomorrow = getDate(0,-1);
+		var tomorrow = getDate(0, -1);
 		$("#hiddenToday").val(today);
 		$("#hiddenTomorrow").val(tomorrow);
 		$("#dateFrom").val(oMG);
 		$("#dateTo").val(today);
-		
-		$(document).on('click', '#allChk', function(){
-			$("input[name='chk']").prop("checked", this.checked);
+
+		$(document).on('click','#allChk',function() {
+			$("input[name='chk']").prop("checked",this.checked);
 		});
-		
-		$(document).on('click', '#deleteWhatSelected', function(){
+
+		$(document).on('click','#deleteWhatSelected',function() {
 			var checkedList = getCheckedValue();
-			var brd_id = <%=request.getParameter("brd_id")%>;
-			
-			var query = {"checkedList":checkedList, "brd_id":brd_id};
-			alert(query.checkedList);
+			var brd_id =<%=request.getParameter("brd_id")%>;
+
+			var query = {
+				"checkedList" : checkedList,
+				"brd_id" : brd_id
+			};
 			if (confirm("선택된 항목을 삭제하시겠습니까?")) {
 				$.ajax({
 					traditional : true,
-					async:false,
-					type:"post",
-					url:"${contextPath}/admin/A_postDelete",
+					async : false,
+					type : "post",
+					url : "${contextPath}/admin/A_postDelete",
 					data : query,
-					success:function(data){
+					success : function(data) {
 						var e = $(data).find("#postListTable");
 						$("#postListTable").html(e).trigger("create");
 					}
 				});
 			}
 		});
-		
-		$(document).on('click', '#reViewWhatSelected', function(){
+
+		$(document).on('click','#reViewWhatSelected',function() {
 			var checkedList = getCheckedValue();
-			var brd_id = <%=request.getParameter("brd_id")%>;
-			
-			var query = {"checkedList":checkedList, "brd_id":brd_id};
+			var brd_id =<%=request.getParameter("brd_id")%>;
+
+			var query = {
+				"checkedList" : checkedList,
+				"brd_id" : brd_id
+			};
 			if (confirm("선택된 항목을 복구하시겠습니까?")) {
 				$.ajax({
 					traditional : true,
-					async:false,
-					type:"post",
-					url:"${contextPath}/admin/A_postReView",
+					async : false,
+					type : "post",
+					url : "${contextPath}/admin/A_postReView",
 					data : query,
-					success:function(data){
+					success : function(data) {
 						var e = $(data).find("#postListTable");
 						$("#postListTable").html(e).trigger("create");
 					}
 				});
 			}
 		});
-		
-		$(document).on('click', '#changeNoticeParamWhatSelected', function(){
+
+		$(document).on('click','#changeNoticeParamWhatSelected',function() {
 			var checkedList = getCheckedValue();
 			var NoticeOrNot = isNoticeWhatChecked();
-			var brd_id = <%=request.getParameter("brd_id")%>;
-			
-			var query = {"checkedList":checkedList, "brd_id":brd_id,"NoticeOrNot":NoticeOrNot};
+			var brd_id =<%=request.getParameter("brd_id")%>;
+
+			var query = {
+				"checkedList" : checkedList,
+				"brd_id" : brd_id,
+				"NoticeOrNot" : NoticeOrNot
+			};
 			if (confirm("선택된 항목을 변경하시겠습니까?")) {
 				$.ajax({
 					traditional : true,
-					async:false,
-					type:"post",
-					url:"${contextPath}/admin/A_postUpdate",
+					async : false,
+					type : "post",
+					url : "${contextPath}/admin/A_postUpdate",
 					data : query,
-					success:function(data){
+					success : function(data) {
 						var e = $(data).find("#postListTable");
 						$("#postListTable").html(e).trigger("create");
 					}
 				});
 			}
-		}); 
+		});
 	});
-
-	function getCheckedValue(){
-		var resultArray = [];
-		$("input[name='chk']:checked").each(function(){
-			resultArray.push($(this).val());
-		});
-		return resultArray;
-	}
-	
-	function isNoticeWhatChecked(){
-		var resultArray = [];
-		$("input[name='chk']:checked").each(function(){
-			var tmp = "#chk_"+$(this).val();
-			resultArray.push($(tmp).val());
-		});
-		return resultArray;
-	}
-	
-	function setToday() {
-		$("#dateFrom").val($("#hiddenToday").val());
-	}
-	
-	function set3_days_ago() {
-		var day3 = getDate(0, 3);
-		$("#dateFrom").val(day3);
-	}
-	
-	function set7_days_ago() {
-		var day7 = getDate(0, 7);
-		$("#dateFrom").val(day7);
-	}
-	
-	function set1_month_ago() {
-		var month1 = getDate(1, 0);
-		$("#dateFrom").val(month1);
-	}
-	
-	function getDate(i, j) {
-		var now = new Date();
-		var year = now.getFullYear();
-		var mon = (now.getMonth() + 1 - i) > 9 ? '' + (now.getMonth() + 1 - i)
-				: '0' + (now.getMonth() + 1 - i);
-		var day = (now.getDate() - j) > 9 ? '' + (now.getDate() - j) : '0'
-				+ (now.getDate() - j);
-		var today = year + '-' + mon + '-' + day;
-		return today;
-	}
-	
-	function searchPostList(){
-		var dateFrom = $("#dateFrom").val();
-		var dateTo = $("#hiddenTomorrow").val();
-		var large_id = $("#large_List").val();
-		var category_id = $("#category_List").val();
-		var brd_id = $("#brd_List").val();
-		var post_notice = $("#post_notice").val();
-		var post_del = $("#post_del").val();
-		var keywordType = $("#keywordTypeForSearchPost").val();
-		if ($("#keywordForSearchPost").val()=="") {
-			var keyword = "&NotAtAll&";
-		} else {
-			var keyword = $("#keywordForSearchPost").val();
-		}
-		
-		var query = {
-				"dateFrom" : dateFrom,
-				"dateTo" : dateTo,
-				"large_id" : large_id,
-				"category_id" : category_id,
-				"brd_id" : brd_id,
-				"post_notice" : post_notice,
-				"keywordType" : keywordType,
-				"keyword" : keyword,
-				"post_del" : post_del
-		};
-
-		$.ajax({
-			async:false,
-			type:"post",
-			url:"${contextPath}/admin/A_postSearch",
-			data:query,
-			success:function(data){
-				var e = $(data).find("#postListTable");
-				alert(e);
-				$("#postListTable").html(e).trigger("create");
-			}
-		});
-	}
 </script>
 <%@include file="include/A_footer.jsp"%>

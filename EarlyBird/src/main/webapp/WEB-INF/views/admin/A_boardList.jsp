@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@include file="include/A_header.jsp"%>
+
 <!-- body -->
 <div class="container">
 	<div class="row">
@@ -24,6 +25,7 @@
 					<th scope="col" class="text-center">게시판 ID</th>
 					<th scope="col" class="text-center">권한(읽기/쓰기)</th>
 					<th scope="col" class="text-center">새글/총 글 갯수</th>
+															  
 					<th scope="col" class="text-center">사용자 표시여부</th>
 					<th scope="col" class="text-center">게시판 관리</th>
 				</tr>
@@ -47,6 +49,7 @@
 							value="${list.brd_writeauth }"></td>
 						<td class="text-center">${list.brd_newPostNum}/${list.brd_allPostNum}</td>
 						<td class="text-center">${list.brd_exposurename }</td>
+															   
 						<td class="text-center"><input type="button" value="표시/비 표시"
 							onclick="changeVisibility(${list.brd_id},${list.brd_exposure});">
 							<button type="button" onclick="adminUpdate(${list.brd_id});">관리자

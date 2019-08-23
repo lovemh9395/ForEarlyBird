@@ -1,8 +1,13 @@
 package kr.co.forearlybird.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -10,18 +15,25 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.forearlybird.MainController;
 import kr.co.forearlybird.domain.Member;
+import kr.co.forearlybird.paging.Criteria;
+import kr.co.forearlybird.paging.PageMaker;
+import kr.co.forearlybird.paging.replyCriteria;
+import kr.co.forearlybird.paging.replyPageMaker;
+import kr.co.forearlybird.service.ContentService;
 import kr.co.forearlybird.service.MemberService;
 
 @Controller
@@ -29,8 +41,14 @@ import kr.co.forearlybird.service.MemberService;
 public class MemberController {
 	private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
+	@Inject
+	PasswordEncoder passwordEncoder;
+	
 	@Autowired
 	MemberService service;
+	
+	@Autowired
+	ContentService cntService;
 
 	// 로그인으로 이동 (사용자,관리자 레벨로 이동)
 	@RequestMapping(value = "/M_login", method = RequestMethod.GET)
@@ -42,19 +60,18 @@ public class MemberController {
 	// 로그인 처리하기
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/M_login", method = RequestMethod.POST)
-	public String login(HttpServletRequest request, HttpServletResponse response, HttpSession session)
+	public String login(HttpServletRequest request, HttpServletResponse response, HttpSession session,Model model)
 			throws Exception {
 		logger.info("login 처리");
 		logger.info(request.toString());
-		logger.info(request.getParameter("email"));
-		logger.info(request.getParameter("password"));
+		logger.info(request.getParameter("login_mem_userid"));
+		logger.info(request.getParameter("login_mem_password"));
 		Map map = service.login(request);
 		System.out.println("------------+++++++++++++-----------------------" + map);
 
 		if (map == null) { // map 가져오기 오류
 			return "redirect:/";
 		}
-
 		if (map.get("level").toString().equals("1")) { // 차단회원인 경우
 			return "Mainpage";
 		} else if (map.get("level").toString().equals("4")) { // 탈퇴회원인 경우
@@ -63,6 +80,7 @@ public class MemberController {
 			// 세션 부여
 			logger.info(map.toString() + "2");
 			session.setAttribute("user", map);
+			session.setAttribute("mem_level", map.get("level"));
 			session.setAttribute("profilephoto", map.get("profilephoto"));
 			session.setAttribute("useridd", map.get("id"));
 			if (session.getAttribute("FindId") != null) {
@@ -83,6 +101,9 @@ public class MemberController {
 				}
 			}
 		}
+		
+		model.addAttribute("list", cntService.Main_C_list());
+		
 		return "Mainpage";
 	}
 
@@ -116,6 +137,7 @@ public class MemberController {
 		Member info = service.detail(id);
 		System.out.println("fdsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + info);
 		mav.addObject("info", info);
+		logger.info(info.toString());
 		session.setAttribute("mem_profilephoto", info.getMem_photo());
 		mav.setViewName("member/M_info");
 
@@ -126,28 +148,70 @@ public class MemberController {
 	@RequestMapping(value = "/M_update", method = { RequestMethod.GET, RequestMethod.POST })
 	public String M_update(Member member, HttpSession session) {
 		logger.info("정보수정 페이지");
-		String nick = member.getMem_nickname();
-		String phone = member.getMem_phone();
-		String id = member.getMem_userid();
-		logger.info(id);
-		logger.info(phone);
-		logger.info(nick);
+		String mem_nickname = member.getMem_nickname();
+		String mem_password = member.getMem_password();
+		String encPassword = passwordEncoder.encode(mem_password);
+		String mem_phone = member.getMem_phone();
+		System.out.println(member.getMem_gender());
+		int mem_gender = member.getMem_gender();
+		String mem_zipcode = member.getMem_zipcode();
+		String mem_address1 = member.getMem_address1();
+		String mem_address2 = member.getMem_address2();
+		String mem_profile_content = member.getMem_profile_content();
 
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("id", session.getAttribute("useridd"));
-		map.put("nick", nick);
-		map.put("phone", phone);
+		map.put("sessionid", session.getAttribute("useridd"));
+		map.put("mem_nickname", mem_nickname);
+		map.put("mem_password", encPassword);
+		map.put("mem_phone", mem_phone);
+		map.put("mem_gender", mem_gender);
+		map.put("mem_zipcode", mem_zipcode);
+		map.put("mem_address1", mem_address1);
+		map.put("mem_address2", mem_address2);
+		map.put("mem_profile_content", mem_profile_content);
 
 		service.update(map);
 
 		return "redirect:../";
 	}
 
-	// 내 글 보기
-	@RequestMapping(value = "/M_list", method = RequestMethod.GET)
-	public String M_list(Model model) {
-		logger.info("내 글 보기 페이지");
+	@RequestMapping(value = "/M_address", method = RequestMethod.GET)
+	public String M_address() {
 
+		return "member/M_address";
+	}
+
+	// 내 글 보기
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value = "/M_list", method = RequestMethod.GET)
+	public String M_list(HttpServletRequest request, @ModelAttribute("cri") Criteria cri, Model model, Map map,
+			HttpSession session) throws Exception {
+		logger.info("내 글 보기 페이지");
+		logger.info(cri.toString());
+
+		replyCriteria replycri = new replyCriteria();
+		replycri.setreplyPage(Integer.parseInt(request.getParameter("replypage")));
+		replycri.setReplyperPageNum(Integer.parseInt(request.getParameter("replyperPageNum")));
+
+		map.put("replycri", replycri);
+		map.put("cri", cri);
+		map.put("sessionId", session.getAttribute("useridd"));
+		logger.info("國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國" + map);
+		logger.info(replycri.toString());
+		model.addAttribute("list", service.listCriteria(map)); // 게시판의 글 리스트
+		logger.info("撥撥撥撥撥撥撥撥撥撥撥撥撥撥撥撥撥撥撥撥撥撥撥撥撥撥撥撥撥撥" + service.listCriteria(map).toString());
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(service.listCountCriteria(map));
+		model.addAttribute("pageMaker", pageMaker); // 게시판 하단의 페이징 관련, 이전페이지, 페이지 링크 , 다음 페이지
+		logger.info("*******************************************************" + pageMaker);
+
+		model.addAttribute("R_list", service.myreplylistCriteria(map));
+		replyPageMaker replypageMaker = new replyPageMaker();
+		replypageMaker.setReplycri(replycri);
+		replypageMaker.setreplyTotalCount(service.myreplylistCountCriteria(map));
+		model.addAttribute("replypageMaker", replypageMaker); // 게시판 하단의 페이징 관련, 이전페이지, 페이지 링크 , 다음 페이지
+		logger.info("**********************************************************" + replypageMaker);
 		return "member/M_list";
 	}
 
@@ -185,19 +249,47 @@ public class MemberController {
 	// 프로필 업로드 입니당
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/upload")
-	public String upload(HttpSession session, Model model, @RequestParam("file1") MultipartFile file) throws Exception {
-
+	public String upload(HttpSession session, Model model, @RequestParam("file1") MultipartFile file,
+			HttpServletRequest request) throws Exception {
 		Map<Object, Object> postmap = new HashMap<>();
-		postmap.put("user", session.getAttribute("useridd"));
-		postmap.put("file", file);
-		System.out.println(file);
-		Map map = service.restore(postmap, session);
-		session.removeAttribute("profilephoto");
-		session.setAttribute("profilephoto", map.get("ProfileName"));
-		model.addAllAttributes(map);
-		String path = session.getServletContext().getRealPath("/");
-		System.out.println("path::::::::::::::::::" + path);
+		logger.info("1");
+		if (file != null && checkImageType(file)) {
+			logger.info("2");
+			postmap.put("user", session.getAttribute("useridd"));
+			postmap.put("file", file);
+			System.out.println("國國國國國國國國國國國國國國國國國國" + file);
+			Map map = service.restore(postmap, session);
+			session.removeAttribute("profilephoto");
+			session.setAttribute("profilephoto", map.get("ProfileName"));
+			model.addAllAttributes(map);
+			String path = session.getServletContext().getRealPath("/");
+			System.out.println("path::::::::::::::::::" + path);
+		}
 		return "redirect:M_info";
+	}
+
+	public File multipartToFile(MultipartFile file) throws IllegalStateException, IOException {
+		File convFile = new File(file.getOriginalFilename());
+		convFile.createNewFile();
+		FileOutputStream fos = new FileOutputStream(convFile);
+		fos.write(file.getBytes());
+		fos.close();
+		return convFile;
+	}
+
+	// 파일의 이미지 타입인지 아닌지 확인하기 위한 메소드
+	private boolean checkImageType(MultipartFile file) {
+		try {
+			String contentType = Files.probeContentType(multipartToFile(file).toPath());
+			if (contentType != null) {
+				return contentType.startsWith("image");
+			} else {
+				return false;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	// 이메일 인증
@@ -237,5 +329,40 @@ public class MemberController {
 
 		return "member/M_searchID";
 	}
-
+	
+	//아이디 중복체크
+	@ResponseBody
+	@RequestMapping(value="/M_CheckId", method= {RequestMethod.GET,RequestMethod.POST})
+	public int M_CheckId(HttpServletRequest request,Model model) throws Exception {
+		String formId = request.getParameter("formId");
+		logger.info(formId);
+		int result = service.CheckId(formId) ;
+		if(result == 0) {
+			return 1;
+		}
+		return 0;
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@ResponseBody
+	@RequestMapping(value="/login_Check", method = {RequestMethod.GET,RequestMethod.POST})
+	public int login_Check(HttpServletRequest request,Map map) throws Exception {
+		String formId = request.getParameter("login_id");
+		String login_pass = request.getParameter("login_pass");
+		map.put("id", formId);
+		map.put("login_pass", login_pass);
+		int result = service.CheckId(formId);
+		if(result == 0) {
+			return 1;
+		} else if (result == 1) {
+			result = service.CheckPass(map);
+			if(result == 2) {
+				return 2;
+			} else {
+				return 3;
+			}
+		}
+		
+		return 0;
+	}
 }

@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <div class="container">
-	<div>
+	<div>							   
 		<div class="row">
 			<div class="col-md-auto">
 				<h2>전체 게시물 목록</h2>
@@ -22,6 +22,7 @@
 	</div>
 	<div class="table-responsive">
 		<table class="table align-items-center table-flush">
+											 
 			<thead>
 				<tr>
 					<th scope="col"><input type="checkbox" id="allChk"
@@ -39,11 +40,11 @@
 			</thead>
 			<tbody>
 				<c:forEach items="${postList }" var="list" varStatus="status">
-					<tr>
+					<tr>								   
 						<td><input type="checkbox" name="chk"
 							value="${list.post_id }"> <input type="hidden" id="chk_${list.post_id }"
 							value="${list.post_notice }">
-						<td>${list.post_id }</td>
+						<td>${list.post_id }</td>					 
 						<!-- 글 번호 -->
 						<td>${list.large_name }</td>
 						<!-- 대분류 -->

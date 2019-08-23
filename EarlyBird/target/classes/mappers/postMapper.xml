@@ -13,12 +13,12 @@
 		resultType="kr.co.forearlybird.domain.Post">
 	<![CDATA[
 	select
-   	post_id, post_title, post_content, mem_userid, post_like, post_hit
+   	*
 	from
     post
-	where post_id > 0
+	where post_id > 0 and brd_id = #{brd_id} and post_del = 0
 	order by post_id desc
-	limit #{pageStart}, #{perPageNum}
+	limit #{cri.pageStart}, #{cri.perPageNum}
 	]]>
 	</select>
 
@@ -26,6 +26,7 @@
 		select count(post_id)
 		as cnt
 		from post
+		where brd_id = #{brd_id} and post_del = 0
 	</select>
 
 	<select id="P_detail" parameterType="java.lang.Integer"
@@ -37,11 +38,11 @@
 
 	<insert id="P_make" parameterType="java.util.Map">
 		insert into
-		post(mem_userid,post_title,post_content,post_datetime,post_updated_datetime,post_comment_updated_datetime)
-		values(#{mem_userid},#{post_title},#{post_content},now(),now(),now())
+		post(brd_id,mem_userid,post_title,post_content,post_datetime,post_updated_datetime,post_ip)
+		values(#{brd_id},#{mem_userid},#{post_title},#{post_content},now(),now(),now())
 	</insert>
 
-	<update id="P_delete" parameterType="java.lang.Integer">
+	<update id="P_delete" parameterType="java.lang.String">
 		update post
 		set post_del=1
 		where post_id=#{post_id}
@@ -52,20 +53,20 @@
 		set post_del=0
 		where post_id=#{post_id}
 	</update>
-
 	<update id="P_update" parameterType="java.util.Map">
 		update post
 		set
-		post_title=#{post_title},post_content=#{post_content}
+		post_title =
+		#{post_title},post_content=#{post_content},post_updated_datetime=now()
 		where
-		post_id=#{post_id}
+		post_id = #{post_id}
 	</update>
 
 	<update id="P_recommand" parameterType="java.lang.Integer">
 		update post
 		set post_like
 		= post_like + 1
-		where post_id=#{post_id}
+		where post_id = #{post_id}
 	</update>
 
 	<update id="P_hit" parameterType="java.lang.Integer">

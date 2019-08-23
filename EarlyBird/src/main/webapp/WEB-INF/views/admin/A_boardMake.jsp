@@ -78,7 +78,12 @@
 		var brd_writeauth = $("input[name='RadioWrite']:checked").val();
 		var brd_name = document.getElementById("brd_name").value;
 
-		doAjax(large_id, category_id, brd_readauth, brd_writeauth, brd_name)
+		if (large_id!=null&&category_id!=null&&brd_readauth!=null&&brd_writeauth!=null&&brd_name!=null) {
+			doAjax(large_id, category_id, brd_readauth, brd_writeauth, brd_name);
+		} else {
+			alert("모든 항목을 기입하십시오");
+		}
+		
 	}
 	function doAjax(large_id, category_id, brd_readauth, brd_writeauth,
 			brd_name) {

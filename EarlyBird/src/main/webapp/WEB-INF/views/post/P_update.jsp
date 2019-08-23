@@ -27,9 +27,13 @@
 		<script>
 			$(document).ready(function() {
 				$("#addP_update").click(function() {
-					var post_id = <%= request.getParameter("post_id") %>
-					var title = $("#post_title").val();
+					var post_id =
+		<%=request.getParameter("post_id")%>
+			var title = $("#post_title").val();
 					var content = $("#post_content").val();
+					var brd_id =
+		<%=request.getParameter("brd_id")%>
+			alert(brd_id);
 					$.ajax({
 						async : false,
 						type : "post",
@@ -37,10 +41,10 @@
 						data : {
 							post_title : title,
 							post_content : content,
-							post_id : post_id
+							post_id : post_id,
 						},
 						success : function(data) {
-							location.href = "P_list";
+							location.href = "P_list?brd_id=" + brd_id;
 						}
 					})
 				})
@@ -58,7 +62,7 @@
 							<div class="col-11" align="right">
 								<button type="button" id="addP_update" class="btn btn-primary">수정하기</button>
 								<a
-									href="${contextPath }/post/P_detail?post_id=${P_detail.post_id}"><button
+									href="${contextPath }/post/P_detail?post_id=<%=request.getParameter("post_id")%>"><button
 										type="button" class="btn btn-primary">취소하기</button></a>
 							</div>
 						</div>
@@ -79,7 +83,8 @@
 										<th scope="row" style="padding-left: 40px">
 											<div class="media-body">
 												<span class="mb-0 text-lg"><input type="text"
-													id="post_title" style="width: 1500px;"></span>
+													id="post_title" style="width: 1500px;"
+													value="${updatePost.post_title }"></span>
 											</div>
 										</th>
 									</tr>
@@ -99,7 +104,8 @@
 										<td style="font-size: 20px; height: 556px"><span
 											class="badge badge-dot mr-4"> <i class="mb-0 text-lg"></i>
 												<input type="text" id="post_content"
-												style="width: 1500px; height: 500px; font-size: 25px;"></span></td>
+												style="width: 1500px; height: 500px; font-size: 25px;"
+												value="${updatePost.post_content}"></span></td>
 									</tr>
 								</tbody>
 							</table>
@@ -108,6 +114,9 @@
 				</div>
 			</div>
 		</div>
+		<!-- footer -->
+		<%@ include file="../include/main_footer.jsp"%>
+		<!-- end footer -->
 		<!-- end body -->
 	</div>
 </body>
