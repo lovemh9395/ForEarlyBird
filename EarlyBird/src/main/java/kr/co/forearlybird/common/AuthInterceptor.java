@@ -6,14 +6,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 public class AuthInterceptor implements HandlerInterceptor {
 
-	private static final Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
+//	private static final Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
 
 	// controller에 요청을 보내기 전에 호출되는 메소드
 	@SuppressWarnings("rawtypes")

@@ -25,7 +25,7 @@ import kr.co.forearlybird.domain.A_postListDTO;
 import kr.co.forearlybird.domain.Board;
 import kr.co.forearlybird.domain.Category;
 import kr.co.forearlybird.domain.LargeCategory;
-import kr.co.forearlybird.domain.Post;
+import kr.co.forearlybird.domain.Post;						  
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -33,8 +33,10 @@ public class AdminServiceImpl implements AdminService {
 
 	@Autowired
 	LargeCategoryDAO largecategoryDAO;
+
 	@Autowired
 	CategoryDAO categoryDAO;
+
 	@Autowired
 	BoardDAO boardDAO;
 	@Autowired
@@ -91,6 +93,7 @@ public class AdminServiceImpl implements AdminService {
 		logger.info(list.toString());
 		// DTO->Map 변환로직
 		for (int i = 0; i < list.size(); i++) {
+
 			// (ex)large_id = 1 -> id = "01"
 			Integer childNum = 0;
 			String id = "";
@@ -132,7 +135,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	@SuppressWarnings("rawtypes")
 	public List<Map> CategoryList() {
-		logger.info("CategoryList");
+		logger.info("CategoryList");					  
 		List<Map> result = new ArrayList<>();
 		List<Category> list = categoryDAO.getCategoryList();
 		// DTO->Map 변환로직
@@ -198,7 +201,7 @@ public class AdminServiceImpl implements AdminService {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Map> getBoardList() {
-		logger.info("getBoardList");
+		logger.info("getBoardList");			  
 		List<Board> boards = boardDAO.getBoardList();
 		List<Map> result = new ArrayList<>();
 
@@ -226,7 +229,6 @@ public class AdminServiceImpl implements AdminService {
 
 			int newPostNum = postDAO.getNewPostNumUnderBoard((int) boards.get(i).getBrd_id());
 			int allPostNum = postDAO.getAllPostNumUnderBoard((int) boards.get(i).getBrd_id());
-
 			map.put("large_name", large_name);
 			map.put("category_name", category_name);
 			map.put("brd_readauthname", brd_readauthname);
@@ -234,7 +236,7 @@ public class AdminServiceImpl implements AdminService {
 			map.put("brd_exposure", boards.get(i).getBrd_exposure());
 			map.put("brd_exposurename", brd_exposurename);
 			map.put("brd_newPostNum", newPostNum);
-			map.put("brd_allPostNum", allPostNum);
+			map.put("brd_allPostNum", allPostNum);			 
 			result.add(map);
 		}
 		return result;

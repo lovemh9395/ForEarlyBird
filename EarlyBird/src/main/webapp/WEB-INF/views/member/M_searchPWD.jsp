@@ -8,9 +8,35 @@
 <script>
 	$(document).ready(function() {
 		$("#searchPWDdetail").click(function() {
-			document.getElementById('searchPWDform').submit();
+			if (searchPassformCheck()) {
+				document.getElementById('searchPWDform').submit();
+			}
 		});
 	});
+
+	function searchPassformCheck() {
+		var expemail = /\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/;
+		if (!expemail.test($("input[name='mem_userid']").val())) {
+			alert("이메일 형식이 맞지 않습니다.");
+			return false;
+		}
+		var expname = /^[가-힣]{2,4}$/;
+		if (!expname.test($("input[name='mem_username']").val())) {
+			alert("이름은 한글만 입력이 가능합니다.");
+			return false;
+		}
+		var exptel1 = /^(19[0-9][0-9]|20\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/;
+		if (!exptel1.test($("input[name='mem_birthday']").val())) {
+			alert("생년월일을 다시 입력해주세요");
+			return false;
+		}
+		var exptel1 = /(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/g;
+		if (!exptel1.test($("input[name='mem_phone']").val())) {
+			alert("전화번호를 다시 입력해주세요");
+			return false;
+		}
+		return true;
+	}
 </script>
 <div class="modal fade" id="modal-searchPWD" tabindex="-1" role="dialog"
 	aria-labelledby="modal-form" aria-hidden="true">
@@ -35,15 +61,8 @@
 										<span class="input-group-text"><i
 											class="ni ni-email-83"></i></span>
 									</div>
-									<c:if test="${empty FindId}">
-										<input class="form-control" placeholder="이메일 아이디"
-											 name="mem_userid" value="">
-									</c:if>
-									<c:if test="${not empty FindId }">
-										<input class="form-control"  name="mem_userid"
-											value="${FindId }">
-									</c:if>
-
+									<input class="form-control" placeholder="이메일 아이디"
+										name="mem_userid" value="${FindId }">
 								</div>
 							</div>
 							<div class="form-group mb-3">
@@ -73,7 +92,7 @@
 											class="ni ni-lock-circle-open"></i></span>
 									</div>
 									<input class="form-control" placeholder="전화번호" type="tel"
-										 name="mem_phone">
+										name="mem_phone">
 								</div>
 							</div>
 							<div class="text-center">

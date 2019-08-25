@@ -30,7 +30,6 @@
 		SELECT large_id FROM largecategory where large_name =
 		#{large_name}
 	</select>
-	
 	<select id="getLargeName" parameterType="java.lang.Integer"
 		resultType="java.lang.String">
 		SELECT large_name FROM largecategory where large_id =

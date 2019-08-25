@@ -26,7 +26,7 @@
 						<br>
 						<br>
 						<div align="center">
-							<a href="${contextPath }/post/P_delete?post_id=${P_detail.post_id}"><button type="button" class="btn btn-primary">삭제하기</button></a>
+							<a href="${contextPath }/post/P_list?post_id=${P_detail.post_id}&brd_id=<%=request.getParameter("brd_id")%>" ><button type="button" class="btn btn-primary">삭제하기</button></a>
 							<button type="button" class="btn btn-primary" data-dismiss="modal">취소하기</button>
 						</div>
 					</div>

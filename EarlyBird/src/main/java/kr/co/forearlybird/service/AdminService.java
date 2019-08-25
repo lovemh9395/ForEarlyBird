@@ -66,6 +66,5 @@ public interface AdminService {
 	void reViewPostToBoard(Map map);
 
 	@SuppressWarnings("rawtypes")
-	void updatePostToBoard(Map map);
-
+	void updatePostToBoard(Map map); 
 }

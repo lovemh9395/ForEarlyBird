@@ -24,25 +24,35 @@
 			</div>
 		</form>
 		<!-- User -->
-		<div class="row">
-			<div class="col-md-auto">
-				<button class="btn" data-toggle="dropdown" aria-haspopup="true"
-					aria-expanded="false">${user.id}님환영합니다</button>
+		<ul class="navbar-nav align-items-center d-none d-md-flex">
+			<li class="nav-item dropdown"><a class="nav-link pr-0"
+				role="button" data-toggle="dropdown" aria-haspopup="true"
+				aria-expanded="false">
+					<div class="media align-items-center">
+						<span class="avatar avatar-sm rounded-circle"> <img
+							alt="Image placeholder"
+							src="/resources/uploadimage/${profilephoto}">
+						</span>
+						<div class="media-body ml-2 d-none d-lg-block">
+							<span class="mb-0 text-sm  font-weight-bold">${user.name}</span>
+						</div>
+					</div>
+			</a>
 				<div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
 					<div class=" dropdown-header noti-title">
-						<h6 class="text-overflow m-0">회원님의 정보</h6>
+						<h6 class="text-overflow m-0">${user.name}님환영합니다</h6>
 					</div>
-					<a href="./examples/profile.html" class="dropdown-item"> <i
-						class="ni ni-single-02"></i> <span>내 정보 보기</span>
-					</a> <a href="./examples/profile.html" class="dropdown-item"> <i
-						class="ni ni-settings-gear-65"></i> <span>내 글 보기</span>
+					<a href="${contextPath}/member/M_info?id=${user.id}"
+						class="dropdown-item"> <i class="ni ni-single-02"></i> <span>내
+							정보 보기</span>
+					</a> <a href="${contextPath}/member/M_list" class="dropdown-item">
+						<i class="ni ni-settings-gear-65"></i> <span>내 글 보기</span>
 					</a>
-				</div>
-			</div>
-			<div class="col-md-auto">
-				<a href="${contextPath}/member/M_logout"><button
-						class="btn btn-info" type="button">로그아웃</button></a>
-			</div>
-		</div>
+					<div class="dropdown-divider"></div>
+					<a href="${contextPath}/member/M_logout" class="dropdown-item">
+						<i class="ni ni-user-run"></i> <span>로그아웃</span>
+					</a>
+				</div></li>
+		</ul>
 	</div>
 </nav>

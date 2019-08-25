@@ -39,7 +39,7 @@
 		<property name="host" value="smtp.gmail.com" />
 		<property name="port" value="587" />
 		<property name="username" value="lovemh9395" />
-		<property name="password" value="!Jj178256439" />
+		<property name="password" value="@Jj178256439" />
 
 
 		<!-- email 요청시는 SMTP -->
@@ -57,6 +57,8 @@
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
-	
+
 	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
 </beans>
+
+

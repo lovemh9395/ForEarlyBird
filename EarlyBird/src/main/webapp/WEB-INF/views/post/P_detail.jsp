@@ -11,18 +11,34 @@
 <%@ include file="../include/core.jsp"%>
 <!--  end Core -->
 <script>
-	$(document).ready(function(){
-		$("#P_recommand").click(function(){
-			var post_id= <%= request.getParameter("post_id") %>
+	$(document).ready(function() {
+		$("#P_recommand").click(function() {
+			var post_id = <%=request.getParameter("post_id")%>;
+			$.ajax({
+				type : "post",
+				url : "${contextPath}/post/P_recommand",
+				data : {post_id : post_id},
+				success : function(data) {
+					location.reload();
+				}, error : function(data){
+					alert("실패"+data);
+				}
+			});
+		});
+		$("#deletePost").click(function(){
+			var post_id = ${P_detail.post_id };
+			var brd_id = ${P_detail.brd_id};
 			$.ajax({
 				type:"post",
-				url:"${contextPath}/post/P_recommand",
-				data:{post_id:post_id},
-				success:function(data){
-					location.reload();
-				}
-			})
-		})
+				url:"${contextPath}/post/P_delete",
+				data:{post_id:post_id,
+					  brd_id:brd_id
+					},
+					success:function(data){
+						location.href="${contextPath}/post/P_list?brd_id=${P_detail.brd_id}";
+					}
+			});
+		});
 	});
 </script>
 <!-- head -->
@@ -32,7 +48,7 @@
 	<!-- side bar -->
 	<%@ include file="../include/left_navbar.jsp"%>
 	<!-- end side bar -->
-	<div class="main-content">
+	<div class="main-content" style="width: 1644px">
 		<!-- main_header -->
 		<%@ include file="../include/main_navbar.jsp"%>
 		<!-- end main header -->
@@ -40,41 +56,30 @@
 		<%@ include file="../include/main_header.jsp"%>
 		<!-- end Header -->
 		<!-- body -->
-		<div class="row mt-5">
+		<div class="row">
 			<div class="col">
 				<div class="card bg-default shadow">
 					<div class="card-header bg-transparent border-0">
-						<div class="row">
-							<div class="col-1">
-								<h3 class="text-white mb-0">자유 게시판</h3>
-							</div>
-							<div class="col-11" align="right">
-								<a
-									href="${contextPath }/post/P_detail?post_id=${P_detail.post_id - 1}"><button
-										type="button" class="btn btn-primary">이전글</button></a> <a
-									href="${contextPath }/post/P_list"><button type="button"
-										class="btn btn-primary">목록보기</button></a> <a
-									href="${contextPath }/post/P_detail?post_id=${P_detail.post_id + 1}"><button
-										type="button" class="btn btn-primary">다음글</button></a>
-							</div>
-						</div>
+						<h3 class="text-white mb-0">자유게시판</h3>
 					</div>
 					<div class="table-responsive">
 						<table class="table align-items-center table-dark table-flush">
 							<colgroup>
-								<col style="width: 50px">
-								<col style="width: 500px">
-								<col style="width: 70px">
-								<col style="width: 50px">
-								<col style="width: 70px">
+								<col style="width: 7%">
+								<col style="width: 64%">
+								<col style="width: 7%">
+								<col style="width: 7%">
+								<col style="width: 7%">
+								<col style="width: 8%">
 							</colgroup>
 							<thead class="thead-dark">
 								<tr>
-									<th scope="col" style="font-size: 15px">글 번호</th>
-									<th scope="col" style="font-size: 15px">글 제목</th>
+									<th scope="col" style="font-size: 15px">글번호</th>
+									<th scope="col" style="font-size: 15px">글제목</th>
 									<th scope="col" style="font-size: 15px">글 작성자</th>
 									<th scope="col" style="font-size: 15px">조회수</th>
 									<th scope="col" style="font-size: 15px">추천수</th>
+									<th scope="col" style="font-size: 15px">작성시간</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -114,34 +119,43 @@
 							</thead>
 							<tbody>
 								<tr>
-									<td style="font-size: 20px; height: 556px"><span
+									<td
+										style="font-size: 20px; height: 556px; padding-top: 0px; padding-bottom: 470px;"><span
 										class="badge badge-dot mr-4"> <i class="mb-0 text-lg"></i>
 											${P_detail.post_content }
 									</span></td>
 								</tr>
 							</tbody>
 						</table>
-
-						<div class="row">
-							<div align="right" class="col-6">
-								<button type="button" class="btn btn-primary" id="P_recommand">추천하기</button>
-							</div>
-							<c:if test="${useridd eq P_detail.mem_userid }">
-								<div align="right" class="col-6">
-									<a
-										href="${contextPath }/post/P_update?post_id=${P_detail.post_id}"><button
-											type="button" class="btn btn-primary">수정하기</button></a>
-									<button type="button" class="btn btn-primary"
-										data-toggle="modal" id="deletPost" data-target="#P_delete">삭제하기</button>
-								</div>
-							</c:if>
+					</div>
+					<div class="row" style="marjin-left: 0px;">
+						<div align="right" class="col-6">
+							<button type="button" class="btn btn-primary" id="P_recommand">추천하기</button>
 						</div>
+						<c:if test="${useridd eq P_detail.mem_userid }">
+							<div align="right" class="col-6">
+								<a
+									href="${contextPath }/post/P_update?post_id=${P_detail.post_id}&brd_id=${P_detail.brd_id}"><button
+										type="button" class="btn btn-primary">수정하기</button></a>
+								<button type="button" class="btn btn-primary"
+									data-toggle="modal" id="deletePost" data-target="#P_delete">삭제하기</button>
+							</div>
+						</c:if>
 					</div>
 				</div>
 			</div>
 		</div>
+		<div id="R_list">
+			<p>
+				<%@ include file="../reply/R_list.jsp"%>
+			</p>
+		</div>
+		<!-- footer -->
+		<%@ include file="../include/main_footer.jsp"%>
+		<!-- end footer -->
 		<!-- end body -->
 	</div>
 </body>
+
 <%@ include file="P_delete.jsp"%>
 </html>

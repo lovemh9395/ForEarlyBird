@@ -41,8 +41,8 @@
 				<c:forEach items="${postList }" var="list" varStatus="status">
 					<tr>
 						<td><input type="checkbox" name="chk"
-							value="${list.post_id }"> <input type="hidden" id="chk_${list.post_id }"
-							value="${list.post_notice }">
+							value="${list.post_id }"> <input type="hidden"
+							id="chk_${list.post_id }" value="${list.post_notice }">
 						<td>${list.post_id }</td>
 						<!-- 글 번호 -->
 						<td>${list.large_name }</td>

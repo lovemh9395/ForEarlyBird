@@ -31,6 +31,14 @@ public class AdminController {
 	@Autowired
 	AdminService service;
 
+	// Admin Main page 이동
+	@RequestMapping(value = "/A_mainpage", method = RequestMethod.GET)
+	public String Adminhome(Model model, HttpSession session) {
+		logger.info("혹시 들어왔...니?");
+		
+		return "A_mainpage";
+	}
+	
 	// 게시판 별 관리자 보기
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/A_adminList", method = RequestMethod.GET)
@@ -103,7 +111,6 @@ public class AdminController {
 		model.addAttribute("adminList", adminList);
 		return "admin/A_adminList";
 	}
-
 	// 회원 검색
 	@RequestMapping(value = "/A_memberSearch", method = RequestMethod.GET)
 	public String A_memberSearch(HttpSession session, Model model) {
@@ -191,7 +198,7 @@ public class AdminController {
 	// 카테고리 보기
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/A_categoryList", method = { RequestMethod.GET, RequestMethod.POST })
-	public String A_categoryList(HttpSession session, Model model) throws Exception {
+	public String A_categoryList(HttpSession session, Model model) throws Exception{
 		logger.info("카테고리 보기 페이지");
 		List<Map> largeList = service.largeCategoryList();
 		List<Map> smallList = service.CategoryList();

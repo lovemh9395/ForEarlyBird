@@ -22,6 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.forearlybird.dao.MemberDAO;
 import kr.co.forearlybird.domain.Member;
+import kr.co.forearlybird.domain.Post;
+import kr.co.forearlybird.domain.Reply;
 import kr.co.forearlybird.email.MailHandler;
 import kr.co.forearlybird.email.TempKey;
 
@@ -39,8 +41,8 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public Map login(HttpServletRequest request) throws Exception {
 		logger.info("로그인 service");
-		String id = request.getParameter("email");
-		String pw = request.getParameter("password");
+		String id = request.getParameter("login_mem_userid");
+		String pw = request.getParameter("login_mem_password");
 
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", id);
@@ -56,17 +58,21 @@ public class MemberServiceImpl implements MemberService {
 
 		if (passwordEncoder.matches(pw, rawPw)) {
 			logger.info("비밀번호 일치");
+			result.put("id", temp.get("mem_userid"));
 			result.put("pw", temp.get("mem_password"));
+			result.put("name", temp.get("mem_username"));
+			result.put("profilephoto", temp.get("mem_photo"));
+			result.put("level", temp.get("mem_level"));
+
+			memberDAO.mem_logintime(id);
+
 		} else {
 			logger.info("비밀번호 불일치");
+			result = null;
+			return result;
 		}
 
-		result.put("id", temp.get("mem_userid"));
-//		result.put("pw", temp.get("mem_password"));
-		result.put("name", temp.get("mem_username"));
-		result.put("profilephoto", temp.get("mem_photo"));
-		result.put("level", temp.get("mem_level"));
-
+		logger.info(result.toString());
 		return result;
 	}
 
@@ -253,7 +259,7 @@ public class MemberServiceImpl implements MemberService {
 		sendMail.setSubject("[ForEarlyBird 서비스 이메일 인증]");
 		logger.info("4");
 		sendMail.setText(
-				new StringBuffer().append("<h1>메일인증</h1>").append("회원님의 임시 비밀번호는 " + vo.getMem_password() + " 입니다.")
+				new StringBuffer().append("<h1>메일인증</h1>").append("회원님의 임시 비밀번호는 " + key + " 입니다.")
 						.append("<a href='http://localhost:9002/member/M_newJoin?user_email=")
 						.append(vo.getMem_profile_content()).append("&key=").append(key)
 						.append("' target='_blenk'>이메일 인증 확인</a>").toString());
@@ -264,5 +270,56 @@ public class MemberServiceImpl implements MemberService {
 		logger.info("7");
 		sendMail.send();
 		logger.info("8");
+	}
+
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List<Post> listCriteria(Map map) throws Exception {
+		logger.info("내 글 보기 Post Service");
+		return memberDAO.listCriteria(map);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public int listCountCriteria(Map map) throws Exception {
+		logger.info("내 글 보기 Count Paging Service");
+		return memberDAO.countPaging(map);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List<Reply> myreplylistCriteria(Map map) throws Exception {
+		logger.info("내 댓글 보기 Post Service");
+		return memberDAO.myreplylistCriteria(map);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public int myreplylistCountCriteria(Map map) throws Exception {
+		logger.info("내 댓글 보기 Count Paging Service");
+		return memberDAO.myreplycountPaging(map);
+	}
+
+	@Override
+	public int CheckId(String formId) throws Exception {
+		return memberDAO.CheckId(formId);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public int CheckPass(Map map) {
+		String login_pass = (String) map.get("login_pass");
+
+		String rawPw = memberDAO.getrawPw(map);
+		logger.info("암호화 비밀번호" + rawPw);
+		logger.info("비밀번호" + login_pass);
+
+		if (passwordEncoder.matches(login_pass, rawPw)) {
+			logger.info("비밀번호 일치");
+			return 3;
+		} else {
+			return 2;
+		}
 	}
 }

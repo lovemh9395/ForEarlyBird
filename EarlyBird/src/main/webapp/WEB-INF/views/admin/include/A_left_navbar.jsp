@@ -96,7 +96,7 @@
 						class="ni ni-calendar-grid-58 text-gray"></i> 일간 현황 분석
 				</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="./examples/register.html"> <i
+					href="${contextPath }/admin/dashboard/"> <i
 						class="ni ni-chart-pie-35 text-green"></i> 사이트 요약 분석
 				</a></li>
 			</ul>

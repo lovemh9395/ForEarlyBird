@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import kr.co.forearlybird.MainController;
 import kr.co.forearlybird.domain.Post;
 import kr.co.forearlybird.paging.Criteria;
 import kr.co.forearlybird.paging.PageMaker;
@@ -28,7 +27,7 @@ import kr.co.forearlybird.service.PostService;
 @Controller
 @RequestMapping(value = "post")
 public class PostController {
-	private static final Logger logger = LoggerFactory.getLogger(MainController.class);
+	private static final Logger logger = LoggerFactory.getLogger(PostController.class);
 
 	@Autowired
 	private PostService service;
@@ -50,7 +49,7 @@ public class PostController {
 	@RequestMapping(value = "/P_make", method = RequestMethod.POST)
 	public String P_make(HttpServletRequest request, HttpSession session, Map map) {
 		logger.info("게시글 등록 페이지");
-		
+		map.put("brd_id", request.getParameter("brd_id"));
 		map.put("post_title", request.getParameter("post_title"));
 		map.put("post_content", request.getParameter("post_content"));
 		map.put("mem_userid", session.getAttribute("useridd"));
@@ -66,8 +65,10 @@ public class PostController {
 	}
 
 	@RequestMapping(value = "/P_update", method = RequestMethod.GET)
-	public String P_update() {
+	public String P_update(@RequestParam("post_id") int post_id, Post updatePost, Model model) {
 		logger.info("게시글 수정 페이지");
+		updatePost = service.P_detail(post_id);
+		model.addAttribute("updatePost", updatePost);
 		return "post/P_update";
 	}
 
@@ -97,10 +98,8 @@ public class PostController {
 	@RequestMapping(value = "/P_search", method = RequestMethod.GET)
 	public String P_search(Model model) {
 		logger.info("게시글 검색 페이지");
-
 		return "P_search";
 	}
-
 //	// 게시글 상세보기
 //	@RequestMapping(value = "/P_detail", method = RequestMethod.GET)
 //	public String P_detail(Model model) {
@@ -115,16 +114,12 @@ public class PostController {
 	public ModelAndView P_recommend(HttpServletRequest request, HttpServletResponse response, HttpSession session,
 			@RequestParam int post_id) {
 		logger.info("게시글 추천하기 페이지");
-
 //		int result = service.P_recommand(post_id);
-
 		ModelAndView view = new ModelAndView();
-
 		Cookie[] cookies = request.getCookies();
 
 		// 비교하기 위해 새로운 쿠키
 		Cookie viewCookies = null;
-
 		logger.info("cookies --------------------------------------" + cookies);
 		// 쿠키가 있을 경우
 		if (cookies != null && cookies.length > 0) {
@@ -136,28 +131,20 @@ public class PostController {
 				}
 			}
 		}
-
 //		if (result != 0) {
 //			System.out.println("게시물 추천 ----- System - 해당 상세 리뷰페이지로 넘어감");
-//
 //			view.addObject("P_recommand",result);
-//			
 //			logger.info(view.toString());
-
 		// 만일 viewCookie가 null일 경우 쿠키를 생성해서 조회수 증가 로직을 처리함.
 		if (viewCookies == null) {
 			logger.info("게시물 추천 ----- cookie 없음");
-
 			// 쿠키 생성(이름, 값)
 			Cookie newCookies = new Cookie("cookies" + post_id, "|" + post_id + "|");
-
 			logger.info("게시물 추천 ----- 쿠키 생성 이름,값 " + newCookies);
 			// 쿠키 추가
 			response.addCookie(newCookies);
-
 			// 쿠키를 추가 시키고 조회수 증가시킴
 			int result = service.P_recommand(post_id);
-
 			if (result > 0) {
 				logger.info("게시물 추천 ----- 조회수 증가");
 			} else {
@@ -167,44 +154,51 @@ public class PostController {
 		// viewCookie가 null이 아닐경우 쿠키가 있으므로 조회수 증가 로직을 처리하지 않음.
 		else {
 			logger.info("게시물 추천 ----- cookie 있음");
-
 			// 쿠키 값 받아옴.
 			String value = viewCookies.getValue();
-
 			logger.info("게시물 추천 ----- cookie 값 : " + value);
 		}
-
 		view.setViewName("post/P_detail");
 		return view;
 	}
 
 	// 페이징 처리해보장
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value = "/P_list", method = RequestMethod.GET)
-	public String listPage(@ModelAttribute("cri") Criteria cri, Model model) throws Exception {
+	public String listPage(@ModelAttribute("cri") Criteria cri, Model model, @RequestParam("brd_id") int brd_id,
+			Map map) throws Exception {
 		logger.info("페이징 처리 페이지");
 		logger.info(cri.toString());
+		map.put("cri", cri);
+		map.put("brd_id", brd_id);
+		model.addAttribute("list", service.listCriteria(map)); // 게시판의 글 리스트
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
-		pageMaker.setTotalCount(service.listCountCriteria(cri)); 
+		pageMaker.setTotalCount(service.listCountCriteria(map));
 		model.addAttribute("pageMaker", pageMaker); // 게시판 하단의 페이징 관련, 이전페이지, 페이지 링크 , 다음 페이지
-		model.addAttribute("list", service.listCriteria(cri)); // 게시판의 글 리스트
+		logger.info(pageMaker.toString());
 		return "post/P_list";
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@ResponseBody
 	@RequestMapping(value = "/P_detail")
-	public ModelAndView p_listDetail(HttpServletRequest request, HttpServletResponse response, HttpSession session,
-			@RequestParam int post_id) {
-		logger.info("게시물 목록보기 및 조회수 증가 방지 --------");
+	public ModelAndView p_listDetail(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam int post_id, @ModelAttribute("cri") Criteria cri, Map map) throws Exception {
+		logger.info("게시물 상세보기 및 조회수 증가 방지 --------");
+		ModelAndView view = new ModelAndView();
 		// 해당 게시판 번호를 받아 리뷰 상세페이지로 넘겨줌
 		Post p_list = service.P_detail(post_id);
-		ModelAndView view = new ModelAndView();
-
+		map.put("cri", cri);
+		map.put("post_id", post_id);
+		PageMaker pageMaker = makePageMaker(map);
+		view.addObject("R_list", service.replyListCriteria(map));
+		logger.info("國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國" + service.replyListCriteria(map).toString());
+		view.addObject("pageMaker", pageMaker); // 게시판 하단의 페이징 관련, 이전페이지, 페이지 링크 , 다음 페이지
+		logger.info(pageMaker.toString());
 		Cookie[] cookie = request.getCookies();
-
 		// 비교하기 위해 새로운 쿠키
 		Cookie viewCookie = null;
-
 		// 쿠키가 있을 경우
 		if (cookie != null && cookie.length > 0) {
 			for (int i = 0; i < cookie.length; i++) {
@@ -215,26 +209,19 @@ public class PostController {
 				}
 			}
 		}
-
 		if (p_list != null) {
 			logger.info("게시물 목록보기 및 조회수 증가 방지 --------System - 해당 상세 리뷰페이지로 넘어감");
-
 			view.addObject("P_detail", p_list);
 			logger.info(view.toString());
-
 			// 만일 viewCookie가 null일 경우 쿠키를 생성해서 조회수 증가 로직을 처리함.
 			if (viewCookie == null) {
 				logger.info("게시물 목록보기 및 조회수 증가 방지 --------cookie 없음");
-
 				// 쿠키 생성(이름, 값)
 				Cookie newCookie = new Cookie("cookie" + post_id, "|" + post_id + "|");
-
 				// 쿠키 추가
 				response.addCookie(newCookie);
-
 				// 쿠키를 추가 시키고 조회수 증가시킴
 				int result = service.updateHit(post_id);
-
 				if (result > 0) {
 					logger.info("게시물 목록보기 및 조회수 증가 방지 --------조회수 증가");
 				} else {
@@ -244,18 +231,23 @@ public class PostController {
 			// viewCookie가 null이 아닐경우 쿠키가 있으므로 조회수 증가 로직을 처리하지 않음.
 			else {
 				logger.info("게시물 목록보기 및 조회수 증가 방지 --------cookie 있음");
-
 				// 쿠키 값 받아옴.
 				String value = viewCookie.getValue();
-
 				logger.info("게시물 목록보기 및 조회수 증가 방지 --------cookie 값 : " + value);
-
 			}
-
 			view.setViewName("post/P_detail");
 			return view;
 		}
 		return view;
 	}
 
+	@SuppressWarnings("rawtypes")
+	private PageMaker makePageMaker(Map map) throws Exception {
+		PageMaker pageMaker = new PageMaker();
+		logger.info(pageMaker.toString());
+		pageMaker.setCri((Criteria) map.get("cri"));
+		pageMaker.setTotalCount(service.replyListCountCriteria(map));
+
+		return pageMaker;
+	}
 }
