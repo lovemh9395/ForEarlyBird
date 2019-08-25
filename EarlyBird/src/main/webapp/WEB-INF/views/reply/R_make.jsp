@@ -10,9 +10,7 @@
 		$("#addR_make").click(function() {
 			var rpl_content = $("#replyPost_content").val();
 			rpl_content.replace('\r\n', '<br>');
-			var post_id =
-<%=request.getParameter("post_id")%>
-	;
+			var post_id =<%=request.getParameter("post_id")%>;
 			$.ajax({
 				async : true,
 				type : "post",
@@ -22,12 +20,11 @@
 					post_id : post_id
 				},
 				success : function(data) {
-					alert(data);
 					 $("#R_list").html(data);
 				}
-			})
-		})
-	})
+			});
+		});
+	});
 </script>
 <div class="row mt-5">
 	<div class="col">

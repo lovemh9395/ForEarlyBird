@@ -12,6 +12,29 @@
 <!--  end Core -->
 <!-- head -->
 <%@ include file="../include/head.jsp"%>
+<script>
+	$(document).ready(function() {
+		$("#addP_update").click(function() {
+			var post_id =<%=request.getParameter("post_id")%>;
+			var title = $("#post_title").val();
+			var content = $("#post_content").val();
+			var brd_id =<%=request.getParameter("brd_id")%>;
+			$.ajax({
+				async : false,
+				type : "post",
+				url : "${contextPath}/post/P_update",
+				data : {
+					post_title : title,
+					post_content : content,
+					post_id : post_id,
+				},
+				success : function(data) {
+					location.href = "P_list?brd_id=" + brd_id;
+				}
+			});
+		});
+	});
+</script>
 <!-- end head -->
 <body class="">
 	<!-- side bar -->
@@ -24,32 +47,6 @@
 		<!-- Header -->
 		<%@ include file="../include/main_header.jsp"%>
 		<!-- end Header -->
-		<script>
-			$(document).ready(function() {
-				$("#addP_update").click(function() {
-					var post_id =
-		<%=request.getParameter("post_id")%>
-			var title = $("#post_title").val();
-					var content = $("#post_content").val();
-					var brd_id =
-		<%=request.getParameter("brd_id")%>
-			alert(brd_id);
-					$.ajax({
-						async : false,
-						type : "post",
-						url : "${contextPath}/post/P_update",
-						data : {
-							post_title : title,
-							post_content : content,
-							post_id : post_id,
-						},
-						success : function(data) {
-							location.href = "P_list?brd_id=" + brd_id;
-						}
-					})
-				})
-			})
-		</script>
 		<!-- body -->
 		<div class="row mt-5">
 			<div class="col">

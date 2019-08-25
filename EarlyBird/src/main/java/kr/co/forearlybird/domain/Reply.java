@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class Reply {
 	private int rpl_id; //Pk
-	private String mem_id; //댓글 입력한 회원의 PK
+	private String mem_userid; //댓글 입력한 회원의 PK
 	private int post_id; //댓글 정렬을 위한 필드
 	private String rpl_content; //댓글 내용
 	private Date rpl_datetime; //댓글 입력 일시

@@ -114,7 +114,7 @@
 			largeArray.push(largeObject);
 		});
 		return largeArray;
-	}
+	};
 
 	function makeCategoryList() {
 		var categoryArray = new Array();
@@ -128,7 +128,7 @@
 			categoryArray.push(categoryObject);
 		});
 		return categoryArray;
-	}
+	};
 
 	function makeBrdList() {
 		var brdArray = new Array();
@@ -143,7 +143,7 @@
 			brdArray.push(brdObject);
 		});
 		return brdArray;
-	}
+	};
 	
 	function getCheckedValue() {
 		var resultArray = [];
@@ -151,7 +151,7 @@
 			resultArray.push($(this).val());
 		});
 		return resultArray;
-	}
+	};
 
 	function isNoticeWhatChecked() {
 		var resultArray = [];
@@ -160,26 +160,26 @@
 			resultArray.push($(tmp).val());
 		});
 		return resultArray;
-	}
+	};
 
 	function setToday() {
 		$("#dateFrom").val($("#hiddenToday").val());
-	}
+	};
 
 	function set3_days_ago() {
 		var day3 = getDate(0, 3);
 		$("#dateFrom").val(day3);
-	}
+	};
 
 	function set7_days_ago() {
 		var day7 = getDate(0, 7);
 		$("#dateFrom").val(day7);
-	}
+	};
 
 	function set1_month_ago() {
 		var month1 = getDate(1, 0);
 		$("#dateFrom").val(month1);
-	}
+	};
 
 	function getDate(i, j) {
 		var now = new Date();
@@ -190,7 +190,7 @@
 				+ (now.getDate() - j);
 		var today = year + '-' + mon + '-' + day;
 		return today;
-	}
+	};
 
 	function searchPostList() {
 		var dateFrom = $("#dateFrom").val();
@@ -229,7 +229,7 @@
 				$("#postListTable").html(e).trigger("create");
 			}
 		});
-	}
+	};
 	
 	$(document).ready(function() {
 		$(document).on("change","select[name='keywordTypeForSearchPost']",function() {

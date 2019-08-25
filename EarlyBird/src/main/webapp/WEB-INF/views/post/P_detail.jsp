@@ -19,14 +19,26 @@
 				url : "${contextPath}/post/P_recommand",
 				data : {post_id : post_id},
 				success : function(data) {
-					alert(data);
 					location.reload();
 				}, error : function(data){
 					alert("실패"+data);
-					
 				}
-			})
-		})
+			});
+		});
+		$("#deletePost").click(function(){
+			var post_id = ${P_detail.post_id };
+			var brd_id = ${P_detail.brd_id};
+			$.ajax({
+				type:"post",
+				url:"${contextPath}/post/P_delete",
+				data:{post_id:post_id,
+					  brd_id:brd_id
+					},
+					success:function(data){
+						location.href="${contextPath}/post/P_list?brd_id=${P_detail.brd_id}";
+					}
+			});
+		});
 	});
 </script>
 <!-- head -->
@@ -44,24 +56,6 @@
 		<%@ include file="../include/main_header.jsp"%>
 		<!-- end Header -->
 		<!-- body -->
-		<script>
-			$(document).ready(function(){
-				$("#deletePost").click(function(){
-					var post_id = ${P_detail.post_id };
-					var brd_id = ${P_detail.brd_id};
-					$.ajax({
-						type:"post",
-						url:"${contextPath}/post/P_delete",
-						data:{post_id:post_id,
-							  brd_id:brd_id
-							},
-							success:function(data){
-								location.href="${contextPath}/post/P_list?brd_id=${P_detail.brd_id}";
-							}
-					})
-				})
-			})
-		</script>
 		<div class="row">
 			<div class="col">
 				<div class="card bg-default shadow">

@@ -5,40 +5,41 @@
 <mapper namespace="reply">
 	<insert id="R_make" parameterType="java.util.Map">
 		insert into
-		reply(mem_id, post_id, rpl_content, rpl_datetime,rpl_updated_datetime,rpl_ip)
-		values(#{sessionid},#{post_id},#{replycontent},sysdate(),now(),now())
+		reply(mem_userid,
+		post_id, rpl_content, rpl_datetime,rpl_ip)
+		values(#{mem_userid},#{post_id},#{rpl_content},now(),now())
 	</insert>
-	
+
 	<update id="R_delete" parameterType="java.lang.Integer">
 		update reply
 		set rpl_del = 1
 		where rpl_id = #{rpl_id}
 	</update>
-	
-	
+
+
 	<!-- criteria 를 적용한 게시판 페이징 조회 -->
 	<select id="replylistCriteria" parameterType="java.util.Map"
 		resultType="kr.co.forearlybird.domain.Reply">
 	<![CDATA[
 	select * from reply
 	where rpl_id > 0 and post_id = #{post_id}  and rpl_del = 0
-	order by rpl_id desc
 	limit #{cri.pageStart}, #{cri.perPageNum}
 	]]>
 	</select>
 
-	<select id="replyCountPaging" resultType="java.lang.Integer">
+	<select id="replyCountPaging" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
 		select count(rpl_id)
-		as
-		cnt
 		from reply
-		where rpl_del = 0 and post_id = #{post_id}
+		where rpl_del = 0 and post_id
+		= #{post_id}
 	</select>
-	
+
 	<select id="R_list" parameterType="java.lang.Integer"
 		resultType="kr.co.forearlybird.domain.Reply">
 		select * from reply
-		where post_id = #{post_id} and rpl_del = 0;
+		where post_id = #{post_id} and rpl_del =
+		0
 	</select>
-	
+
 </mapper>

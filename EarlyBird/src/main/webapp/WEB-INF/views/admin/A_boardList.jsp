@@ -3,65 +3,66 @@
 <%@include file="include/A_header.jsp"%>
 
 <!-- body -->
-<div class="container">
-	<div class="row">
-		<div class="col-4">
-			<h2>
-				게시판 관리<small>ver 1.0</small>
-			</h2>
+<div style="width: 1300px">
+	<div align="center">
+		<div class="row" align="center">
+			<div class="col-4">
+				<h2>
+					게시판 관리<small>ver 1.0</small>
+				</h2>
+			</div>
+			<div class="col-8">
+				<button type="button" data-toggle="modal"
+					data-target="#modal-makeboard">게시판 추가하기</button>
+			</div>
 		</div>
-		<div class="col-8" align="right">
-			<button type="button" data-toggle="modal"
-				data-target="#modal-makeboard">게시판 추가하기</button>
-		</div>
-	</div>
-	<div class="table-responsive">
-		<table class="table align-items-center table-flush">
-			<thead class="thead">
-				<tr>
-					<th scope="col" class="text-center">대분류</th>
-					<th scope="col" class="text-center">분류</th>
-					<th scope="col" class="text-center">게시판명</th>
-					<th scope="col" class="text-center">게시판 ID</th>
-					<th scope="col" class="text-center">권한(읽기/쓰기)</th>
-					<th scope="col" class="text-center">새글/총 글 갯수</th>
-															  
-					<th scope="col" class="text-center">사용자 표시여부</th>
-					<th scope="col" class="text-center">게시판 관리</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach items="${boardList }" var="list">
+		<div class="table-responsive">
+			<table class="table align-items-center table-flush">
+				<thead class="thead">
 					<tr>
-						<td class="text-center">${list.large_name }<input
-							type="hidden" id="large${list.brd_id }" value="${list.large_id }"></td>
-						<td class="text-center">${list.category_name }<input
-							type="hidden" id="category${list.brd_id }"
-							value="${list.category_id }"></td>
-						<td class="text-center"><a
-							href="A_postList?brd_id=${list.brd_id}"><input type="button"
-								value=${list.brd_name }></a></td>
-						<td class="text-center">${list.brd_id }</td>
-						<td class="text-center">${list.brd_readauthname }<input
-							type="hidden" id="readAuth${list.brd_id }"
-							value="${list.brd_readauth }"> /${list.brd_writeauthname }<input
-							type="hidden" id="writeauth${list.brd_id }"
-							value="${list.brd_writeauth }"></td>
-						<td class="text-center">${list.brd_newPostNum}/${list.brd_allPostNum}</td>
-						<td class="text-center">${list.brd_exposurename }</td>
-															   
-						<td class="text-center"><input type="button" value="표시/비 표시"
-							onclick="changeVisibility(${list.brd_id},${list.brd_exposure});">
-							<button type="button" onclick="adminUpdate(${list.brd_id});">관리자
-								설정</button> <input type="hidden" id="admin${list.brd_id }"
-							value="${list.brd_id }">&nbsp;&nbsp;<input type="button"
-							value="x" onclick="deleteBoard(${list.brd_id });"></td>
-
+						<th scope="col" class="text-center">대분류</th>
+						<th scope="col" class="text-center">분류</th>
+						<th scope="col" class="text-center">게시판명</th>
+						<th scope="col" class="text-center">게시판 ID</th>
+						<th scope="col" class="text-center">권한(읽기/쓰기)</th>
+						<th scope="col" class="text-center">새글/총 글 갯수</th>
+						<th scope="col" class="text-center">사용자 표시여부</th>
+						<th scope="col" class="text-center">게시판 관리</th>
 					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
-		<div id="formodal" style="display: none"></div>
+				</thead>
+				<tbody>
+					<c:forEach items="${boardList }" var="list">
+						<tr>
+							<td class="text-center">${list.large_name }<input
+								type="hidden" id="large${list.brd_id }"
+								value="${list.large_id }"></td>
+							<td class="text-center">${list.category_name }<input
+								type="hidden" id="category${list.brd_id }"
+								value="${list.category_id }"></td>
+							<td class="text-center"><a
+								href="A_postList?brd_id=${list.brd_id}"><input type="button"
+									value=${list.brd_name }></a></td>
+							<td class="text-center">${list.brd_id }</td>
+							<td class="text-center">${list.brd_readauthname }<input
+								type="hidden" id="readAuth${list.brd_id }"
+								value="${list.brd_readauth }"> /${list.brd_writeauthname }<input
+								type="hidden" id="writeauth${list.brd_id }"
+								value="${list.brd_writeauth }"></td>
+							<td class="text-center">${list.brd_newPostNum}/${list.brd_allPostNum}</td>
+							<td class="text-center">${list.brd_exposurename }</td>
+							<td class="text-center"><input type="button" value="표시/비 표시"
+								onclick="changeVisibility(${list.brd_id},${list.brd_exposure});">
+								<button type="button" onclick="adminUpdate(${list.brd_id});">관리자
+									설정</button> <input type="hidden" id="admin${list.brd_id }"
+								value="${list.brd_id }">&nbsp;&nbsp;<input type="button"
+								value="x" onclick="deleteBoard(${list.brd_id });"></td>
+
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+			<div id="formodal" style="display: none"></div>
+		</div>
 	</div>
 </div>
 <!-- end of body -->
@@ -238,7 +239,6 @@ function changeVisibility(brd_id, brd_exposure){
 			location.reload(true);
 		}
 	});
-	
 }
 </script>
 <%@include file="include/A_footer.jsp"%>

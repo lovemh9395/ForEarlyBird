@@ -65,7 +65,7 @@ public class PostController {
 	}
 
 	@RequestMapping(value = "/P_update", method = RequestMethod.GET)
-	public String P_update(@RequestParam("post_id") int post_id, Post updatePost,Model model) {
+	public String P_update(@RequestParam("post_id") int post_id, Post updatePost, Model model) {
 		logger.info("게시글 수정 페이지");
 		updatePost = service.P_detail(post_id);
 		model.addAttribute("updatePost", updatePost);
@@ -117,7 +117,7 @@ public class PostController {
 //		int result = service.P_recommand(post_id);
 		ModelAndView view = new ModelAndView();
 		Cookie[] cookies = request.getCookies();
-		
+
 		// 비교하기 위해 새로운 쿠키
 		Cookie viewCookies = null;
 		logger.info("cookies --------------------------------------" + cookies);
@@ -161,11 +161,12 @@ public class PostController {
 		view.setViewName("post/P_detail");
 		return view;
 	}
-	
+
 	// 페이징 처리해보장
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value = "/P_list", method = RequestMethod.GET)
-	public String listPage(@ModelAttribute("cri") Criteria cri, Model model, @RequestParam("brd_id") int brd_id,Map map) throws Exception {
+	public String listPage(@ModelAttribute("cri") Criteria cri, Model model, @RequestParam("brd_id") int brd_id,
+			Map map) throws Exception {
 		logger.info("페이징 처리 페이지");
 		logger.info(cri.toString());
 		map.put("cri", cri);
@@ -178,7 +179,7 @@ public class PostController {
 		logger.info(pageMaker.toString());
 		return "post/P_list";
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@ResponseBody
 	@RequestMapping(value = "/P_detail")
@@ -192,7 +193,7 @@ public class PostController {
 		map.put("post_id", post_id);
 		PageMaker pageMaker = makePageMaker(map);
 		view.addObject("R_list", service.replyListCriteria(map));
-		logger.info("國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國"+service.replyListCriteria(map).toString());
+		logger.info("國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國" + service.replyListCriteria(map).toString());
 		view.addObject("pageMaker", pageMaker); // 게시판 하단의 페이징 관련, 이전페이지, 페이지 링크 , 다음 페이지
 		logger.info(pageMaker.toString());
 		Cookie[] cookie = request.getCookies();
@@ -239,14 +240,14 @@ public class PostController {
 		}
 		return view;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	private PageMaker makePageMaker(Map map) throws Exception {
 		PageMaker pageMaker = new PageMaker();
 		logger.info(pageMaker.toString());
-		pageMaker.setCri((Criteria)map.get("cri"));
+		pageMaker.setCri((Criteria) map.get("cri"));
 		pageMaker.setTotalCount(service.replyListCountCriteria(map));
-	
-	return pageMaker;
+
+		return pageMaker;
 	}
 }

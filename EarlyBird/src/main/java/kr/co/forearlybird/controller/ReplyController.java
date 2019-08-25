@@ -32,26 +32,19 @@ public class ReplyController {
 	@RequestMapping(value = "/R_make", method = { RequestMethod.GET, RequestMethod.POST })
 	public String R_make(HttpSession session, HttpServletRequest request,Map map, Model model, @ModelAttribute("cri") Criteria cri) throws Exception {
 		logger.info("댓글 등록 페이지");
-		String sessionid = (String) session.getAttribute("useridd");
-		String replycontent = request.getParameter("rpl_content");
+		String mem_userid = (String) session.getAttribute("useridd");
+		String rpl_content = request.getParameter("rpl_content");
 		String post_id = request.getParameter("post_id");
-		map.put("sessionid", sessionid);
-		map.put("replycontent", replycontent);
+		map.put("mem_userid", mem_userid);
+		map.put("rpl_content", rpl_content);
 		map.put("post_id", post_id);
 		service.R_make(map);
-		logger.info(post_id);
-		logger.info(sessionid);
-		logger.info(replycontent);
 		
 		map.put("cri", cri);
 		map.put("post_id", post_id);
 		PageMaker pageMaker = makePageMaker(map);
 		model.addAttribute("R_list", service.replyListCriteria(map));
-		
 		model.addAttribute("pageMaker", pageMaker); // 게시판 하단의 페이징 관련, 이전페이지, 페이지 링크 , 다음 페이지
-		//댓글 리스트 불러오기 
-		//ex -> model.addAttribute("R_list", service.replyListCriteria(map));
-		//현재 R_list에서 c:forEach 구문 돌려서 댓글 불러올때 출력할 List가 없어서 출력이 안됨
 		return "reply/R_list";
 	}
 

@@ -38,7 +38,7 @@
 
 	<insert id="P_make" parameterType="java.util.Map">
 		insert into
-		post(brd_id,mem_userid,post_title,post_content,post_datetime,post_updated_datetime,post_ip)
+		post(brd_id,mem_userid,post_title,post_content,post_datetime,post_updated_datetime,post_comment_updated_datetime)
 		values(#{brd_id},#{mem_userid},#{post_title},#{post_content},now(),now(),now())
 	</insert>
 

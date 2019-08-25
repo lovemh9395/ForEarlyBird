@@ -32,7 +32,7 @@
 									<th scope="row">
 										<div class="media align-items-center">
 											<div class="media-body">
-												<span class="mb-0 text-sm">${list.mem_id }</span>
+												<span class="mb-0 text-sm">${list.mem_userid }</span>
 											</div>
 										</div>
 									</th>
@@ -43,7 +43,7 @@
 													<span class="col-1 mb-0 text-sm"
 														style="word-break: break-all;">${list.rpl_content }</span>
 													<div class="col-11" align="right">
-														<c:if test="${ list.mem_id eq useridd}">
+														<c:if test="${ list.mem_userid eq useridd}">
 															<%@ include file="R_delete.jsp"%>
 														</c:if>
 													</div>

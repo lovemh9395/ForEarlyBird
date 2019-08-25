@@ -24,29 +24,6 @@
 		<!-- Header -->
 		<%@ include file="../include/main_header.jsp"%>
 		<!-- end Header -->
-		<script>
-			$(document).ready(function() {
-				$("#addP_make").click(function() {
-					var title = $("#newPost_title").val();
-					var content = $("#newPost_content").val();
-					var brd_id = <%=request.getParameter("brd_id")%>;
-					$.ajax({
-						async : false,
-						type : "post",
-						url : "${contextPath}/post/P_make",
-						data : {
-							post_title : title,
-							post_content : content,
-							brd_id : brd_id
-						},
-						success : function(data) {
-							location.href = "P_list?brd_id=<%=request.getParameter("brd_id")%>
-			";
-																}
-															})
-												})
-							})
-		</script>
 		<!-- body -->
 		<div class="row mt-5">
 			<div class="col">
@@ -115,4 +92,26 @@
 		<!-- end body -->
 	</div>
 </body>
+<script>
+	$(document).ready(function() {
+		$("#addP_make").click(function() {
+			var title = $("#newPost_title").val();
+			var content = $("#newPost_content").val();
+			var brd_id = <%=request.getParameter("brd_id")%>;
+			$.ajax({
+				async : false,
+				type : "post",
+				url : "${contextPath}/post/P_make",
+				data : {
+					"post_title" : title,
+					"post_content" : content,
+					"brd_id" : brd_id
+				},
+				success : function(data) {
+					location.href = 'P_list?brd_id=<%=request.getParameter("brd_id")%>';
+				}
+			});
+		});
+	});
+</script>
 </html>
