@@ -51,4 +51,14 @@ public interface PostDAO {
 	public void P_reView(int parseInt);
 
 	public void changeParamNotice(int post_id, int post_del);
+
+	public List<Post> getNoticeList();
+
+	public void P_make(Post post);
+
+	public void P_update(Post post);
+
+	public void changeParamDelete(int post_id, int post_delete);
+
+	public void changeParamDrop(int post_id);
 }

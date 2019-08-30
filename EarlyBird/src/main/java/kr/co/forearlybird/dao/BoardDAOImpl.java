@@ -83,4 +83,22 @@ public class BoardDAOImpl implements BoardDAO {
 		return sqlsession.selectOne("board.getLargeAndCategoryid", brd_id);
 	}
 
+	@Override
+	public int checkBoardId(int category_id) {
+		logger.info("checkBoardIdDAO");
+		return sqlsession.selectOne("board.checkBoardId",category_id);
+	}
+
+	@Override
+	public int checkBoardIdByCategory(int category_id) {
+		logger.info("checkBoardIdByCategoryDAO");
+		return sqlsession.selectOne("board.checkBoardIdByCategory", category_id);
+	}
+
+	@Override
+	public int getBoardMAXIDUnderCategory(int category_id) {
+		logger.info("getBoardMAXIDUnderCategoryDAO");
+		return sqlsession.selectOne("board.getBoardMAXIDUnderCategory",category_id);
+	}
+
 }

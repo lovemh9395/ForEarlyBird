@@ -147,4 +147,44 @@ public class PostDAOImpl implements PostDAO {
 		map.put("post_notice",notice);
 		sqlSession.update("post.changeParamNotice", map);
 	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public void changeParamDelete(int post_id, int post_delete) {
+		logger.info("changeParamDeleteDAO");
+		int delete = post_delete;
+		if (post_delete == 1) {
+			delete-=1;
+		} else {
+			delete+=1;
+		}
+		Map map = new HashMap();
+		map.put("post_id",post_id);
+		map.put("post_delete",delete);
+		sqlSession.update("post.changeParamDelete", map);
+	}
+	
+	@Override
+	public void changeParamDrop(int post_id) {
+		logger.info("changeParamDeleteDAO");
+		sqlSession.update("post.dropNoticePost", post_id);
+	}
+	
+	@Override
+	public List<Post> getNoticeList() {
+		logger.info("getNoticeListDAO");
+		return sqlSession.selectList("post.getNoticeList");
+	}
+
+	@Override
+	public void P_make(Post post) {
+		logger.info("글쓰기(공지) DAO");
+		sqlSession.insert("post.P_makeNotice",post);
+	}
+
+	@Override
+	public void P_update(Post post) {
+		logger.info("글수정(공지) DAO");
+		sqlSession.update("post.P_updateNotice",post);
+	}
 }

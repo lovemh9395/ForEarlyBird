@@ -7,7 +7,7 @@ import lombok.Data;
 //Lombok을 이용함(getter,setter 등등 한번에 처리 가능)
 @Data
 public class Member {
-	private int mem_id; //PK
+	//private int mem_id; //PK
 	private String mem_userid; //회원 아이디
 	private String mem_password; //회원 패스워드
 	private String mem_nickname; //회원 닉네임

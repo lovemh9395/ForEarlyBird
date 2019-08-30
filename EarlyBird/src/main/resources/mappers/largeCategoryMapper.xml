@@ -11,7 +11,7 @@
 
 	<!-- 코드 최대값 가지고오기 -->
 	<select id="getMaxNumLargeId" resultType="java.lang.Integer">
-		SELECT MAX(large_id)
+		SELECT IFNULL(MAX(large_id),0)
 		FROM
 		largecategory
 	</select>

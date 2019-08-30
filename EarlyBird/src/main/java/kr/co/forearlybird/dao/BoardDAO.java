@@ -29,4 +29,10 @@ public interface BoardDAO {
 
 	@SuppressWarnings("rawtypes")
 	Map getLargeAndCategoryid(int brd_id);
+
+	int checkBoardId(int category_id);
+
+	int checkBoardIdByCategory(int category_id);
+
+	int getBoardMAXIDUnderCategory(int category_id);
 }

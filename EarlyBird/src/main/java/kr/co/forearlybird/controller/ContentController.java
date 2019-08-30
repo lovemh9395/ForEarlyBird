@@ -36,6 +36,13 @@ public class ContentController {
 		model.addAttribute("list", service.C_list_M(idx));
 		return "content/C_list_M";
 	}
+	
+	// 관리자 게시글 목록 보기
+	@RequestMapping(value = "/C_list", method = RequestMethod.GET)
+	public String C_list_A(HttpServletRequest request, Model model) {
+		logger.info("관리자 게시글 목록 보기 페이지");
+		return "content/C_list";
+	}
 
 	// 게시글 등록
 	@RequestMapping(value = "/C_make", method = RequestMethod.GET)

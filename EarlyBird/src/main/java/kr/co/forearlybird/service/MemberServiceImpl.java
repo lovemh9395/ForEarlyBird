@@ -221,13 +221,10 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public void create(Member vo) throws Exception {
 		String encPassword = passwordEncoder.encode(vo.getMem_password());
-		logger.info("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" + encPassword);
 		vo.setMem_password(encPassword);
 
 		memberDAO.insertUser(vo); // 회원가입 DAO
-
 		String key = new TempKey().getKey(50, false); // 인증키 생성
-
 		memberDAO.createAuthKey(vo.getMem_userid(), key); // 인증키 DB저장
 
 		MailHandler sendMail = new MailHandler(mailSender);

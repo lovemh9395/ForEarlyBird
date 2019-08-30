@@ -17,6 +17,7 @@ import kr.co.forearlybird.domain.Member;
 import kr.co.forearlybird.domain.Post;
 import kr.co.forearlybird.domain.Reply;
 
+@SuppressWarnings("rawtypes")
 @Repository
 public class MemberDAOImpl implements MemberDAO {
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
@@ -26,7 +27,6 @@ public class MemberDAOImpl implements MemberDAO {
 	@Inject
 	PasswordEncoder passwordEncoder;
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public Map login(Map<String, Object> map) throws Exception {
 		logger.info("로그인 DAO");
@@ -37,7 +37,6 @@ public class MemberDAOImpl implements MemberDAO {
 	@Override
 	public int make(Member member) {
 		logger.info("회원가입 DAO");
-		// TODO Auto-generated method stub
 		return sqlSession.insert("member.make", member);
 	}
 
@@ -47,7 +46,6 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectOne("member.detail", id);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public Map update(Map<String, Object> map) {
 		logger.info("정보수정 dao");
@@ -55,12 +53,11 @@ public class MemberDAOImpl implements MemberDAO {
 	}
 
 	@Override
-	public int delete(String id) {
+	public int delete(String mem_userid) {
 		logger.info("회원탈퇴 dao");
-		return sqlSession.insert("member.delete", id);
+		return sqlSession.update("member.delete", mem_userid);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public int profile(Map middlemap) {
 		logger.info("프로필업로드 dao");
@@ -77,8 +74,6 @@ public class MemberDAOImpl implements MemberDAO {
 
 	@Override
 	public void insertUser(Member vo) throws Exception {
-		// TODO Auto-generated method stub
-		logger.info("111111111111111111111111111111111111111111111111111111111111111");
 		logger.info("dao " + vo);
 		System.out.println("DAO 로그 : 회원가입 중");
 		sqlSession.insert("member.insertUser", vo);
@@ -87,17 +82,14 @@ public class MemberDAOImpl implements MemberDAO {
 
 	@Override
 	public void createAuthKey(String user_email, String user_authcode) throws Exception {
-		// TODO Auto-generated method stub
 		Member vo = new Member();
 		vo.setMem_profile_content(user_authcode);
 		vo.setMem_adminmemo(user_email);
-		logger.info("111111111111111111111111111111111111111111111111111111111111111");
 		sqlSession.selectOne("member.createAuthKey", vo);
 	}
 
 	@Override
 	public void userAuth(String user_email) throws Exception {
-		// TODO Auto-generated method stub
 		sqlSession.update("member.userAuth", user_email);
 	}
 
@@ -109,14 +101,12 @@ public class MemberDAOImpl implements MemberDAO {
 		sqlSession.selectOne("member.searchPWD", vo);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public String getrawPw(Map map) {
 		return sqlSession.selectOne("member.rawPw", map);
 	}
 
 	// Criteria 를 적용한 게시판 페이징 조회
-	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Post> listCriteria(Map map) throws Exception {
 		logger.info("내 글 보기 Post DAO");
@@ -124,7 +114,6 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectList("member.mypostlistCriteria", map);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public int countPaging(Map map) throws Exception {
 		logger.info("내 글 보기 Count paging List DAO");
@@ -133,7 +122,6 @@ public class MemberDAOImpl implements MemberDAO {
 	}
 
 	// Criteria 를 적용한 게시판 페이징 조회
-	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Reply> myreplylistCriteria(Map map) throws Exception {
 		logger.info("내 댓글 보기 Post DAO");
@@ -141,7 +129,6 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectList("member.myreplylistCriteria", map);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public int myreplycountPaging(Map map) throws Exception {
 		logger.info("내 댓글 보기 Count paging List DAO");
@@ -160,7 +147,6 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectOne("member.CheckId",formId);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public int CheckPass(Map map) {
 		return sqlSession.selectOne("member.CheckPass",map);
@@ -173,7 +159,6 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectOne("member.getMemberNickName", mem_userid);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Map> getMemberListByMinLevel(int mem_level) {
 		logger.info("getMemberListByMinLevelDAO");
@@ -181,8 +166,12 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectList("member.getMemberListByMinLevel", mem_level);
 	}
 
-													 
-	@SuppressWarnings("rawtypes")
+	@Override
+	public List<Member> getMemberList() {
+		logger.info("getMemberListDAO");
+		return sqlSession.selectList("member.getMemberList");
+	}
+	
 	@Override
 	public List<Map> getMemberList(Map map) {
 		logger.info("getMemberListDAO");
@@ -195,11 +184,52 @@ public class MemberDAOImpl implements MemberDAO {
 		}
 	}
 	
-	@SuppressWarnings("rawtypes")
 	@Override
 	public List getMemberListLikesThisName(String keyword) {
 		logger.info("getMemberListLikesThisNameDAO");
 		return sqlSession.selectList("member.getMemberListLikesThisName",keyword);
 	}
 
+	@Override
+	public List<Member> searchMemberList(Map map) {
+		logger.info("searchMemberListDAO");
+		return sqlSession.selectList("member.searchMemberList",map);
+	}
+
+	@Override
+	public List<Member> getAdminList() {
+		logger.info("getAdminListDAO");
+		return sqlSession.selectList("member.getAdminList");
+	}
+
+	@Override
+	public List<Member> searchAdminCandidateList(Map map) {
+		logger.info("searchAdminCandidateListDAO");
+		return sqlSession.selectList("member.searchForAdminList",map);
+	}
+
+
+	@Override
+	public void release(String mem_userid) {
+		logger.info("releaseDAO");
+		sqlSession.update("member.release",mem_userid);
+	}
+
+	@Override
+	public void ban(String mem_userid) {
+		logger.info("banDAO");
+		sqlSession.update("member.ban",mem_userid);
+	}
+
+	@Override
+	public void memberAuthUpdate(Map map) {
+		logger.info("memberAuthUpdateDAO");
+		sqlSession.update("member.memberAuthUpdate",map);
+	}
+
+	@Override
+	public List<Member> getBanMemberList() {
+		logger.info("getBanMemberListDAO");
+		return sqlSession.selectList("member.getBanMemberList");
+	}
 }

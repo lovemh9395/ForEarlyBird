@@ -8,12 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,12 +23,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.forearlybird.domain.Post;
 import kr.co.forearlybird.service.AdminService;
 
+@SuppressWarnings({ "unchecked", "rawtypes" })
 @Controller
-@RequestMapping(value = "admin", method = { RequestMethod.GET, RequestMethod.POST })
+@RequestMapping(value = "admin")
 public class AdminController {
 	private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
+
+	@Inject
+	PasswordEncoder passwordEncoder;
 
 	@Autowired
 	AdminService service;
@@ -34,25 +41,55 @@ public class AdminController {
 	// Admin Main page 이동
 	@RequestMapping(value = "/A_mainpage", method = RequestMethod.GET)
 	public String Adminhome(Model model, HttpSession session) {
-		logger.info("혹시 들어왔...니?");
-		
+		logger.info("AdminPage");
 		return "A_mainpage";
 	}
-	
-	// 게시판 별 관리자 보기
-	@SuppressWarnings("rawtypes")
+
+	// 관리자 목록 보기
 	@RequestMapping(value = "/A_adminList", method = RequestMethod.GET)
+	public String A_adminList(HttpSession session, Model model) {
+		logger.info("관리자 보기 페이지");
+		model.addAttribute("memberList", service.getAdminList());
+		return "admin/A_adminList";
+	}
+
+	@RequestMapping(value = "/A_AdminCandidateSearch", method = RequestMethod.POST)
+	public String A_AdminCandidateSearch(HttpServletRequest request, HttpSession session, Model model) {
+		logger.info("회원 검색 페이지");
+		Map map = new HashMap();
+		map.put("keytype", request.getParameter("keytype"));
+		map.put("keyword", request.getParameter("keyword"));
+		model.addAttribute("memberList", service.searchAdminCandidateList(map));
+		return "admin/A_adminList";
+	}
+	
+	@RequestMapping(value = "/A_adminUpdate", method = RequestMethod.GET)
+	public String A_adminUpdate(String[] checkedList, String[] authList, HttpSession session, Model model) {
+		logger.info("회원 등급변경 페이지");
+		Map map = new HashMap();
+		List<String> checklist = new ArrayList<>();
+		List<String> memberAuthList = new ArrayList<>();
+		for (int i = 0; i < checkedList.length; i++) {
+			checklist.add(checkedList[i]);
+			memberAuthList.add(authList[i]);
+		}
+		map.put("checklist", checklist);
+		map.put("authlist", memberAuthList);
+		service.memberAuthUpdate(map);
+		model.addAttribute("memberList", service.getAdminList());
+		return "admin/A_adminList";
+	}
+
+	// 게시판 별 관리자 보기
+	@RequestMapping(value = "/A_boardAdminList", method = { RequestMethod.GET, RequestMethod.POST })
 	public String A_adminList(@RequestParam("brd_id") int brd_id, HttpSession session, Model model) {
 		logger.info("게시판 별 관리자 보기 페이지");
-		logger.info("게시판 아이디 : " + brd_id);
 		List<String> adminNicknames = service.getAdminNickname(brd_id);
 		List<Map> adminList = service.getMemberListForBoardAdmin();
-
 		model.addAttribute("brd_id", brd_id);
 		model.addAttribute("adminNicknames", adminNicknames);
 		model.addAttribute("adminList", adminList);
-
-		return "admin/A_adminList";
+		return "admin/A_boardAdminList";
 	}
 
 	@RequestMapping(value = "/A_checkAdminId", method = RequestMethod.POST)
@@ -61,13 +98,11 @@ public class AdminController {
 			HttpSession session, Model model) {
 		logger.info("게시판 관리자 선정 여부 체크");
 		int tmp = service.checkAdminId(brd_id, mem_userid);
-		logger.info("service :" + tmp);
 		String result = tmp + "";
 		return result;
 	}
 
 	// 게시판 별 관리자 설정
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value = "/A_boardAdminUpdate", method = { RequestMethod.GET, RequestMethod.POST })
 	public String A_boardAdminUpdate(HttpServletRequest request, HttpSession session, Model model) {
 		logger.info("게시판 관리자 변경 페이지");
@@ -87,11 +122,10 @@ public class AdminController {
 		model.addAttribute("adminNicknames", adminNicknames);
 		model.addAttribute("adminList", adminList);
 
-		return "admin/A_adminList";
+		return "admin/A_boardAdminList";
 	}
 
 	// 게시판 별 관리자 설정을 위한 후보자 목록 검색
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value = "/A_searchMemberForAdmin", method = { RequestMethod.GET, RequestMethod.POST })
 	public String A_searchMemberForAdmin(HttpServletRequest request, HttpSession session, Model model) {
 		logger.info("게시판 관리자 변경 페이지");
@@ -111,11 +145,71 @@ public class AdminController {
 		model.addAttribute("adminList", adminList);
 		return "admin/A_adminList";
 	}
+
 	// 회원 검색
-	@RequestMapping(value = "/A_memberSearch", method = RequestMethod.GET)
-	public String A_memberSearch(HttpSession session, Model model) {
+	@RequestMapping(value = "/A_memberList", method = RequestMethod.GET)
+	public String A_memberList(HttpServletRequest request, HttpSession session, Model model) {
+		logger.info("회원 관리 페이지");
+		if (request.getParameter("mem_level") != null) {
+			model.addAttribute("memberList", service.getBanMemberList());
+		} else {
+			model.addAttribute("memberList", service.getMemberList());
+		}
+		return "admin/A_memberList";
+	}
+
+	// 회원 검색
+	@RequestMapping(value = "/A_memberSearch", method = RequestMethod.POST)
+	public String A_memberSearch(HttpServletRequest request, HttpSession session, Model model) {
 		logger.info("회원 검색 페이지");
-		return "admin/A_memberSearch";
+		Map map = new HashMap();
+		map.put("keytype", request.getParameter("keytype"));
+		map.put("keyword", request.getParameter("keyword"));
+		model.addAttribute("memberList", service.searchMemberList(map));
+		return "admin/A_memberList";
+	}
+
+	@RequestMapping(value = "/A_memberDelete", method = RequestMethod.POST)
+	public String A_memberDelete(String[] checkedList, HttpServletRequest request, HttpSession session, Model model) {
+		logger.info("회원정보 수정 페이지");
+		Map map = new HashMap();
+		List<String> checklist = new ArrayList<>();
+		for (int i = 0; i < checkedList.length; i++) {
+			checklist.add(checkedList[i]);
+		}
+		map.put("checklist", checklist);
+		service.deleteMembers(map);
+		model.addAttribute("memberList", service.getMemberList());
+		return "admin/A_memberList";
+	}
+
+	@RequestMapping(value = "/A_memberBan", method = RequestMethod.POST)
+	public String A_memberBan(String[] checkedList, HttpServletRequest request, HttpSession session, Model model) {
+		logger.info("회원정보 수정 페이지");
+		Map map = new HashMap();
+		List<String> checklist = new ArrayList<>();
+		for (int i = 0; i < checkedList.length; i++) {
+			checklist.add(checkedList[i]);
+		}
+		map.put("checklist", checklist);
+		service.banMembers(map);
+		model.addAttribute("memberList", service.getMemberList());
+		return "admin/A_memberList";
+	}
+
+	@RequestMapping(value = "/A_memberRelease", method = RequestMethod.POST)
+	public String A_memberRelease(String[] checkedList, HttpServletRequest request, HttpSession session, Model model)
+			throws Exception {
+		logger.info("회원정보 수정 페이지");
+		Map map = new HashMap();
+		List<String> checklist = new ArrayList<>();
+		for (int i = 0; i < checkedList.length; i++) {
+			checklist.add(checkedList[i]);
+		}
+		map.put("checklist", checklist);
+		service.releaseMembers(map);
+		model.addAttribute("memberList", service.getMemberList());
+		return "admin/A_memberList";
 	}
 
 	// 회원 글 보기
@@ -169,36 +263,113 @@ public class AdminController {
 
 	// 공지사항 보기
 	@RequestMapping(value = "/A_noticeList", method = RequestMethod.GET)
-	public String A_noticeList(HttpSession session, Model model) {
+	public String A_noticeList(HttpSession session, Model model) throws ParseException {
 		logger.info("공지사항 보기 페이지");
+		model.addAttribute("noticeList", service.getNoticeListFromBoard());
 		return "admin/A_noticeList";
 	}
 
-	// 공지사항 등록
+	@RequestMapping(value = "/A_noticeDetail", method = RequestMethod.GET)
+	public String A_noticeDetail(HttpServletRequest request, HttpSession session, Model model) throws ParseException {
+		logger.info("공지 세부 페이지");
+		model.addAttribute("post", service.getPost(Integer.parseInt(request.getParameter("post_id"))));
+		return "admin/A_noticeDetail";
+	}
+
+	// 공지사항 등록 페이지
 	@RequestMapping(value = "/A_noticeMake", method = RequestMethod.GET)
 	public String A_noticeMake(HttpSession session, Model model) {
 		logger.info("공지사항 등록 페이지");
 		return "admin/A_noticeMake";
 	}
 
+	// 공지사항 등록 페이지
+	@ResponseBody
+	@RequestMapping(value = "/A_noticeMake", method = RequestMethod.POST)
+	public void A_Mnotice(HttpServletRequest request, HttpSession session, Model model) {
+		logger.info("공지사항 등록");
+		Post post = makePost(request, session);
+		service.makeNotice(post);
+	}
+
+	private Post makePost(HttpServletRequest request, HttpSession session) {
+		Post post = new Post();
+		post.setBrd_id(1);
+		post.setPost_id(Integer.parseInt(request.getParameter("post_id")));
+		post.setMem_userid((String) session.getAttribute("useridd"));
+		post.setPost_title(request.getParameter("notice_title"));
+		post.setPost_content(request.getParameter("notice_content"));
+		post.setPost_del(0);
+		post.setPost_notice(1);
+		return post;
+	}
+
 	// 공지사항 수정
 	@RequestMapping(value = "/A_noticeUpdate", method = RequestMethod.GET)
-	public String A_noticeUpdate(HttpSession session, Model model) {
+	public String A_noticeUpdateGET(HttpServletRequest request, HttpSession session, Model model) {
 		logger.info("공지사항 수정 페이지");
+		int post_id = Integer.parseInt(request.getParameter("post_id"));
+		model.addAttribute("post", service.getPost(post_id));
 		return "admin/A_noticeUpdate";
 	}
 
+	// 공지사항 수정
+	@ResponseBody
+	@RequestMapping(value = "/A_noticeUpdate", method = RequestMethod.POST)
+	public void A_noticeUpdate(HttpServletRequest request, HttpSession session, Model model) {
+		logger.info("공지사항 수정 페이지");
+		Post post = makePost(request, session);
+		service.updateNotice(post);
+	}
+
 	// 공지사항 삭제
-	@RequestMapping(value = "/A_noticeDelete", method = RequestMethod.GET)
-	public String A_noticeDelete(HttpSession session, Model model) {
+	@RequestMapping(value = "/A_noticeDelete", method = RequestMethod.POST)
+	public String A_noticeDelete(HttpServletRequest request, HttpSession session, Model model, String[] checkedList,
+			String[] NoticeOrNot) throws Exception {
 		logger.info("공지사항 삭제 페이지");
-		return "admin/A_noticeDelete";
+		Map map = new HashMap();
+		List<String> checklist = new ArrayList<>();
+		for (int i = 0; i < checkedList.length; i++) {
+			checklist.add(checkedList[i]);
+		}
+
+		List<String> noticeOrNot = new ArrayList<>();
+		for (int i = 0; i < NoticeOrNot.length; i++) {
+			noticeOrNot.add(NoticeOrNot[i]);
+		}
+		map.put("brd_id", request.getParameter("brd_id"));
+		map.put("checklist", checklist);
+		map.put("NoticeOrNot", noticeOrNot);
+
+		service.updatePostToBoard(map);
+
+		model.addAttribute("noticeList", service.getNoticeListFromBoard());
+		return "admin/A_noticeList";
+	}
+
+	// 공지사항 삭제2
+	@RequestMapping(value = "/A_noticeDrop", method = RequestMethod.POST)
+	public String A_noticeDrop(HttpServletRequest request, HttpSession session, Model model, String[] checkedList,
+			String[] NoticeOrNot) throws Exception {
+		logger.info("공지사항 삭제 페이지");
+		Map map = new HashMap();
+		List<String> checklist = new ArrayList<>();
+		for (int i = 0; i < checkedList.length; i++) {
+			checklist.add(checkedList[i]);
+		}
+
+		map.put("brd_id", request.getParameter("brd_id"));
+		map.put("checklist", checklist);
+
+		service.updatePostToBoard(map);
+
+		model.addAttribute("noticeList", service.getNoticeListFromBoard());
+		return "admin/A_noticeList";
 	}
 
 	// 카테고리 보기
-	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/A_categoryList", method = { RequestMethod.GET, RequestMethod.POST })
-	public String A_categoryList(HttpSession session, Model model) throws Exception{
+	public String A_categoryList(HttpSession session, Model model) throws Exception {
 		logger.info("카테고리 보기 페이지");
 		List<Map> largeList = service.largeCategoryList();
 		List<Map> smallList = service.CategoryList();
@@ -217,7 +388,7 @@ public class AdminController {
 
 	// 대분류 카테고리 생성
 	@ResponseBody
-	@RequestMapping(value = "/A_largeCategoryMake", method = RequestMethod.POST)
+	@RequestMapping(value = "/A_largeCategoryMake", method = { RequestMethod.GET, RequestMethod.POST })
 	public void A_largeCategoryMake(HttpServletRequest request, Model model) throws Exception {
 		logger.info("대분류 카테고리 생성");
 		request.setCharacterEncoding("UTF-8");
@@ -230,7 +401,7 @@ public class AdminController {
 
 	// 카테고리 생성
 	@ResponseBody
-	@RequestMapping(value = "/A_categoryMake", method = RequestMethod.POST)
+	@RequestMapping(value = "/A_categoryMake", method = { RequestMethod.GET, RequestMethod.POST })
 	public void A_categoryMake(HttpServletRequest request, Model model) {
 		logger.info("카테고리 생성");
 		int large_id = Integer.parseInt(request.getParameter("large_id"));
@@ -246,7 +417,7 @@ public class AdminController {
 
 	// 카테고리 삭제
 	@ResponseBody
-	@RequestMapping(value = "/A_largeCategoryDelete", method = RequestMethod.GET)
+	@RequestMapping(value = "/A_largeCategoryDelete", method = { RequestMethod.GET, RequestMethod.POST })
 	public void A_LargeCategoryDelete(@RequestParam("large_id") int large_id, Model model) {
 		logger.info("카테고리 삭제 페이지");
 		int result = service.leaveLargeCategory(large_id);
@@ -255,7 +426,7 @@ public class AdminController {
 
 	// 카테고리 삭제
 	@ResponseBody
-	@RequestMapping(value = "/A_categoryDelete", method = RequestMethod.GET)
+	@RequestMapping(value = "/A_categoryDelete", method = { RequestMethod.GET, RequestMethod.POST })
 	public void A_categoryDelete(@RequestParam("category_id") int category_id, Model model) {
 		logger.info("카테고리 삭제 페이지");
 		logger.info(category_id + "");
@@ -264,7 +435,6 @@ public class AdminController {
 	}
 
 	// 게시판 글 보기
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/A_postList", method = RequestMethod.GET)
 	public String A_postList(@RequestParam("brd_id") int brd_id, HttpSession session, Model model) throws Exception {
 		logger.info("게시판 글 보기 페이지");
@@ -277,7 +447,7 @@ public class AdminController {
 		String forlargeList = getStringFromLargeList(largeList);
 		String forcategoryList = getStringFromCategoryList(categoryList);
 		String forbrdList = getStringFromBoardList(boardList);
-		
+
 		model.addAttribute("forlargeList", forlargeList);
 		model.addAttribute("forcategoryList", forcategoryList);
 		model.addAttribute("forbrdList", forbrdList);
@@ -286,7 +456,6 @@ public class AdminController {
 	}
 
 	// 게시판 글 검색
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/A_postSearch", method = RequestMethod.POST)
 	public String A_postSearch(HttpServletRequest request, HttpSession session, Model model) throws Exception {
 		logger.info("게시판 글 검색 페이지");
@@ -326,16 +495,16 @@ public class AdminController {
 	}
 
 	// 게시판 글 수정
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@RequestMapping(value = "/A_postUpdate", method = RequestMethod.GET)
-	public String A_postUpdate(HttpServletRequest request, HttpSession session, Model model, String[] checkedList, String[] NoticeOrNot) throws Exception {
+	@RequestMapping(value = "/A_postUpdate", method = RequestMethod.POST)
+	public String A_postUpdate(HttpServletRequest request, HttpSession session, Model model, String[] checkedList,
+			String[] NoticeOrNot) throws Exception {
 		logger.info("게시판 글 수정 페이지");
 		Map map = new HashMap();
 		List<String> checklist = new ArrayList<>();
 		for (int i = 0; i < checkedList.length; i++) {
 			checklist.add(checkedList[i]);
 		}
-		
+
 		List<String> noticeOrNot = new ArrayList<>();
 		for (int i = 0; i < NoticeOrNot.length; i++) {
 			noticeOrNot.add(NoticeOrNot[i]);
@@ -343,17 +512,17 @@ public class AdminController {
 		map.put("brd_id", request.getParameter("brd_id"));
 		map.put("checklist", checklist);
 		map.put("NoticeOrNot", noticeOrNot);
-		
+
 		service.updatePostToBoard(map);
-		
+
 		List<Map> boardList = service.getBoardList();
 		List<Map> largeList = service.largeCategoryList();
 		List<Map> categoryList = service.CategoryList();
-		
+
 		String forlargeList = getStringFromLargeList(largeList);
 		String forcategoryList = getStringFromCategoryList(categoryList);
 		String forbrdList = getStringFromBoardList(boardList);
-		
+
 		model.addAttribute("forlargeList", forlargeList);
 		model.addAttribute("forcategoryList", forcategoryList);
 		model.addAttribute("forbrdList", forbrdList);
@@ -369,9 +538,9 @@ public class AdminController {
 	}
 
 	// 게시판 글 삭제
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/A_postDelete", method = RequestMethod.POST)
-	public String A_postDelete(HttpServletRequest request, HttpSession session, Model model, String[] checkedList) throws Exception {
+	public String A_postDelete(HttpServletRequest request, HttpSession session, Model model, String[] checkedList)
+			throws Exception {
 		logger.info("게시판 글 삭제 페이지");
 		Map map = new HashMap();
 		List<String> checklist = new ArrayList<>();
@@ -380,27 +549,27 @@ public class AdminController {
 		}
 		map.put("brd_id", request.getParameter("brd_id"));
 		map.put("checklist", checklist);
-		
+
 		service.deletePostToBoard(map);
-		
+
 		List<Map> boardList = service.getBoardList();
 		List<Map> largeList = service.largeCategoryList();
 		List<Map> categoryList = service.CategoryList();
-		
+
 		String forlargeList = getStringFromLargeList(largeList);
 		String forcategoryList = getStringFromCategoryList(categoryList);
 		String forbrdList = getStringFromBoardList(boardList);
-		
+
 		model.addAttribute("forlargeList", forlargeList);
 		model.addAttribute("forcategoryList", forcategoryList);
 		model.addAttribute("forbrdList", forbrdList);
 		model.addAttribute("postList", service.ListPostToBoard(map));
 		return "admin/A_postSearch";
 	}
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+
 	@RequestMapping(value = "/A_postReView", method = RequestMethod.POST)
-	public String A_postReView(HttpServletRequest request, HttpSession session, Model model, String[] checkedList) throws Exception {
+	public String A_postReView(HttpServletRequest request, HttpSession session, Model model, String[] checkedList)
+			throws Exception {
 		logger.info("게시판 글 삭제 페이지");
 		Map map = new HashMap();
 		List<String> checklist = new ArrayList<>();
@@ -409,17 +578,17 @@ public class AdminController {
 		}
 		map.put("brd_id", request.getParameter("brd_id"));
 		map.put("checklist", checklist);
-		
+
 		service.reViewPostToBoard(map);
-		
+
 		List<Map> boardList = service.getBoardList();
 		List<Map> largeList = service.largeCategoryList();
 		List<Map> categoryList = service.CategoryList();
-		
+
 		String forlargeList = getStringFromLargeList(largeList);
 		String forcategoryList = getStringFromCategoryList(categoryList);
 		String forbrdList = getStringFromBoardList(boardList);
-		
+
 		model.addAttribute("forlargeList", forlargeList);
 		model.addAttribute("forcategoryList", forcategoryList);
 		model.addAttribute("forbrdList", forbrdList);
@@ -428,7 +597,6 @@ public class AdminController {
 	}
 
 	// 게시판 관리페이지 보기
-	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/A_boardList", method = RequestMethod.GET)
 	public String A_boardList(HttpSession session, Model model) throws Exception {
 		logger.info("게시판 목록 페이지");
@@ -447,8 +615,7 @@ public class AdminController {
 	}
 
 	// 게시판 추가하기
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@RequestMapping(value = "/A_makeBoard", method = RequestMethod.GET)
+	@RequestMapping(value = "/A_makeBoard", method = RequestMethod.POST)
 	public String A_makeBoard(HttpServletRequest request, HttpSession session, Model model) {
 		logger.info("게시판 제작하기");
 		Map map = new HashMap();
@@ -457,7 +624,6 @@ public class AdminController {
 		map.put("brd_readauth", Integer.parseInt(request.getParameter("brd_readauth")));
 		map.put("brd_writeauth", Integer.parseInt(request.getParameter("brd_writeauth")));
 		map.put("brd_name", (String) request.getParameter("brd_name"));
-		System.out.println("map : " + map.toString());
 		service.makeBoard(map);
 		return "admin/A_boardList";
 	}
@@ -483,7 +649,6 @@ public class AdminController {
 		return to;
 	}
 
-	@SuppressWarnings("rawtypes")
 	private String getStringFromBoardList(List<Map> boardList) {
 		String forbrdList = "[";
 		for (int i = 0; i < boardList.size(); i++) {
@@ -499,7 +664,6 @@ public class AdminController {
 		return forbrdList;
 	}
 
-	@SuppressWarnings("rawtypes")
 	private String getStringFromCategoryList(List<Map> categoryList) {
 		String forcategoryList = "[";
 		for (int i = 0; i < categoryList.size(); i++) {
@@ -515,7 +679,6 @@ public class AdminController {
 		return forcategoryList;
 	}
 
-	@SuppressWarnings("rawtypes")
 	private String getStringFromLargeList(List<Map> largeList) {
 		String forlargeList = "[";
 		for (int i = 0; i < largeList.size(); i++) {

@@ -311,18 +311,23 @@
 				"checkedList" : checkedList,
 				"brd_id" : brd_id
 			};
-			if (confirm("선택된 항목을 삭제하시겠습니까?")) {
-				$.ajax({
-					traditional : true,
-					async : false,
-					type : "post",
-					url : "${contextPath}/admin/A_postDelete",
-					data : query,
-					success : function(data) {
-						var e = $(data).find("#postListTable");
-						$("#postListTable").html(e).trigger("create");
-					}
-				});
+			
+			if (checkedList[0] == null) {
+				alert("항목을 선택하여 주십시오");
+			} else {
+				if (confirm("선택된 항목을 삭제하시겠습니까?")) {
+					$.ajax({
+						traditional : true,
+						async : false,
+						type : "post",
+						url : "${contextPath}/admin/A_postDelete",
+						data : query,
+						success : function(data) {
+							var e = $(data).find("#postListTable");
+							$("#postListTable").html(e).trigger("create");
+						}
+					});
+				}
 			}
 		});
 
@@ -334,18 +339,23 @@
 				"checkedList" : checkedList,
 				"brd_id" : brd_id
 			};
-			if (confirm("선택된 항목을 복구하시겠습니까?")) {
-				$.ajax({
-					traditional : true,
-					async : false,
-					type : "post",
-					url : "${contextPath}/admin/A_postReView",
-					data : query,
-					success : function(data) {
-						var e = $(data).find("#postListTable");
-						$("#postListTable").html(e).trigger("create");
-					}
-				});
+			
+			if (checkedList[0] == null) {
+				alert("항목을 선택하여 주십시오");
+			} else {
+				if (confirm("선택된 항목을 복구하시겠습니까?")) {
+					$.ajax({
+						traditional : true,
+						async : false,
+						type : "post",
+						url : "${contextPath}/admin/A_postReView",
+						data : query,
+						success : function(data) {
+							var e = $(data).find("#postListTable");
+							$("#postListTable").html(e).trigger("create");
+						}
+					});
+				}
 			}
 		});
 
@@ -359,18 +369,23 @@
 				"brd_id" : brd_id,
 				"NoticeOrNot" : NoticeOrNot
 			};
-			if (confirm("선택된 항목을 변경하시겠습니까?")) {
-				$.ajax({
-					traditional : true,
-					async : false,
-					type : "post",
-					url : "${contextPath}/admin/A_postUpdate",
-					data : query,
-					success : function(data) {
-						var e = $(data).find("#postListTable");
-						$("#postListTable").html(e).trigger("create");
-					}
-				});
+			
+			if (checkedList[0] == null) {
+				alert("항목을 선택하여 주십시오");
+			} else {
+				if (confirm("선택된 항목을 변경하시겠습니까?")) {
+					$.ajax({
+						traditional : true,
+						async : false,
+						type : "post",
+						url : "${contextPath}/admin/A_postUpdate",
+						data : query,
+						success : function(data) {
+							var e = $(data).find("#postListTable");
+							$("#postListTable").html(e).trigger("create");
+						}
+					});
+				}
 			}
 		});
 	});

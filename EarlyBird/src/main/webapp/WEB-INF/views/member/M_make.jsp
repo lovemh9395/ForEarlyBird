@@ -94,7 +94,7 @@
 								style="width: 200px; height: auto;">
 							</a>
 						</div>
-						<form role="forming" id="forming" action="member/M_make"
+						<form role="forming" id="forming" action="${contextPath }/member/M_make"
 							method="post">
 							<div class="form-group mb-3">
 								<div class="input-group input-group-alternative">
