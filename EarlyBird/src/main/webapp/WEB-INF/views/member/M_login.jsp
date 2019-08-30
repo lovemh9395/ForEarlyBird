@@ -22,6 +22,8 @@
 						  			alert("없는 아이디 입니다.");
 						  		} else if (data == 2) {
 						  			alert("비밀번호가 맞지 않습니다.");
+						  		} else if (data == 4) {
+						  			alert("회원탈퇴된 아이디입니다.")
 						  		} else {
 						  		$('#loginform').submit();
 						  		}

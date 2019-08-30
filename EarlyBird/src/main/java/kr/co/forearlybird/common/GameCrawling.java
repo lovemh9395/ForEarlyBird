@@ -23,16 +23,16 @@ public class GameCrawling {
 		int brd_id = index + 100;
 		try {
 			String mainURL = "http://www.inven.co.kr";
-			String siteURL = "http://www.inven.co.kr/webzine/news/?hotnews=1";
+			String siteURL = "https://bbs.ruliweb.com/news/529";
 			System.out.println("=====================================================================");
 			System.out.println("URL :" + siteURL);
 			// URL에 접속해 Document를 얻어내기 
 			// 간략화 된 GET,POST
 			Document doc1 = Jsoup.connect(siteURL).get();
 
-			Elements title = doc1.select(".webzineNewsList");
-			Elements title2 = title.select("tbody");
-			Elements title3 = title2.select(".left");
+			Elements title = doc1.select(".center_list");
+			Elements title2 = title.select(".row li");
+			Elements title3 = title2.select(".title_wrapper");
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			String url = "jdbc:mysql://localhost/earlybird?characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false";
 			String id = "root";
@@ -40,14 +40,13 @@ public class GameCrawling {
 			conn = DriverManager.getConnection(url, id, pass);
 
 			System.out.println("=====================================================================");
-			for (Element e : title3) {
-				String cnt_title = e.select(".title").text();
+			for (Element e : title2) {
+				String cnt_title = e.select(".title_wrapper").select(".title").text();
 				String cnt_thumbnail = e.getElementsByAttribute("src").attr("src");
 				String cnt_link = e.getElementsByAttribute("href").attr("href");
 				System.out.println("titleeeeeeeeeeeeeeee = "+cnt_title);
 				System.out.println("imgggggggggggggggggg = "+cnt_thumbnail);
 				System.out.println("linkkkkkkkkkkkkkkkkk = "+cnt_link);
-
 				String sql = "select count(cnt_title) from content where brd_id = "+ brd_id;
 				pstmt = conn.prepareStatement(sql);
 				rs = pstmt.executeQuery();

@@ -37,73 +37,66 @@ public class MemberDAOImpl implements MemberDAO {
 	@Override
 	public int make(Member member) {
 		logger.info("회원가입 DAO");
-		// TODO Auto-generated method stub
 		return sqlSession.insert("member.make", member);
 	}
 
 	@Override
 	public Member detail(String id) {
-		logger.info("내 정보 보기 dao");
+		logger.info("내 정보 보기 DAO");
 		return sqlSession.selectOne("member.detail", id);
 	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Map update(Map<String, Object> map) {
-		logger.info("정보수정 dao");
+		logger.info("정보수정 DAO");
 		return sqlSession.selectOne("member.update", map);
 	}
 
 	@Override
 	public int delete(String id) {
-		logger.info("회원탈퇴 dao");
+		logger.info("회원탈퇴 DAO");
 		return sqlSession.insert("member.delete", id);
 	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
 	public int profile(Map middlemap) {
-		logger.info("프로필업로드 dao");
-		logger.info(middlemap.toString());
+		logger.info("프로필업로드 DAO");
 		System.out.println(middlemap.get("url"));
 		return sqlSession.update("member.profileupdate", middlemap);
 	}
 
 	@Override
 	public String searchID(Member member) {
-		logger.info("PW 찾기 dao");
+		logger.info("비밀번호 찾기 DAO");
 		return sqlSession.selectOne("member.searchID", member);
 	}
 
 	@Override
 	public void insertUser(Member vo) throws Exception {
-		// TODO Auto-generated method stub
-		logger.info("111111111111111111111111111111111111111111111111111111111111111");
-		logger.info("dao " + vo);
-		System.out.println("DAO 로그 : 회원가입 중");
+		logger.info("회원가입 DAO");
 		sqlSession.insert("member.insertUser", vo);
-//			System.out.println(vo.toString());
 	}
 
 	@Override
 	public void createAuthKey(String user_email, String user_authcode) throws Exception {
-		// TODO Auto-generated method stub
+		logger.info("인증키 생성 DAO");
 		Member vo = new Member();
 		vo.setMem_profile_content(user_authcode);
 		vo.setMem_adminmemo(user_email);
-		logger.info("111111111111111111111111111111111111111111111111111111111111111");
 		sqlSession.selectOne("member.createAuthKey", vo);
 	}
 
 	@Override
 	public void userAuth(String user_email) throws Exception {
-		// TODO Auto-generated method stub
+		logger.info("인증키 보내기 DAO");
 		sqlSession.update("member.userAuth", user_email);
 	}
 
 	@Override
 	public void searchPWD(Member vo, String mem_password) throws Exception {
-		System.out.println("++++++++++++++++++++++++++" + vo + "-------------------" + mem_password);
+		logger.info("비밀번호 찾기 DAO");
 		String encPassword = passwordEncoder.encode(mem_password);
 		vo.setMem_password(encPassword);
 		sqlSession.selectOne("member.searchPWD", vo);
@@ -112,6 +105,7 @@ public class MemberDAOImpl implements MemberDAO {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public String getrawPw(Map map) {
+		logger.info("비밀번호 암호화 비교 DAO");
 		return sqlSession.selectOne("member.rawPw", map);
 	}
 
@@ -119,16 +113,14 @@ public class MemberDAOImpl implements MemberDAO {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Post> listCriteria(Map map) throws Exception {
-		logger.info("내 글 보기 Post DAO");
-		logger.info(map.toString());
+		logger.info("내 글 보기 DAO");
 		return sqlSession.selectList("member.mypostlistCriteria", map);
 	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
 	public int countPaging(Map map) throws Exception {
-		logger.info("내 글 보기 Count paging List DAO");
-		logger.info(map.toString());
+		logger.info("내 글 보기 페이징 처리 DAO");
 		return sqlSession.selectOne("member.mypostcountPaging", map);
 	}
 
@@ -136,33 +128,33 @@ public class MemberDAOImpl implements MemberDAO {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Reply> myreplylistCriteria(Map map) throws Exception {
-		logger.info("내 댓글 보기 Post DAO");
-		logger.info(map.toString());
+		logger.info("내 댓글 보기 DAO");
 		return sqlSession.selectList("member.myreplylistCriteria", map);
 	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
 	public int myreplycountPaging(Map map) throws Exception {
-		logger.info("내 댓글 보기 Count paging List DAO");
-		logger.info(map.toString());
+		logger.info("내 댓글 보기 페이징  DAO");
 		return sqlSession.selectOne("member.myreplyCountPaging", map);
 	}
 
-	// 마지막 로그인 시간 업데이트
 	@Override
 	public void mem_logintime(String id) {
+		logger.info("마지막 로그인 시간 업데이트 DAO");
 		sqlSession.update("member.login_time", id);
 	}
 
 	@Override
 	public int CheckId(String formId) throws Exception {
+		logger.info("로그인 아이디 체크 DAO");
 		return sqlSession.selectOne("member.CheckId",formId);
 	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
 	public int CheckPass(Map map) {
+		logger.info("로그인 비밀번호 체크 DAO");
 		return sqlSession.selectOne("member.CheckPass",map);
 	}
 	
@@ -200,6 +192,15 @@ public class MemberDAOImpl implements MemberDAO {
 	public List getMemberListLikesThisName(String keyword) {
 		logger.info("getMemberListLikesThisNameDAO");
 		return sqlSession.selectList("member.getMemberListLikesThisName",keyword);
+	}
+	
+	public int CheckLevel(Map map) {
+		return sqlSession.selectOne("member.CheckLevel",map);
+	}
+
+	@Override
+	public int searchPWDcheck(Map map) {
+		return sqlSession.selectOne("member.searchPWDcheck",map);
 	}
 
 }

@@ -25,21 +25,34 @@
 				}
 			});
 		});
-		$("#deletePost").click(function(){
-			var post_id = ${P_detail.post_id };
-			var brd_id = ${P_detail.brd_id};
-			$.ajax({
-				type:"post",
-				url:"${contextPath}/post/P_delete",
-				data:{post_id:post_id,
-					  brd_id:brd_id
-					},
-					success:function(data){
-						location.href="${contextPath}/post/P_list?brd_id=${P_detail.brd_id}";
-					}
-			});
-		});
 	});
+	
+	function deletePost() {
+		var post_id = ${P_detail.post_id };
+		var brd_id = ${P_detail.brd_id};
+		$.ajax({
+			type:"post",
+			url:"${contextPath}/post/P_delete",
+			data:{post_id:post_id,
+				  brd_id:brd_id
+				},
+				success:function(data){
+					location.href="${contextPath}/post/P_list?brd_id=${P_detail.brd_id}";
+			}	
+		});
+	}
+	
+
+	$(document).ready(function() {
+		$("#deletePost").click(function() {
+			var result = confirm("글을 삭제하시겠습니까?");
+
+			if (result) {
+				deletePost();
+			} 
+		})
+	})
+
 </script>
 <!-- head -->
 <%@ include file="../include/head.jsp"%>
@@ -138,7 +151,7 @@
 									href="${contextPath }/post/P_update?post_id=${P_detail.post_id}&brd_id=${P_detail.brd_id}"><button
 										type="button" class="btn btn-primary">수정하기</button></a>
 								<button type="button" class="btn btn-primary"
-									data-toggle="modal" id="deletePost" data-target="#P_delete">삭제하기</button>
+									data-toggle="modal" id="deletePost">삭제하기</button>
 							</div>
 						</c:if>
 					</div>
@@ -146,9 +159,7 @@
 			</div>
 		</div>
 		<div id="R_list">
-			<p>
 				<%@ include file="../reply/R_list.jsp"%>
-			</p>
 		</div>
 		<!-- footer -->
 		<%@ include file="../include/main_footer.jsp"%>

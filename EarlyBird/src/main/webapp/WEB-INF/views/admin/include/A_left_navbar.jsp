@@ -16,7 +16,7 @@
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<!-- Brand -->
-		<a class="navbar-brand pt-0" href="#"> <img
+		<a class="navbar-brand pt-0" href="${contextPath}/admin/A_mainpage"> <img
 			src="/resources/assets/img/brand/logo.png" class="navbar-brand-img"
 			alt="..." style="">
 		</a>

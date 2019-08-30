@@ -15,15 +15,6 @@
 <!--  end Core -->
 <script>
 	$(document).ready(function() {
-		$("#update").click(function() {
-			$("#infoupdate").submit();
-			if ($("#mem_gender_select").val() == "남자") {
-				$("#mem_gender").val("0");
-			} else {
-				$("#mem_gender").val("1");
-			}
-			alert("보낸당");
-		});
 		$("#gender_man").click(function() {
 			$("#mem_gender_select").val("남자");
 			$("#mem_gender").val("0");
@@ -41,6 +32,69 @@
 			$("#mem_gender_select").val("남자");
 		}
 	});
+
+	$(document).ready(function() {
+		$("#M_delete").click(function() {
+			var result = confirm("회원탈퇴를 하시겠습니까?");
+
+			if (result) {
+				M_delete();
+			} else {
+				alert("취소되었습니다.");
+			}
+		})
+	})
+
+	function updateChecking() {
+		var exppass = /^[a-zA-Z0-9]{7,15}$/;
+		if (!exppass.test($("#update_mem_password").val())) {
+			alert("비밀번호는 8~15자의 영문,숫자만 허용됩니다.");
+			return false;
+		}
+		var exppass = /^[a-zA-Z0-9]{7,15}$/;
+		if (!exppass.test($("#update_mem_password2").val())) {
+			alert("비밀번호는 8~15자의 영문,숫자만 허용됩니다.");
+			return false;
+		}
+		if ($("#update_mem_password").val() != $("#update_mem_password2").val()) {
+			alert("비밀번호가 같지 않습니다.");
+			$("#update_mem_password").val("");
+			$("#update_mem_password2").val("");
+			$("#update_mem_password").focus();
+			return false;
+		}
+		return true;
+	}
+
+	$(document).ready(function() {
+		$("#update").click(function() {
+			if (updateChecking()) {
+				var result = confirm("회원정보를 변경하시겠습니까?");
+
+				if (result) {
+					$("#infoupdate").submit();
+					alert("회원님의 정보가 변경되었습니다.");
+				} else {
+					alert("취소되었습니다.");
+				}
+			}
+		})
+	})
+
+	function M_delete(mem_userid) {
+		$.ajax({
+			async : false,
+			type : "post",
+			url : "${contextPath}/member/M_delete",
+			data : {
+				"id" : mem_userid
+			},
+			success : function(data) {
+				alert("회원탈퇴 되었습니다.");
+				location.href = "${contextPath}/"
+			}
+		})
+	}
 </script>
 <script>
 	function execPostcode() {
@@ -159,8 +213,7 @@
 						</div>
 					</div>
 					<div class="text-right" align="right">
-						<a href="${contextPath }/member/M_delete?id='${info.mem_userid }'"><button
-								type="button" class="btn btn-sm btn-primary" id="M_delete">회원탈퇴</button></a>
+						<button type="button" class="btn btn-sm btn-primary" id="M_delete">회원탈퇴</button>
 					</div>
 				</div>
 				<div class="col-xl-8 order-xl-1">
@@ -186,8 +239,8 @@
 										<div class="col-lg-6">
 											<div class="form-group">
 												<label class="form-control-label" for="infouserid">아이디</label>
-												<input type="text" id="mem_userid" name="mem_userid"
-													style="disabled: true" readonly
+												<input type="text" id="update_mem_userid"
+													name="update_mem_userid" style="disabled: true" readonly
 													class="form-control form-control-alternative"
 													placeholder="${info.mem_userid }"
 													value="${info.mem_userid }">
@@ -207,7 +260,7 @@
 										<div class="col-lg-6">
 											<div class="form-group">
 												<label class="form-control-label" for="input-last-name">닉네임
-												</label> <input type="text" name="mem_nickname"
+												</label> <input type="text" name="update_mem_nickname"
 													style="disabled: true"
 													class="form-control form-control-alternative"
 													value="${info.mem_nickname }">
@@ -218,8 +271,8 @@
 										<div class="col-lg-6">
 											<div class="form-group">
 												<label class="form-control-label" for="input-first-name">비밀번호
-												</label> <input type="password" id="mem_password"
-													name="mem_password"
+												</label> <input type="password" id="update_mem_password"
+													name="update_mem_password"
 													class="form-control form-control-alternative"
 													style="disabled: true" placeholder="비밀번호를 입력해주세요">
 											</div>
@@ -227,8 +280,8 @@
 										<div class="col-lg-6">
 											<div class="form-group">
 												<label class="form-control-label" for="input-last-name">비밀번호
-													재입력 </label> <input type="password" id="mem_password2"
-													name="mem_password2" style="disabled: true"
+													재입력 </label> <input type="password" id="update_mem_password2"
+													name="update_mem_password2" style="disabled: true"
 													class="form-control form-control-alternative"
 													placeholder="비밀번호를 다시 입력해주세요">
 											</div>
@@ -243,7 +296,7 @@
 										<div class="col-md-12">
 											<div class="form-group">
 												<label class="form-control-label" for="input-address">전화번호</label>
-												<input name="mem_phone"
+												<input name="update_mem_phone"
 													class="form-control form-control-alternative"
 													value="${info.mem_phone }" type="text">
 											</div>
@@ -253,7 +306,7 @@
 										<div class="col-lg-4">
 											<div class="form-group">
 												<label class="form-control-label" for="input-city">생일</label>
-												<input type="text" id="infobirth" name="infobirth"
+												<input type="text" id="infobirth" name="update_mem_birthday"
 													style="disabled: false"
 													class="form-control form-control-alternative"
 													placeholder="${info.mem_birthday }"
@@ -263,7 +316,7 @@
 										<div class="col-lg-4">
 											<div class="form-group">
 												<label class="form-control-label">성별</label> <input
-													type="text" id="mem_gender_select" name="mem_gender_select"
+													type="text" id="mem_gender_select" name="update_mem_gender"
 													class="form-control form-control-alternative"
 													style="align: left; cursor: pointer" data-toggle="dropdown"
 													value="${info.mem_gender }"> <span class="caret"></span>
@@ -272,14 +325,13 @@
 													<li><a id="gender_man" style="cursor: pointer">남자</a></li>
 													<li><a id="gender_girl" style="cursor: pointer">여자</a></li>
 												</ul>
-												<input type="hidden" value="${info.mem_gender }"
-													id="mem_gender" name="mem_gender">
 											</div>
 										</div>
 										<div class="col-lg-4">
 											<div class="form-group">
 												<label class="form-control-label">우편번호 </label> <input
-													type="text" id="mem_zipcode" name="mem_zipcode"
+													type="text" id="update_mem_zipcode"
+													name="update_mem_zipcode"
 													class="form-control form-control-alternative"
 													value="${info.mem_zipcode }" onClick="execPostcode();"
 													placeholder="우편번호">
@@ -290,7 +342,7 @@
 										<div class="col-md-8">
 											<div class="form-group">
 												<label class="form-control-label">주소</label> <input
-													name="mem_address1" id="mem_address1"
+													name="update_mem_address1" id="update_mem_address1"
 													class="form-control form-control-alternative"
 													value="${info.mem_address1 }" placeholder="주소를 입력해주세요"
 													onClick="execPostcode();" type="text">
@@ -299,7 +351,7 @@
 										<div class="col-md-4">
 											<div class="form-group">
 												<label class="form-control-label">상세주소</label> <input
-													name="mem_address2" id="mem_address2"
+													name="update_mem_address2" id="update_mem_address2"
 													class="form-control form-control-alternative"
 													value="${info.mem_address2 }" placeholder="상세주소를 입력해주세요"
 													type="text">
@@ -317,7 +369,8 @@
 										<textarea rows="4"
 											class="form-control form-control-alternative"
 											placeholder="A few words about you ..."
-											id="mem_profile_content" name="mem_profile_content">${info.mem_profile_content }</textarea>
+											id="update_mem_profile_content"
+											name="update_mem_profile_content">${info.mem_profile_content }</textarea>
 									</div>
 								</div>
 							</form>

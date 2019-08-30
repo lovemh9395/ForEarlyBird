@@ -5,6 +5,16 @@
 	request.setCharacterEncoding("UTF-8");
 %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<script>
+	$(function() {
+		$("#MOVE_TOP_BTN").click(function() {
+			$('html, body').animate({
+				scrollTop : 0
+			}, 400);
+			return false;
+		});
+	});
+</script>
 <nav
 	class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white"
 	id="sidenav-main">
@@ -136,7 +146,7 @@
 			<hr class="my-3">
 			<ul class="navbar-nav">
 				<li class="nav-item"><a class="nav-link"
-					href="./examples/register.html"> <i
+					href="${contextPath }/content/C_share_M?brd_id=9"> <i
 						class="ni ni-circle-08 text-pink"></i> 정보공유
 				</a></li>
 			</ul>
@@ -147,8 +157,15 @@
 						class="ni ni-circle-08 text-pink"></i> QnA
 				</a></li>
 			</ul>
-			<!-- Divider -->
 			<hr class="my-3">
+			<ul class="navbar-nav">
+				<li class="nav-item"><a class="nav-link" id="MOVE_TOP_BTN"
+					href="#"> <i
+						class="ni ni-circle-08 text-pink"></i>맨 위로 Button
+				</a></li>
+			</ul>
+			<hr class="my-3">
+			<!-- Divider -->
 			<!-- Heading -->
 		</div>
 	</div>

@@ -32,7 +32,7 @@
 									<th scope="row">
 										<div class="media align-items-center">
 											<div class="media-body">
-												<span class="mb-0 text-sm">${list.mem_userid }</span>
+												<span class="mb-0 text-sm">${list.mem_userid}</span>
 											</div>
 										</div>
 									</th>
@@ -66,22 +66,26 @@
 			</div>
 			<div class="card-footer py-4">
 				<nav aria-label="...">
+				
 					<ul class="pagination justify-content-end mb-0">
-						<li class="page-item"><a class="page-link"
-							href="${contextPath }/post/P_detail?page=${pageMaker.startPage - 1}&perPageNum=${pageMaker.cri.perPageNum}&post_id=${P_detail.post_id}">
-								<i class="fas fa-angle-left"></i> <span class="sr-only">Previous</span>
-						</a></li>
+						<c:if test="${pageMaker.prev }">
+							<li class="page-item"><a class="page-link"
+								href="${contextPath }/post/P_detail?page=${pageMaker.startPage - 1}&perPageNum=${pageMaker.cri.perPageNum}&post_id=${{param.post_id}}">
+									<i class="fas fa-angle-left"></i> <span class="sr-only">Previous</span>
+							</a></li>
+						</c:if>
 						<c:forEach begin="${pageMaker.startPage }"
 							end="${pageMaker.endPage }" var="index">
 							<li class="page-item active"><a class="page-link"
-								href="${contextPath }/post//P_detail?page=${index}&perPageNum=${pageMaker.cri.perPageNum}&post_id=${P_detail.post_id}">${index }</a>
+								href="${contextPath }/post//P_detail?page=${index}&perPageNum=${pageMaker.cri.perPageNum}&post_id=${param.post_id}">${index }</a>
 							</li>
 						</c:forEach>
-
-						<li class="page-item"><a class="page-link"
-							href="${contextPath }/post//P_detail?page=${pageMaker.endPage + 1}&perPageNum=${pageMaker.cri.perPageNum}&post_id=${P_detail.post_id}">
-								<i class="fas fa-angle-right"></i> <span class="sr-only">Next</span>
-						</a></li>
+						<c:if test="${pageMaker.next }">
+							<li class="page-item"><a class="page-link"
+								href="${contextPath }/post//P_detail?page=${pageMaker.endPage + 1}&perPageNum=${pageMaker.cri.perPageNum}&post_id=${{param.post_id}}">
+									<i class="fas fa-angle-right"></i> <span class="sr-only">Next</span>
+							</a></li>
+						</c:if>
 					</ul>
 				</nav>
 			</div>

@@ -23,7 +23,7 @@ public class DramaCrawiling {
 		int brd_id = index + 300;
 		try {
 			String mainURL = "https://search.daum.net/search";
-			String siteURL = "https://search.daum.net/search?w=tot&q=2019%EA%B8%B0%EB%8C%80%EC%9E%91&DA=TVS&rtmaxcoll=TVS";
+			String siteURL = "https://search.daum.net/search?w=tot&q=%EB%8F%85%EC%A0%90%EC%83%81%EC%98%81%EA%B4%80&DA=TVS&rtmaxcoll=TVS";
 			System.out.println("=====================================================================");
 			System.out.println("URL :" + siteURL);
 			// URL에 접속해 Document를 얻어내기

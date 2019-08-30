@@ -22,8 +22,12 @@
 					},
 					success : function(data) {
 						alert(data);
+						if($(data).find("#IDsearchName").val() != "") {
 						$(data).modal();
 						<%session.removeAttribute("FindId");%>
+						} else {
+							alert("회원정보가 없습니다.")
+						}
 					}
 				})
 			}

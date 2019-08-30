@@ -6,19 +6,6 @@
 %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <script>
-	/* $(document).ready(function(){
-		$("#deleteReply").click(function(){
-			
-			$.ajax({
-				type:"post",
-				url:"${contextPath}/reply/R_delete",
-				success:function(data){
-					alert(data);
-				}
-			})
-		})
-	}) */
-	
 	function replydelete(index){
 		var post_id = <%=request.getParameter("post_id")%>;
 		$.ajax({
@@ -32,7 +19,16 @@
 			}
 		})
 	}
+	function M_delete(index) {
+			var result = confirm("댓글을 삭제 하시겠습니까?");
+
+			if (result) {
+				replydelete(index);
+			}
+	}
+	
 </script>
-		<div class="col-11" align="right">
-			<button type="button" class="btn btn-sm btn-primary" onclick = "replydelete(${status.current.rpl_id});">삭제</button>
-		</div>
+<div class="col-11" align="right">
+	<button type="button" class="btn btn-sm btn-primary"
+		onclick="M_delete(${status.current.rpl_id});">삭제</button>
+</div>

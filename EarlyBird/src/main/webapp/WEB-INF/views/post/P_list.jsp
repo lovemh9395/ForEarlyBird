@@ -49,7 +49,13 @@
 									<h3 class="text-white mb-0">게시판 이름</h3>
 								</c:if>
 							</div>
-							<c:if test="${!empty useridd}">
+							<c:if test="${!empty useridd && brd_id ge 2}">
+								<div class="col-11" align="right">
+									<a href="${contextPath }/post/P_make?brd_id=${brd_id}"><button
+											type="button" class="btn btn-primary">글쓰기</button></a>
+								</div>
+							</c:if>
+							<c:if test="${!empty useridd && mem_level ge 8 && brd_id eq 1}">
 								<div class="col-11" align="right">
 									<a href="${contextPath }/post/P_make?brd_id=${brd_id}"><button
 											type="button" class="btn btn-primary">글쓰기</button></a>
@@ -118,21 +124,24 @@
 					<div class="card bg-default shadow">
 						<nav aria-label="...">
 							<ul class="pagination justify-content-end mb-0">
-								<li class="page-item"><a class="page-link"
-									href="${contextPath }/post/P_list?page=${pageMaker.startPage - 1}&perPageNum=${pageMaker.cri.perPageNum}&brd_id=${brd_id}">
-										<i class="fas fa-angle-left"></i> <span class="sr-only">Previous</span>
-								</a></li>
+								<c:if test="${pageMaker.prev }">
+									<li class="page-item"><a class="page-link"
+										href="${contextPath }/post/P_list?page=${pageMaker.startPage - 1}&perPageNum=${pageMaker.cri.perPageNum}&brd_id=${brd_id}">
+											<i class="fas fa-angle-left"></i> <span class="sr-only">Previous</span>
+									</a></li>
+								</c:if>
 								<c:forEach begin="${pageMaker.startPage }"
 									end="${pageMaker.endPage }" var="index">
 									<li class="page-item active"><a class="page-link"
 										href="${contextPath }/post/P_list?page=${index}&perPageNum=${pageMaker.cri.perPageNum}&brd_id=${brd_id}">${index }</a>
 									</li>
 								</c:forEach>
-
-								<li class="page-item"><a class="page-link"
-									href="${contextPath }/post/P_list?page=${pageMaker.endPage + 1}&perPageNum=${pageMaker.cri.perPageNum}&post_id=${post_id}&brd_id=${brd_id}">
-										<i class="fas fa-angle-right"></i> <span class="sr-only">Next</span>
-								</a></li>
+								<c:if test="${pageMaker.next }">
+									<li class="page-item"><a class="page-link"
+										href="${contextPath }/post/P_list?page=${pageMaker.endPage + 1}&perPageNum=${pageMaker.cri.perPageNum}&post_id=${post_id}&brd_id=${brd_id}">
+											<i class="fas fa-angle-right"></i> <span class="sr-only">Next</span>
+									</a></li>
+								</c:if>
 							</ul>
 						</nav>
 					</div>

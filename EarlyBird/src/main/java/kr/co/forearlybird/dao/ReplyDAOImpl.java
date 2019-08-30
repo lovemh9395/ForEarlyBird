@@ -21,10 +21,12 @@ public class ReplyDAOImpl implements ReplyDAO {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public int R_make(Map map) {
+		logger.info("댓글 쓰기 DAO");
 		return sqlSession.insert("reply.R_make",map);
 	}
 	@Override
 	public int R_delete(int rpl_id) {
+		logger.info("댓글 삭제 DAO");
 		return sqlSession.update("reply.R_delete",rpl_id);
 	}
 
@@ -37,7 +39,7 @@ public class ReplyDAOImpl implements ReplyDAO {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Reply> replylistCriteria(Map map) throws Exception {
-		logger.info("페이징처리3 List DAO");
+		logger.info("페이징처리3 DAO");
 		return sqlSession.selectList("reply.replylistCriteria", map);
 	}
 	
@@ -45,7 +47,7 @@ public class ReplyDAOImpl implements ReplyDAO {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public int replyCountPaging(Map map) throws Exception {
-		logger.info("reply 페이징처리4 List DAO");
+		logger.info("reply 페이징처리4 DAO");
 		return sqlSession.selectOne("reply.replyCountPaging", map);
 	}
 }

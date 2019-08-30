@@ -10,7 +10,7 @@
 	<div class="container-fluid">
 		<!-- Brand -->
 		<a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
-			href="./index.html">ForEarlyBird</a>
+			href="${contextPath}/admin/A_mainpage">ForEarlyBird</a>
 		<!-- Form -->
 		<form
 			class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
@@ -42,14 +42,11 @@
 					<div class=" dropdown-header noti-title">
 						<h6 class="text-overflow m-0">${user.name}님환영합니다</h6>
 					</div>
-					<a href="${contextPath}/member/M_info?id=${user.id}"
-						class="dropdown-item"> <i class="ni ni-single-02"></i> <span>내
-							정보 보기</span>
-					</a> <a href="${contextPath}/member/M_list" class="dropdown-item">
-						<i class="ni ni-settings-gear-65"></i> <span>내 글 보기</span>
-					</a>
-					<div class="dropdown-divider"></div>
-					<a href="${contextPath}/member/M_logout" class="dropdown-item">
+					<a href="${contextPath }/admin/A_mainpage" class="dropdown-item">
+						<i class="ni ni-settings-gear-65"></i> <span>관리자 페이지</span>
+					</a> <a href="${contextPath}/" class="dropdown-item"> <i
+						class="ni ni-settings-gear-65"></i> <span>메인 페이지</span>
+					</a> <a href="${contextPath}/member/M_logout" class="dropdown-item">
 						<i class="ni ni-user-run"></i> <span>로그아웃</span>
 					</a>
 				</div></li>

@@ -46,13 +46,11 @@
 <script>
 	$(document).ready(function() {
 		$("#profileupload").click(function() {
-			if ($("#fileName").val() != null) {
+			if ($("#fileName").val() != "") {
 				console.log($("#fileName").val());
-				alert($("#fileName").val());
-				alert($("#fileName").val());
 				document.getElementById('fileuploadform').submit();
 			} else {
-				alert("넣으셈");
+				alert("사진을 넣어주세요");
 				return false;
 			}
 		});

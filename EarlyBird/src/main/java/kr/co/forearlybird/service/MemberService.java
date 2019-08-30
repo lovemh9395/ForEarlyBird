@@ -59,4 +59,8 @@ public interface MemberService {
 	
 	@SuppressWarnings("rawtypes")
 	public int CheckPass(Map map);
+	
+	public int CheckLevel(String formId);
+	
+	public int searchPWDcheck(Map map);
 }

@@ -6,23 +6,27 @@
 %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <script>
-	$(document).ready(function() {
-		$("#addR_make").click(function() {
-			var rpl_content = $("#replyPost_content").val();
-			rpl_content.replace('\r\n', '<br>');
-			var post_id =<%=request.getParameter("post_id")%>;
-			$.ajax({
-				async : true,
-				type : "post",
-				url : "${contextPath}/reply/R_make",
-				data : {
-					rpl_content : rpl_content,
-					post_id : post_id
-				},
-				success : function(data) {
-					 $("#R_list").html(data);
-				}
-			});
+		$(document).ready(function() {
+			$("#addR_make").click(function() {
+				if($("#replyPost_content").val() != ""){
+				var rpl_content = $("#replyPost_content").val();
+				rpl_content.replace('\r\n', '<br>');
+				var post_id =<%=request.getParameter("post_id")%>;
+				$.ajax({
+					async : true,
+					type : "post",
+					url : "${contextPath}/reply/R_make",
+					data : {
+						rpl_content : rpl_content,
+						post_id : post_id
+					},
+					success : function(data) {
+						 $("#R_list").html(data);
+					}
+				});
+			} else {
+				alert("댓글을 입력해주세요.");
+			}
 		});
 	});
 </script>

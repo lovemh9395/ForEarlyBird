@@ -20,21 +20,20 @@ public class PostDAOImpl implements PostDAO {
 
 	@Override
 	public List<Post> P_list() {
-		logger.info("자유게시판 List DAO");
+		logger.info("자유게시판  DAO");
 		return sqlSession.selectList("post.P_list");
 	}
 
 	@Override
 	public List<Post> listAll() throws Exception {
-		logger.info("페이징처리1 List DAO");
+		logger.info("페이징처리1 DAO");
 		return sqlSession.selectList("Post.listAll");
 	}
 
 	// 게시판 페이징
-
 	@Override
 	public List<Post> listPage(int page) throws Exception {
-		logger.info("페이징처리2 List DAO");
+		logger.info("페이징처리2 DAO");
 		if (page <= 0) {
 			page = 1;
 		}
@@ -48,14 +47,14 @@ public class PostDAOImpl implements PostDAO {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Post> listCriteria(Map map) throws Exception {
-		logger.info("페이징처리3 List DAO");
+		logger.info("페이징처리3 DAO");
 		return sqlSession.selectList("post.listCriteria", map);
 	}
 	
 	@SuppressWarnings("rawtypes")
 	@Override
 	public int countPaging(Map map) throws Exception {
-		logger.info("페이징처리4 List DAO");
+		logger.info("페이징처리4 DAO");
 		return sqlSession.selectOne("post.countPaging", map);
 	}
 

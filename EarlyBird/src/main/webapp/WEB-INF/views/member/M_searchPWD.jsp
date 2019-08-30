@@ -8,8 +8,21 @@
 <script>
 	$(document).ready(function() {
 		$("#searchPWDdetail").click(function() {
+			var searchPWD = $("#searchPWDform").serialize();
 			if (searchPassformCheck()) {
-				document.getElementById('searchPWDform').submit();
+				$.ajax({
+					tyep : "post",
+					url : "${contextPath}/member/M_searchPWD",
+					data : searchPWD,
+					success : function(data) {
+						if (data == 0) {
+							alert("회원정보가 일치하지 않습니다.");
+						} else if (data == 1) {
+							alert("이메일로 임시비밀번호가 전송되었습니다.");
+							location.href = "${contextPath}/";
+						}
+					}
+				})
 			}
 		});
 	});
@@ -53,8 +66,7 @@
 								style="width: 200px; height: auto;">
 							</a>
 						</div>
-						<form role="form" id="searchPWDform" action="member/M_searchPWD"
-							method="post">
+						<form role="form" id="searchPWDform" method="post">
 							<div class="form-group mb-3">
 								<div class="input-group input-group-alternative">
 									<div class="input-group-prepend">

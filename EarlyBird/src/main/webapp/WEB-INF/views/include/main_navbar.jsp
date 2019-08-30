@@ -68,6 +68,14 @@
 								class="dropdown-item"> <i class="ni ni-settings-gear-65"></i>
 								<span>내 글 보기</span>
 							</a>
+							<c:if test="${mem_level ge 8 }">
+								<a href="${contextPath }/admin/A_mainpage" class="dropdown-item">
+									<i class="ni ni-settings-gear-65"></i> <span>관리자 페이지</span>
+								</a>
+							</c:if>
+							<a href="${contextPath}/" class="dropdown-item"> <i
+								class="ni ni-settings-gear-65"></i> <span>메인 페이지</span>
+							</a>
 							<div class="dropdown-divider"></div>
 							<a href="${contextPath}/member/M_logout" class="dropdown-item">
 								<i class="ni ni-user-run"></i> <span>로그아웃</span>

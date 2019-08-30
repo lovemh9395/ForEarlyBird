@@ -69,4 +69,8 @@ public interface MemberDAO  {
 	@SuppressWarnings("rawtypes")
 	public List getMemberListLikesThisName(String string);
 	
+	public int CheckLevel(Map map);
+	
+	public int searchPWDcheck(Map map);
+	
 }

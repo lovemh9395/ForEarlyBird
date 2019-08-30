@@ -81,28 +81,6 @@ public class MemberServiceImpl implements MemberService {
 		return null;
 	}
 
-//	@Override
-//	public int make(HttpServletRequest request) {
-//		logger.info("회원가입 service");
-//		try {
-//			request.setCharacterEncoding("UTF-8");
-//		} catch (UnsupportedEncodingException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		String encPassword = passwordEncoder.encode(request.getParameter("makepassword"));
-//		logger.info("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"+encPassword);
-//		Member member = new Member();
-//		member.setMem_userid(request.getParameter("makeemail"));
-//		member.setMem_password(encPassword);
-//		member.setMem_nickname(request.getParameter("makenickname"));
-//		member.setMem_phone(request.getParameter("maketel"));
-//		member.setMem_birthday(request.getParameter("makebirth"));
-//		member.setMem_username(request.getParameter("makename"));
-//		// 클라이언트 아이피 주소 받기
-//		return memberDAO.make(member);
-//	}
-
 	@Override
 	public Member detail(String id) {
 		logger.info("내 정보 보기 service");
@@ -149,9 +127,6 @@ public class MemberServiceImpl implements MemberService {
 
 			writeFile(multipartFile, saveFileName);
 			url = SAVE_PATH + saveFileName;
-
-			// String useriding = postmap.get("userid").toString();
-
 			String iddddd = (String) session.getAttribute("useridd");
 			System.out.println("fdsafdsafdsafdsafdsafdsa" + iddddd);
 			Map middlemap = new HashMap<>();
@@ -303,12 +278,14 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public int CheckId(String formId) throws Exception {
+		logger.info("로그인 아이디 체크 Service");
 		return memberDAO.CheckId(formId);
 	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
 	public int CheckPass(Map map) {
+		logger.info("로그인 비밀번호 체크 Service");
 		String login_pass = (String) map.get("login_pass");
 
 		String rawPw = memberDAO.getrawPw(map);
@@ -317,9 +294,24 @@ public class MemberServiceImpl implements MemberService {
 
 		if (passwordEncoder.matches(login_pass, rawPw)) {
 			logger.info("비밀번호 일치");
+			int result = memberDAO.CheckLevel(map);
+			if(result == 4) {
+				return 4;
+			} 
 			return 3;
 		} else {
 			return 2;
 		}
 	}
+
+	@Override
+	public int CheckLevel(String formId) {
+		return 0;
+	}
+
+	@Override
+	public int searchPWDcheck(Map map) {
+		return memberDAO.searchPWDcheck(map);
+	}
+	
 }

@@ -6,8 +6,8 @@
 	<insert id="R_make" parameterType="java.util.Map">
 		insert into
 		reply(mem_userid,
-		post_id, rpl_content, rpl_datetime,rpl_ip)
-		values(#{mem_userid},#{post_id},#{rpl_content},now(),now())
+		post_id, rpl_content, rpl_datetime,rpl_ip,rpl_updated_datetime)
+		values(#{mem_userid},#{post_id},#{rpl_content},now(),now(),now())
 	</insert>
 
 	<update id="R_delete" parameterType="java.lang.Integer">

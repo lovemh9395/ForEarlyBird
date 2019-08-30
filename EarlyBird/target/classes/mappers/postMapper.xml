@@ -38,11 +38,11 @@
 
 	<insert id="P_make" parameterType="java.util.Map">
 		insert into
-		post(brd_id,mem_userid,post_title,post_content,post_datetime,post_updated_datetime,post_comment_updated_datetime)
+		post(brd_id,mem_userid,post_title,post_content,post_datetime,post_updated_datetime,post_ip)
 		values(#{brd_id},#{mem_userid},#{post_title},#{post_content},now(),now(),now())
 	</insert>
 
-	<update id="P_delete" parameterType="java.lang.String">
+	<update id="P_delete" parameterType="java.lang.Integer">
 		update post
 		set post_del=1
 		where post_id=#{post_id}

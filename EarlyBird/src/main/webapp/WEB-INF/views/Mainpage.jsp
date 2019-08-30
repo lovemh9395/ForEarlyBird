@@ -49,6 +49,7 @@ ul.dropdown-menu {
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-color: gray;
+	cursor: pointer;
 }
 
 .thumbnail.round {
@@ -62,7 +63,7 @@ ul.dropdown-menu {
 <script>
 	function C_recommand(cnt_id) {
 		$.ajax({
-			async : false,
+			async : true,
 			type : "post",
 			url : "${contextPath}/content/C_recommand",
 			data : {
@@ -70,27 +71,28 @@ ul.dropdown-menu {
 			},
 			success : function(data) {
 				var a = $(data).find("#main_menu_btn");
-				$("#main_menu_btn").load(a);
+				$("#main_menu_btn").html(a);
+			},error:function(request,status,error){
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 
 			}
 		})
 	}
-
-	function C_view(cnt_id, connectLink) {
-		$
-				.ajax({
-					async : false,
-					type : "post",
-					url : "${contextPath}/content/C_view",
-					data : {
-						"cnt_id" : cnt_id,
-					},
-					success : function(data) {
-						window
-								.open(connectLink, "connectLink",
-										"toolbar=no, menubar=no, scrollbars=no, resizable=yes");
-					}
-				})
+	
+	function C_view(cnt_id,cnt_connectlink){
+		$.ajax({
+			async:false,
+			type:"post",
+			url:"${contextPath}/content/C_view",
+			data:{"cnt_id":cnt_id},
+			success:function(data){
+				var a = $(data).find("#main_menu_btn");
+				$("#main_menu_btn").html(a);
+				window.open(cnt_connectlink, "connectlink", "width=1200,height=600");
+			},error:function(request,status,error){
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+		})
 	}
 </script>
 <body class="">
@@ -105,23 +107,16 @@ ul.dropdown-menu {
 		<%@ include file="include/main_header.jsp"%>
 		<!-- end Header -->
 		<!-- body -->
-		<div class="row" id="main_menu_btn">
-			<div class="container col-md-12">
+		<div class="row">
+			<div class="container col-md-12" id="main_menu_btn">
 				<!--  -->
 				<div class="col-xs-12 col-sm-6 col-md-2">
 					<div align="center" style="paddin-left: 15px">
 						<div class="btn-group" role="group">
-							<button type="button" class="btn btn-default dropdown-toggle"
-								style="align: center;" role="group" data-toggle="dropdown"
-								aria-expanded="false">
-								게임 <span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="">이벤트</a></li>
-								<li><a href="">업데이트</a></li>
-								<li><a href="">사전등록</a></li>
-								<li><a href="">출시</a></li>
-							</ul>
+							<a href="${contextPath }/content/C_list_M?brd_id=1"><button
+									type="button" class="btn btn-default" style="align: center;">
+									게임 <span class="caret"></span>
+								</button></a>
 						</div>
 					</div>
 					<div>
@@ -143,7 +138,8 @@ ul.dropdown-menu {
 									<h4>
 										<i class="ni ni-active-40 text-blue"></i>${list.cnt_hit }</h4>
 									<h4>
-										<a href="" onclick='C_recommand("${list.cnt_id }");'> <i
+										<a style="cursor: pointer"
+											onclick='C_recommand("${list.cnt_id }");'> <i
 											class="ni ni-favourite-28 text-red"></i>${list.cnt_like }</a>
 									</h4>
 								</div>
@@ -155,16 +151,10 @@ ul.dropdown-menu {
 				<div class="col-sm-6 col-md-2">
 					<div align="center" style="paddin-left: 15px">
 						<div class="btn-group">
-							<button type="button" class="btn btn-default dropdown-toggle"
-								role="group" data-toggle="dropdown" aria-expanded="false">
-								영화 <span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="">개봉예정</a></li>
-								<li><a href="">티저영상</a></li>
-								<li><a href="">ex1</a></li>
-								<li><a href="">ex2</a></li>
-							</ul>
+							<a href="${contextPath }/content/C_list_M?brd_id=2"><button
+									type="button" class="btn btn-default">
+									영화 <span class="caret"></span>
+								</button></a>
 						</div>
 					</div>
 					<c:forEach items="${list}" var="list">
@@ -185,7 +175,8 @@ ul.dropdown-menu {
 								<h4>
 									<i class="ni ni-active-40 text-blue"></i>${list.cnt_hit }</h4>
 								<h4>
-									<a href="" onclick='C_recommand("${list.cnt_id }");'> <i
+									<a style="cursor: pointer"
+										onclick='C_recommand("${list.cnt_id }");'> <i
 										class="ni ni-favourite-28 text-red"></i>${list.cnt_like }</a>
 								</h4>
 							</div>
@@ -196,16 +187,10 @@ ul.dropdown-menu {
 				<div class="col-sm-6 col-md-2">
 					<div align="center" style="paddin-left: 15px">
 						<div class="btn-group">
-							<button type="button" class="btn btn-default dropdown-toggle"
-								role="group" data-toggle="dropdown" aria-expanded="false">
-								드라마 <span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="">개봉예정</a></li>
-								<li><a href="">티저영상</a></li>
-								<li><a href="">ex1</a></li>
-								<li><a href="">ex2</a></li>
-							</ul>
+							<a href="${contextPath }/content/C_list_M?brd_id=3"><button
+									type="button" class="btn btn-default">
+									드라마 <span class="caret"></span>
+								</button></a>
 						</div>
 					</div>
 					<c:forEach items="${list}" var="list">
@@ -225,7 +210,8 @@ ul.dropdown-menu {
 								<h4>
 									<i class="ni ni-active-40 text-blue"></i>${list.cnt_hit }</h4>
 								<h4>
-									<a href="" onclick='C_recommand("${list.cnt_id }");'> <i
+									<a style="cursor: pointer"
+										onclick='C_recommand("${list.cnt_id }");'> <i
 										class="ni ni-favourite-28 text-red"></i>${list.cnt_like }</a>
 								</h4>
 							</div>
@@ -236,15 +222,15 @@ ul.dropdown-menu {
 				<div class="col-sm-6 col-md-2">
 					<div align="center" style="paddin-left: 15px">
 						<div class="btn-group">
-							<button type="button" class="btn btn-default dropdown-toggle"
-								role="group" data-toggle="dropdown" aria-expanded="false">
-								음악/공연 <span class="caret"></span>
-							</button>
+							<a href="${contextPath }/content/C_list_M?brd_id=4"><button
+									type="button" class="btn btn-default">
+									음악/공연 <span class="caret"></span>
+								</button> </a>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="">음악소식</a></li>
-								<li><a href="">공연소식</a></li>
-								<li><a href="">음악티저</a></li>
-								<li><a href="">ex1</a></li>
+								<li><a href="${contextPath }/content/C_list_M?brd_id=4">음악소식</a></li>
+								<li><a href="${contextPath }/content/C_list_M?brd_id=4">공연소식</a></li>
+								<li><a href="${contextPath }/content/C_list_M?brd_id=4">음악티저</a></li>
+								<li><a href="${contextPath }/content/C_list_M?brd_id=4">ex1</a></li>
 							</ul>
 						</div>
 					</div>
@@ -266,7 +252,8 @@ ul.dropdown-menu {
 								<h4>
 									<i class="ni ni-active-40 text-blue"></i>${list.cnt_hit }</h4>
 								<h4>
-									<a href="" onclick='C_recommand("${list.cnt_id }");'> <i
+									<a style="cursor: pointer"
+										onclick='C_recommand("${list.cnt_id }");'> <i
 										class="ni ni-favourite-28 text-red"></i>${list.cnt_like }</a>
 								</h4>
 							</div>
@@ -277,16 +264,10 @@ ul.dropdown-menu {
 				<div class="col-sm-6 col-md-2">
 					<div align="center" style="paddin-left: 15px">
 						<div class="btn-group">
-							<button type="button" class="btn btn-default dropdown-toggle"
-								role="group" data-toggle="dropdown" aria-expanded="false">
-								IT <span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="">IT모바일</a></li>
-								<li><a href="">IT자동차</a></li>
-								<li><a href="">ITex1</a></li>
-								<li><a href="">ITex2</a></li>
-							</ul>
+							<a href="${contextPath }/content/C_list_M?brd_id=5"><button
+									type="button" class="btn btn-default">
+									IT <span class="caret"></span>
+								</button></a>
 						</div>
 						<c:forEach items="${list}" var="list">
 							<c:if test="${500 < list.brd_id and list.brd_id < 600 }">
@@ -306,7 +287,8 @@ ul.dropdown-menu {
 									<h4>
 										<i class="ni ni-active-40 text-blue"></i>${list.cnt_hit }</h4>
 									<h4>
-										<a href="" onclick='C_recommand("${list.cnt_id }");'> <i
+										<a style="cursor: pointer"
+											onclick='C_recommand("${list.cnt_id }");'> <i
 											class="ni ni-favourite-28 text-red"></i>${list.cnt_like }</a>
 									</h4>
 								</div>

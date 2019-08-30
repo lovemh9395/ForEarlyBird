@@ -93,21 +93,24 @@
 					<div class="card bg-default shadow">
 						<nav aria-label="...">
 							<ul class="pagination justify-content-end mb-0">
-								<li class="page-item"><a class="page-link"
-									href="${contextPath }/member/M_list?page=${pageMaker.startPage - 1}&perPageNum=${pageMaker.cri.perPageNum}&replypage=${replypageMaker.replyendPage - 1}&replyperPageNum=${replypageMaker.replycri.replyperPageNum}">
-										<i class="fas fa-angle-left"></i> <span class="sr-only">Previous</span>
-								</a></li>
+								<c:if test="${pageMaker.prev }">
+									<li class="page-item"><a class="page-link"
+										href="${contextPath }/member/M_list?page=${pageMaker.startPage - 1}&perPageNum=${pageMaker.cri.perPageNum}&replypage=${replypageMaker.replyendPage - 1}&replyperPageNum=${replypageMaker.replycri.replyperPageNum}">
+											<i class="fas fa-angle-left"></i> <span class="sr-only">Previous</span>
+									</a></li>
+								</c:if>
 								<c:forEach begin="${pageMaker.startPage }"
 									end="${pageMaker.endPage }" var="post">
 									<li class="page-item active"><a class="page-link"
 										href="${contextPath }/member/M_list?page=${post}&perPageNum=${pageMaker.cri.perPageNum}&replypage=${replypageMaker.replycri.replyPage}&replyperPageNum=${replypageMaker.replycri.replyperPageNum}">${post }</a>
 									</li>
 								</c:forEach>
-
-								<li class="page-item"><a class="page-link"
-									href="${contextPath }/member/M_list?page=${pageMaker.endPage + 1}&perPageNum=${pageMaker.cri.perPageNum}&replypage=${replypageMaker.replyendPage + 1}&replyperPageNum=${replypageMaker.replycri.replyperPageNum}">
-										<i class="fas fa-angle-right"></i> <span class="sr-only">Next</span>
-								</a></li>
+								<c:if test="${pageMaker.next }">
+									<li class="page-item"><a class="page-link"
+										href="${contextPath }/member/M_list?page=${pageMaker.endPage + 1}&perPageNum=${pageMaker.cri.perPageNum}&replypage=${replypageMaker.replyendPage + 1}&replyperPageNum=${replypageMaker.replycri.replyperPageNum}">
+											<i class="fas fa-angle-right"></i> <span class="sr-only">Next</span>
+									</a></li>
+								</c:if>
 							</ul>
 						</nav>
 					</div>
@@ -141,7 +144,7 @@
 											<th scope="row">
 												<div class="media align-items-center">
 													<div class="media-body">
-														<span class="mb-0 text-sm">${list.mem_userid }</span>
+														<span class="mb-0 text-sm">${useridd}</span>
 													</div>
 												</div>
 											</th>
@@ -151,12 +154,6 @@
 														<div class="row">
 															<span class="col-1 mb-0 text-sm"
 																style="word-break: break-all;">${list.rpl_content }</span>
-															<div class="col-11" align="right">
-																<c:if test="${ list.mem_userid eq useridd}">
-																	<%@ include file="M_listreplydelete.jsp"%>
-																</c:if>
-															</div>
-															<div class="col-11" align="right"></div>
 														</div>
 													</div>
 												</div>
@@ -174,34 +171,37 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="card bg-default shadow">
+					<div class="card-footer py-4">
 						<nav aria-label="...">
 							<ul class="pagination justify-content-end mb-0">
-								<li class="page-item"><a class="page-link"
-									href="${contextPath }/member/M_list?page=${pageMaker.startPage - 1}&perPageNum=${pageMaker.cri.perPageNum}&replypage=${replypageMaker.replyendPage - 1}&replyperPageNum=${replypageMaker.replycri.replyperPageNum}">
-										<i class="fas fa-angle-left"></i> <span class="sr-only">Previous</span>
-								</a></li>
+								<c:if test="${pageMaker.prev }">
+									<li class="page-item"><a class="page-link"
+										href="${contextPath }/member/M_list?page=${pageMaker.startPage - 1}&perPageNum=${pageMaker.cri.perPageNum}&replypage=${replypageMaker.replyendPage - 1}&replyperPageNum=${replypageMaker.replycri.replyperPageNum}">
+											<i class="fas fa-angle-left"></i> <span class="sr-only">Previous</span>
+									</a></li>
+								</c:if>
 								<c:forEach begin="${replypageMaker.replystartPage }"
 									end="${replypageMaker.replyendPage }" var="reply">
 									<li class="page-item active"><a class="page-link"
 										href="${contextPath }/member/M_list?page=${pageMaker.cri.page}&perPageNum=${pageMaker.cri.perPageNum}&replypage=${reply}&replyperPageNum=${replypageMaker.replycri.replyperPageNum}">${reply }</a>
 									</li>
 								</c:forEach>
-
-								<li class="page-item"><a class="page-link"
-									href="${contextPath }/member/M_list?page=${pageMaker.endPage + 1}&perPageNum=${pageMaker.cri.perPageNum}&replypage=${replypageMaker.replyendPage + 1}&replyperPageNum=${replypageMaker.replycri.replyperPageNum}">
-										<i class="fas fa-angle-right"></i> <span class="sr-only">Next</span>
-								</a></li>
+								<c:if test="${pageMaker.next }">
+									<li class="page-item"><a class="page-link"
+										href="${contextPath }/member/M_list?page=${pageMaker.endPage + 1}&perPageNum=${pageMaker.cri.perPageNum}&replypage=${replypageMaker.replyendPage + 1}&replyperPageNum=${replypageMaker.replycri.replyperPageNum}">
+											<i class="fas fa-angle-right"></i> <span class="sr-only">Next</span>
+									</a></li>
+								</c:if>
 							</ul>
 						</nav>
 					</div>
 				</div>
 			</div>
-			<!-- footer -->
-			<%@ include file="../include/main_footer.jsp"%>
-			<!-- end footer -->
 			<!-- end body -->
 		</div>
+		<!-- footer -->
+		<%@ include file="../include/main_footer.jsp"%>
+		<!-- end footer -->
 		<!--   Core   -->
 		<%@ include file="../include/core.jsp"%>
 		<!--  end Core -->
