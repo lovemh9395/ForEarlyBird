@@ -62,7 +62,7 @@ public class AdminController {
 		model.addAttribute("memberList", service.searchAdminCandidateList(map));
 		return "admin/A_adminList";
 	}
-	
+
 	@RequestMapping(value = "/A_adminUpdate", method = RequestMethod.GET)
 	public String A_adminUpdate(String[] checkedList, String[] authList, HttpSession session, Model model) {
 		logger.info("회원 등급변경 페이지");
@@ -213,6 +213,22 @@ public class AdminController {
 	}
 
 	// 회원 글 보기
+	@RequestMapping(value = "/A_memberDetail", method = RequestMethod.GET)
+	public String A_memberDetail(HttpServletRequest request, HttpSession session, Model model) throws Exception {
+		logger.info("회원 작성글 열람 페이지");
+		String mem_userid = request.getParameter("mem_userid");
+		model.addAttribute("mem_userid", mem_userid);
+		model.addAttribute("mem_nickname", service.getNickname(mem_userid));
+		if (service.getPostNumWritenBy(mem_userid) > 0) {
+			model.addAttribute("postList", service.getPostListFromWriter(mem_userid));
+		}
+		if (service.getReplyNumWritenBy(mem_userid) > 0) {
+			model.addAttribute("replyList", service.getRplListFromWriter(mem_userid));
+		}
+		return "admin/A_memberDetail";
+	}
+
+	// 회원 글 보기
 	@RequestMapping(value = "/A_memberPostList", method = RequestMethod.GET)
 	public String A_memberPostList(HttpSession session, Model model) {
 		logger.info("회원 글 보기 페이지");
@@ -238,27 +254,6 @@ public class AdminController {
 	public String A_memberReplyUpdate(HttpSession session, Model model) {
 		logger.info("회원 댓글 이관 페이지");
 		return "admin/A_memberReplyUpdate";
-	}
-
-	// 탈퇴 회원 정보 검색
-	@RequestMapping(value = "/A_deleteMemberSearch", method = RequestMethod.GET)
-	public String A_deleteMemberSearch(HttpSession session, Model model) {
-		logger.info("탈퇴 회원 정보 검색 페이지");
-		return "admin/A_deleteMemberSearch";
-	}
-
-	// 탈퇴 회원 정보 보기
-	@RequestMapping(value = "/A_deleteMemberList", method = RequestMethod.GET)
-	public String A_deleteMemberList(HttpSession session, Model model) {
-		logger.info("탈퇴 회원 정보 보기 페이지");
-		return "admin/A_deleteMemberList";
-	}
-
-	// 탈퇴 회원 정보 삭제
-	@RequestMapping(value = "/A_deleteMemberLeave", method = RequestMethod.GET)
-	public String A_deleteMemberLeave(HttpSession session, Model model) {
-		logger.info("탈퇴 회원 정보 삭제 페이지");
-		return "admin/A_deleteMemberLeave";
 	}
 
 	// 공지사항 보기

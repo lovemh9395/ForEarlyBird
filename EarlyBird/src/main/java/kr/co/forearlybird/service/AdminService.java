@@ -81,4 +81,14 @@ public interface AdminService {
 	void memberAuthUpdate(Map map);
 
 	List<Map> getBanMemberList();
+
+	String getNickname(String mem_userid);
+
+	List<A_postListDTO> getPostListFromWriter(String mem_userid) throws Exception;
+
+	List<Map> getRplListFromWriter(String mem_userid) throws Exception;
+
+	int getPostNumWritenBy(String mem_userid);
+
+	int getReplyNumWritenBy(String mem_userid);
 }

@@ -18,4 +18,8 @@ public interface ReplyDAO {
 	
 	@SuppressWarnings("rawtypes")
 	public int replyCountPaging(Map map) throws Exception;
+
+	public List<Reply> getReplyList(String mem_userid);
+
+	public int getReplyNumWritenBy(String mem_userid);
 }

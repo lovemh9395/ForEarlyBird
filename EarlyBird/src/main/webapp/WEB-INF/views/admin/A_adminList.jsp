@@ -64,7 +64,7 @@
 							<td><input type="checkbox" name="chk" value="${mem_userid}"><input
 								type="hidden" name="chk_${list.mem_userid}" value="${list.mem_level}"></td>
 							<td>${Status.count}</td>
-							<td>${list.mem_userid}</td>
+							<td><a href="${contextPath }/admin/A_memberDetail?mem_userid=${list.mem_userid}<">${list.mem_userid}</a></td>
 							<td>${list.mem_nickname}</td>
 							<td>${list.mem_levelname}</td>
 							<td>${list.mem_phone}</td>

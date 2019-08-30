@@ -187,4 +187,16 @@ public class PostDAOImpl implements PostDAO {
 		logger.info("글수정(공지) DAO");
 		sqlSession.update("post.P_updateNotice",post);
 	}
+
+	@Override
+	public List<Post> getPostList(String mem_userid) {
+		logger.info("getPostList DAO");
+		return sqlSession.selectList("post.getPostListWritenBy",mem_userid);
+	}
+
+	@Override
+	public int getPostNumWritenBy(String mem_userid) {
+		logger.info("getPostNumWritenBy DAO");
+		return sqlSession.selectOne("post.getPostNumWritenBy",mem_userid);
+	}
 }

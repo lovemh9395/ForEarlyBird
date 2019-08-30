@@ -67,7 +67,7 @@
 							<td><input type="checkbox" name="chk"
 								value="${list.mem_userid}"></td>
 							<td>${Status.count}</td>
-							<td>${list.mem_userid}</td>
+							<td><a href="${contextPath }/admin/A_memberDetail?mem_userid=${list.mem_userid}">${list.mem_userid}</a></td>
 							<td>${list.mem_nickname}</td>
 							<td>${list.mem_levelname}</td>
 							<td>${list.mem_phone}</td>

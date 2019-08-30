@@ -48,4 +48,14 @@ public class ReplyDAOImpl implements ReplyDAO {
 		logger.info("reply 페이징처리4 List DAO");
 		return sqlSession.selectOne("reply.replyCountPaging", map);
 	}
+	@Override
+	public List<Reply> getReplyList(String mem_userid) {
+		logger.info("getReplyList DAO");
+		return sqlSession.selectList("reply.getReplyList",mem_userid);
+	}
+	@Override
+	public int getReplyNumWritenBy(String mem_userid) {
+		logger.info("getReplyNumWritenBy DAO");
+		return sqlSession.selectOne("reply.getReplyNumWritenBy",mem_userid);
+	}
 }

@@ -16,7 +16,6 @@
 		where rpl_id = #{rpl_id}
 	</update>
 
-
 	<!-- criteria 를 적용한 게시판 페이징 조회 -->
 	<select id="replylistCriteria" parameterType="java.util.Map"
 		resultType="kr.co.forearlybird.domain.Reply">
@@ -41,5 +40,14 @@
 		where post_id = #{post_id} and rpl_del =
 		0
 	</select>
-
+	
+	<select id="getReplyList" parameterType="java.lang.String"
+		resultType="kr.co.forearlybird.domain.Reply">
+		SELECT * FROM reply WHERE mem_userid=#{mem_userid}
+	</select>
+	
+	<select id="getReplyNumWritenBy" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM reply WHERE mem_userid=#{mem_userid}
+	</select>
 </mapper>

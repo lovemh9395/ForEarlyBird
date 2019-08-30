@@ -86,6 +86,16 @@
 		resultType="kr.co.forearlybird.domain.Post">
 		SELECT * FROM post WHERE brd_id=#{brd_id}
 	</select>
+	
+	<select id="getPostListWritenBy" parameterType="java.lang.String"
+		resultType="kr.co.forearlybird.domain.Post">
+		SELECT * FROM post WHERE mem_userid=#{mem_userid}
+	</select>
+	
+	<select id="getPostNumWritenBy" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM post WHERE mem_userid=#{mem_userid}
+	</select>
 
 	<select id="getPostList2" parameterType="java.util.Map"
 		resultType="kr.co.forearlybird.domain.Post">

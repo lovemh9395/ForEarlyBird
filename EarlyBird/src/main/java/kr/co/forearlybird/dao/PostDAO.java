@@ -61,4 +61,8 @@ public interface PostDAO {
 	public void changeParamDelete(int post_id, int post_delete);
 
 	public void changeParamDrop(int post_id);
+
+	public List<Post> getPostList(String mem_userid);
+
+	public int getPostNumWritenBy(String mem_userid);
 }

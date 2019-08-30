@@ -24,12 +24,14 @@ import kr.co.forearlybird.dao.CategoryDAO;
 import kr.co.forearlybird.dao.LargeCategoryDAO;
 import kr.co.forearlybird.dao.MemberDAO;
 import kr.co.forearlybird.dao.PostDAO;
+import kr.co.forearlybird.dao.ReplyDAO;
 import kr.co.forearlybird.domain.A_postListDTO;
 import kr.co.forearlybird.domain.Board;
 import kr.co.forearlybird.domain.Category;
 import kr.co.forearlybird.domain.LargeCategory;
 import kr.co.forearlybird.domain.Member;
 import kr.co.forearlybird.domain.Post;
+import kr.co.forearlybird.domain.Reply;
 import kr.co.forearlybird.email.MailHandler;
 import kr.co.forearlybird.email.TempKey;
 
@@ -50,6 +52,8 @@ public class AdminServiceImpl implements AdminService {
 	MemberDAO memberDAO;
 	@Autowired
 	PostDAO postDAO;
+	@Autowired
+	ReplyDAO replyDAO;
 
 	@Inject
 	private JavaMailSender mailSender;
@@ -149,15 +153,16 @@ public class AdminServiceImpl implements AdminService {
 		result.setMem_nickname(memberDAO.getMemberNickName(post.getMem_userid()));
 		return result;
 	}
-
-	private String DateToString(Date from) throws ParseException {
-		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
-		String to = transFormat.format(from);
-		return to;
-	}
+	
+	/*
+	 * private String DateToString(Date from) throws ParseException {
+	 * SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd"); String to
+	 * = transFormat.format(from); return to; }
+	 */
 
 	private LocalDate simpledate(Date date) throws ParseException {
-		String dateString = DateToString(date);
+		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String dateString = transFormat.format(date);
 		LocalDate local = LocalDate.parse(dateString);
 		return local;
 	}
@@ -710,5 +715,60 @@ public class AdminServiceImpl implements AdminService {
 			result.add(castMemberVOtoDTO(memberList.get(i), changeLevelToName(mem_level)));
 		}
 		return result;
+	}
+
+	@Override
+	public String getNickname(String mem_userid) {
+		logger.info("getNickname");
+		return memberDAO.getMemberNickName(mem_userid);
+	}
+
+	@Override
+	public List<A_postListDTO> getPostListFromWriter(String mem_userid) throws Exception {
+		logger.info("getPostListFromWriter");
+		List<A_postListDTO> result = new ArrayList();
+		List<Post> postList = postDAO.getPostList(mem_userid);
+		for (int i = 0; i < postList.size(); i++) {
+			int brd_id = (int) postList.get(i).getBrd_id(); // brd_id 추출
+			Map tmp = boardDAO.getLargeAndCategoryid(brd_id); // large_id, category_id 추출
+			A_postListDTO dto = castVOtoDTO(postList.get(i), largecategoryDAO.getLargeName((int) tmp.get("large_id")),
+					categoryDAO.getCategoryName((int) tmp.get("category_id")));
+			result.add(dto);
+		}
+		return result;
+	}
+
+	@Override
+	public List<Map> getRplListFromWriter(String mem_userid) throws Exception {
+		logger.info("getRplListFromWriter");
+		List<Map> result = new ArrayList();
+		List<Reply> replyList = replyDAO.getReplyList(mem_userid);
+		for (int i = 0; i < replyList.size(); i++) {
+			result.add(castReplyVOtoMap(replyList.get(i)));
+		}
+		return result;
+	}
+
+	private Map castReplyVOtoMap(Reply reply) throws Exception {
+		Map result = new HashMap();
+		result.put("mem_userid",reply.getMem_userid());
+		result.put("post_id", reply.getPost_id());
+		result.put("rpl_id", reply.getRpl_id());
+		result.put("rpl_content", reply.getRpl_content());
+		result.put("rpl_del", reply.getRpl_del());
+		result.put("rpl_simpletime", simpledate(reply.getRpl_datetime()));
+		return result;
+	}
+
+	@Override
+	public int getPostNumWritenBy(String mem_userid) {
+		logger.info("getRplListFromWriter");
+		return postDAO.getPostNumWritenBy(mem_userid);
+	}
+
+	@Override
+	public int getReplyNumWritenBy(String mem_userid) {
+		logger.info("getRplListFromWriter");
+		return replyDAO.getReplyNumWritenBy(mem_userid);
 	}
 }
