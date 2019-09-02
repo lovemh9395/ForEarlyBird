@@ -2,4 +2,39 @@
 <!DOCTYPE mapper
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="content"></mapper>
+<mapper namespace="content">
+	<select id="Main_C_list"
+		resultType="kr.co.forearlybird.domain.Content">
+		select * from content
+	</select>
+
+	<select id="C_list_M" parameterType="java.lang.Integer"
+		resultType="kr.co.forearlybird.domain.Content">
+		select * from content
+		where <![CDATA[brd_id >(#{idx})*100 and brd_id<(#{idx}+1)*100 ]]>
+	</select>
+
+	<update id="C_recommand" parameterType="java.lang.Integer">
+		update content
+		set
+		cnt_like
+		= cnt_like + 1
+		where cnt_id = #{cnt_id}
+	</update>
+
+	<update id="C_view" parameterType="java.lang.Integer">
+		update content
+		set cnt_hit
+		=
+		cnt_hit + 1
+		where cnt_id = #{cnt_id}
+	</update>
+	
+	<select id="C_connectlink" parameterType = "java.lang.Integer" resultType="java.lang.String">
+		select cnt_connectlink from content where cnt_id = #{cnt_id}
+	</select>
+	
+	<select id="menu_btn" parameterType = "java.util.Map" resultType="kr.co.forearlybird.domain.Content">
+		select * from content where brd_id = (#{brd_id}*100+#{brd_num})
+	</select>
+</mapper>

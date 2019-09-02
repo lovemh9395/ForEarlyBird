@@ -1,80 +1,70 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<div class="section">
-	<div class="mTitle">
-		<h2>전체 게시물 목록</h2>
-	</div>
-	<div class="mState">
-		<div class="gRight">
-			<select class="fSelect" id='eSearchSort' name="searchSort"
-				onChange="view_board('submit');" align="absmiddle">
-				<option value="" selected="selected">기본정렬
-				<option value="H">조회수많은순
-			</select> <select class="fSelect" id='list_limit' name="list_limit"
-				onChange="view_board('submit');" align="absmiddle">
-				<option value="10" selected>10개씩보기
-				<option value="20">20개씩보기
-				<option value="30">30개씩보기
-				<option value="50">50개씩보기
-			</select>
-		</div>
-	</div>
-	<div class="mCtrl typeHeader setting">
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<div class="container">
+	<div>
 		<div class="row">
-			<div class="col-md-auto">삭제</div>
-			<div class="col-md-auto">공지등록</div>
-			<div class="col-md-auto">공지해제</div>
+			<div class="col-md-auto">
+				<h2>전체 게시물 목록</h2>
+			</div>
+			<div class="col-md-auto">
+				<input type="button" value="선택삭제" id="deleteWhatSelected">
+			</div>
+			<div class="col-md-auto">
+				<input type="button" value="삭제해제" id="reViewWhatSelected">
+			</div>
+			<div class="col-md-auto">
+				<input type="button" value="공지등록/해제"
+					id="changeNoticeParamWhatSelected">
+			</div>
 		</div>
 	</div>
 	<div class="table-responsive">
 		<table class="table align-items-center table-flush">
-			<caption>전체 게시물 목록</caption>
 			<thead>
 				<tr>
-					<th scope="col"><input type="checkbox" class="allChk" /></th>
+					<th scope="col"><input type="checkbox" id="allChk"
+						name="allChk" /> <input type="hidden" id="error"
+						value="${error }"></th>
 					<th scope="col">번호</th>
-					<th scope="col">분류</th>
-					<th scope="col" style="display: none;">카테고리</th>
+					<th scope="col">대 분류</th>
+					<th scope="col">카테고리</th>
 					<th scope="col">제목</th>
-					<th scope="col">미리보기</th>
-					<th scope="col">작성자</th>
+					<th scope="col">공지 / 삭제</th>
+					<th scope="col">닉네임 / 아이디</th>
 					<th scope="col">작성일</th>
 					<th scope="col">조회수</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td><input type="checkbox" name="bbs_no[]" value="1"
-						class="rowChk" /> <input type="hidden" name="no[]" value="1">
-						<input type="hidden" id="iBoardNo_1" value="1"> <input
-						type="hidden" id="iBoardGroup_1" value="1"> <input
-						type="hidden" id="eIsDeleted_1" value="F"> <input
-						type="hidden" id="iBoardGroup_1" value="1"> <input
-						type="hidden" id="iNotice_1" value="F"> <input
-						type="hidden" id="iFixed_1" value="F"></td>
-					<!-- 번호 -->
-					<td>1</td>
-					<!-- 분류명 -->
-					<td>공지사항</td>
-					<!-- 카테고리 -->
-					<td style="display: none;"></td>
-					<!-- 제목 -->
-					<td class="left">몰 오픈을 축하합니다.</td>
-					<!-- 미리보기 -->
-					<td><span>미리보기</span></td>
-					<!-- 작성자 -->
-					<td><input type="hidden" id="writer_type_1" value="">
-						EC Hosting <br /> (비회원)</td>
-					<!-- 작성일 -->
-					<td>2019-07-25 07:12:13</td>
-					<!-- 조회 -->
-					<td class="right">0</td>
-				</tr>
+				<c:forEach items="${postList }" var="list" varStatus="status">
+					<tr>
+						<td><input type="checkbox" name="chk"
+							value="${list.post_id }"> <input type="hidden"
+							id="chk_${list.post_id }" value="${list.post_notice }">
+						<td>${list.post_id }</td>
+						<!-- 글 번호 -->
+						<td>${list.large_name }</td>
+						<!-- 대분류 -->
+						<td>${list.category_name }</td>
+						<!-- 카테고리 -->
+						<td class="left">${list.post_title }</td>
+						<!-- 제목 -->
+						<td><c:if test="${list.post_notice ==1 }">Y</c:if> <c:if
+								test="${list.post_notice ==0 }">N</c:if> / <c:if
+								test="${list.post_del ==1 }">Del</c:if> <c:if
+								test="${list.post_del ==0 }">No</c:if></td>
+						<!-- 공지여부 -->
+						<td>${list.mem_nickname }/${list.mem_userid }</td>
+						<!-- 작성자 아이디-->
+						<td>${list.post_simpletime }</td>
+						<!-- 작성일 -->
+						<td class="right">${list.post_hit }</td>
+						<!-- 조회 -->
+					</tr>
+				</c:forEach>
 			</tbody>
 		</table>
 	</div>
-	<div class="mPaginate">
-		<span>첫</span> / <span>이전 10</span>/ 1 /<span>다음 10</span> / <span>마지막</span>
-	</div>
-</div>
 </div>

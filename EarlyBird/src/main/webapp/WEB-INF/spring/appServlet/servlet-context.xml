@@ -43,11 +43,19 @@
 	</beans:bean>
 
 	<!-- intercepter 설정 -->
-	<beans:bean class="kr.co.forearlybird.common.AuthInterceptor" id="auth"/>
+	<beans:bean
+		class="kr.co.forearlybird.common.AdminInterceptor" id="auth" />
 	<interceptors>
+	
+	<!-- 	<interceptor>
+			<mapping path="/member/**" /> 인터셉터를 걸어놓을 위치
+			<beans:ref bean="kr.co.forearlybird.common.MemberInterceptor" /> 인터셉터가 참조할 클래스
+		</interceptor> -->
+		
 		<interceptor>
-			<mapping path="/*" /> <!-- 인터셉터를 걸어놓을 위치 -->
+			<mapping path="/admin/**" /> <!-- 인터셉터를 걸어놓을 위치 -->
 			<beans:ref bean="auth" /> <!-- 인터셉터가 참조할 클래스 -->
 		</interceptor>
+		
 	</interceptors>
 </beans:beans>

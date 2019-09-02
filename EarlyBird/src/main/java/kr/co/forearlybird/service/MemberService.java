@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import kr.co.forearlybird.domain.Member;
+import kr.co.forearlybird.domain.Post;
+import kr.co.forearlybird.domain.Reply;
 
 public interface MemberService {
 	// 로그인을 처리하기 위한 메소드
@@ -15,8 +17,6 @@ public interface MemberService {
 
 	// 전체 목록을 가져오는 메소드
 	public List<Member> list();
-
-
 
 	// 상세보기를 위한 메소드
 	public Member detail(String id);
@@ -41,4 +41,26 @@ public interface MemberService {
 	
 	void serachPWD(Member vo) throws Exception;
 
+	//내 글 보기 페이징 처리 및 보여주기 다하자
+	@SuppressWarnings("rawtypes")
+	public List<Post> listCriteria(Map map) throws Exception;
+	
+	@SuppressWarnings("rawtypes")
+	public int listCountCriteria(Map map) throws Exception;
+	
+	//내 글 보기 페이징 처리 및 보여주기 다하자
+	@SuppressWarnings("rawtypes")
+	public List<Reply> myreplylistCriteria(Map map) throws Exception;
+	
+	@SuppressWarnings("rawtypes")
+	public int myreplylistCountCriteria(Map map) throws Exception;
+	
+	public int CheckId(String formId) throws Exception;
+	
+	@SuppressWarnings("rawtypes")
+	public int CheckPass(Map map);
+	
+	public int CheckLevel(String formId);
+	
+	public int searchPWDcheck(Map map);
 }

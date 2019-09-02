@@ -16,4 +16,6 @@ public interface LargeCategoryDAO {
 
 	int leaveLargeCategory(int large_id);
 
+	int getLargeID(String large_name);
+
 }

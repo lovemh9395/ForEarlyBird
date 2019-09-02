@@ -24,4 +24,5 @@
 <!-- CSS Files -->
 <link href="/resources/assets/css/argon-dashboard.css?v=1.1.0"
 	rel="stylesheet" />
+<script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
 </head>

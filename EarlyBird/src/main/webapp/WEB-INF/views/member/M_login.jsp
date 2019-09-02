@@ -9,9 +9,43 @@
 <script>
 	$(document).ready(function() {
 		$("#loginbutton").click(function() {
-			$('#loginform').submit();
+			if (formChecking()) {
+				var login_id = $("#login_mem_userid").val();
+				var login_pass= $("#login_mem_password").val();
+				$.ajax({
+					type:"post",
+					url:"${contextPath}/member/login_Check",
+					data:{"login_id":login_id,
+						  "login_pass":login_pass},
+						  success:function(data) {
+						  		 if (data == 1) {
+						  			alert("없는 아이디 입니다.");
+						  		} else if (data == 2) {
+						  			alert("비밀번호가 맞지 않습니다.");
+						  		} else if (data == 4) {
+						  			alert("회원탈퇴된 아이디입니다.")
+						  		} else {
+						  		$('#loginform').submit();
+						  		}
+						  }
+				})
+			}
 		});
 	});
+
+	function formChecking() {
+		var expemail = /\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/;
+		if (!expemail.test($("#login_mem_userid").val())) {
+			alert("이메일 형식이 맞지 않습니다.");
+			return false;
+		}
+		var exppass = /^[a-zA-Z0-9]{7,15}$/;
+		if (!exppass.test($("#login_mem_password").val())) {
+			alert("비밀번호는 8~15자의 영문,숫자만 허용됩니다.");
+			return false;
+		}
+		return true;
+	}
 </script>
 <div class="modal fade" id="modal-login" tabindex="-1" role="dialog"
 	aria-labelledby="modal-form" aria-hidden="true">
@@ -28,8 +62,8 @@
 								style="width: 200px; height: auto;">
 							</a>
 						</div>
-						<form role="form" id="loginform" action="member/M_login"
-							method="post">
+						<form role="form" id="loginform"
+							action="${contextPath }/member/M_login" method="post">
 							<div class="form-group mb-3">
 								<div class="input-group input-group-alternative">
 									<div class="input-group-prepend">
@@ -37,7 +71,7 @@
 											class="ni ni-email-83"></i></span>
 									</div>
 									<input class="form-control" placeholder="Email" type="email"
-										id="email" name="email">
+										id="login_mem_userid" name="login_mem_userid">
 								</div>
 							</div>
 							<div class="form-group">
@@ -47,14 +81,8 @@
 											class="ni ni-lock-circle-open"></i></span>
 									</div>
 									<input class="form-control" placeholder="Password"
-										type="password" id="password" name="password">
+										type="password" id="login_mem_password" name="login_mem_password">
 								</div>
-							</div>
-							<div
-								class="custom-control custom-control-alternative custom-checkbox">
-								<input class="custom-control-input" id=" customCheckLogin"
-									type="checkbox"> <label class="custom-control-label"
-									for=" customCheckLogin"><span>아이디를 저장합니다.</span></label>
 							</div>
 							<div class="text-center">
 								<button type="button" id="loginbutton"

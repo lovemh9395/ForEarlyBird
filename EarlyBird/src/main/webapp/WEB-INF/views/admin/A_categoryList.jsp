@@ -53,7 +53,7 @@ function largeDelete(large_id){
 	} else { 
 		childNumID = "childNum"+large_id;
 	}
-	var childNum = childNum+document.getElementById(childNumID).value;
+	var childNum = document.getElementById(childNumID).value;
 	
 	if (childNum!=0) {
 		$("#modal-notificationChildCategoryExist").modal();

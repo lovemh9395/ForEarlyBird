@@ -46,10 +46,12 @@
 <script>
 	$(document).ready(function() {
 		$("#profileupload").click(function() {
-			if($("#fileName") == null) {
-				alert("넣으셈");
-			} else{
-			document.getElementById('fileuploadform').submit();
+			if ($("#fileName").val() != "") {
+				console.log($("#fileName").val());
+				document.getElementById('fileuploadform').submit();
+			} else {
+				alert("사진을 넣어주세요");
+				return false;
 			}
 		});
 	});
@@ -71,19 +73,20 @@
 								style="width: 200px; height: auto;">
 							</a>
 						</div>
-						<form id="fileuploadform"method="post" action="upload" enctype="multipart/form-data">
+						<form id="fileuploadform" method="post" action="upload"
+							enctype="multipart/form-data">
 							<div class="form-group">
 								<input type="text" id="fileName" class="file_input_textbox"
 									readonly="readonly">
 								<div class="file_input_div">
 									<input type="button" value="파일선택" class="btn btn-sm btn-info">
-									<input type="file" class="file_input_hidden" name="file1" 
+									<input type="file" class="file_input_hidden" name="file1"
 										onchange="javascript:document.getElementById('fileName').value = this.value.split('\\')[this.value.split('\\').length-1]">
 								</div>
 							</div>
 							<div class="text-center">
-								<input type="button" id="profileupload" class="btn btn-primary my-4"
-									value="사진변경">
+								<input type="button" id="profileupload"
+									class="btn btn-primary my-4" value="사진변경">
 								<button type="button" class="btn btn-primary my-4"
 									data-dismiss="modal">취소하기</button>
 							</div>

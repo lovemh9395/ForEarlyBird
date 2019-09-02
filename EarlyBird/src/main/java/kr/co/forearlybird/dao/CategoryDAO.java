@@ -19,4 +19,10 @@ public interface CategoryDAO {
 
 	String getCategoryName(Integer category_id);
 
+	@SuppressWarnings("rawtypes")
+	int getCategoryID(Map tmp);
+
+	@SuppressWarnings("rawtypes")
+	List<Map> getCategoryList(int large_id);
+
 }

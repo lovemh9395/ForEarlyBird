@@ -22,6 +22,9 @@
 		<%@ include file="../include/main_header.jsp"%>
 		<!-- end Header -->
 		<!-- body -->
+		<!-- footer -->
+		<%@ include file="../include/main_footer.jsp"%>
+		<!-- end footer -->
 		<!-- end body -->
 	</div>
 	<!--   Core   -->

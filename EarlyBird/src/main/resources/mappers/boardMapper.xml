@@ -3,13 +3,65 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="board">
-	<select id="getBoardList" resultType="kr.co.forearlybird.domain.Board">
+	<select id="getBoardList"
+		resultType="kr.co.forearlybird.domain.Board">
 		SELECT * FROM board
 	</select>
-	
+
 	<select id="getNumberOfBoardUnderCategory"
 		parameterType="java.lang.Integer" resultType="java.lang.Integer">
 		SELECT COUNT(brd_id) FROM
 		board WHERE category_id = #{category_id}
+	</select>
+
+	<select id="getBoardIdNumToName" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT count(brd_id) FROM
+		board WHERE brd_name =
+		#{brd_name}
+		and
+		category_id = #{category_id}
+	</select>
+
+	<select id="getBoardMAXID" resultType="java.lang.Integer">
+		SELECT IFNULL(MAX(brd_id),0) FROM
+		board
+	</select>
+
+	<insert id="makeBoard" parameterType="java.util.Map">
+		INSERT INTO
+		board(brd_id,brd_name,large_id,category_id,brd_readauth,brd_writeauth)
+		VALUES(#{brd_id},#{brd_name},#{large_id},#{category_id},#{brd_readauth},#{brd_writeauth})
+	</insert>
+
+	<delete id="leaveBoard" parameterType="java.lang.Integer">
+		DELETE FROM board WHERE
+		brd_id = #{brd_id}
+	</delete>
+
+	<update id="changeBoardVisibility" parameterType="java.util.Map">
+		UPDATE board
+		SET brd_exposure = #{brd_exposure} WHERE brd_id = #{brd_id}
+	</update>
+
+	<select id="getBrd_listByL" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT brd_id FROM board WHERE large_id=#{large_id}
+	</select>
+
+	<select id="getBrd_listByLC" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT brd_id FROM board WHERE large_id=#{large_id} and
+		category_id=#{category_id}
+	</select>
+	
+	<select id="getBrd_list" resultType="java.lang.Integer">
+		SELECT brd_id FROM board
+	</select>
+
+	<select id="getLargeAndCategoryid"
+		parameterType="java.lang.Integer" resultType="java.util.Map">
+		SELECT large_id,
+		category_id FROM board WHERE brd_id=#{brd_id}
 	</select>
 </mapper>
