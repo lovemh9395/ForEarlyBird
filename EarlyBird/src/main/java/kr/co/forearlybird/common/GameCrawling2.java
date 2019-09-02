@@ -23,7 +23,7 @@ public class GameCrawling2 {
 		int brd_id = index + 100;
 		try {
 			String mainURL = "http://www.inews24.com";
-			String siteURL = "http://www.inews24.com/list/game?page=7";
+			String siteURL = "http://www.inews24.com/list/game?page=6";
 			System.out.println("=====================================================================");
 			System.out.println("URL :" + siteURL);
 			// URL에 접속해 Document를 얻어내기 
@@ -63,7 +63,7 @@ public class GameCrawling2 {
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, cnt_title);
 					pstmt.setString(2, cnt_thumbnail);
-					pstmt.setString(3, cnt_link);
+					pstmt.setString(3, mainURL+cnt_link);
 					pstmt.executeUpdate();
 //				} else {
 //					sql = "select cnt_title from content where brd_id="+brd_id;

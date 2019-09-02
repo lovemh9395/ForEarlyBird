@@ -19,4 +19,8 @@ public interface ContentDAO {
 	
 	@SuppressWarnings("rawtypes")
 	public List<Content> menu_btn(Map map);
+	
+	public int C_share_make(Map middlemap);
+	
+	public List<Content> C_share_list(int brd_id);
 }

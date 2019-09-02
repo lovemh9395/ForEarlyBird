@@ -3,6 +3,8 @@ package kr.co.forearlybird.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import kr.co.forearlybird.domain.Content;
 
 public interface ContentService {
@@ -19,4 +21,8 @@ public interface ContentService {
 	
 	@SuppressWarnings("rawtypes")
 	public List<Content> menu_btn(Map map);
+	
+	public Map C_share_make(Map postmap) throws Exception;
+	
+	public List<Content> C_share_list(int brd_id);
 }

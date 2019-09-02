@@ -55,4 +55,18 @@ public class ContentDAOImpl implements ContentDAO {
 		logger.info("컨텐츠 하나의 메뉴 리스트 DAO");
 		return sqlSession.selectList("content.menu_btn",map);
 	}
+	
+	@Override
+	public int C_share_make(Map middlemap) {
+		logger.info("컨텐츠 글쓰기 DAO");
+		System.out.println(middlemap.toString());
+		return sqlSession.update("content.share_make", middlemap);
+	}
+
+	@Override
+	public List<Content> C_share_list(int brd_id) {
+		logger.info("컨텐츠 리스트 가져오기 DAO");
+		return sqlSession.selectList("content.C_share_list", brd_id);
+	}
+
 }

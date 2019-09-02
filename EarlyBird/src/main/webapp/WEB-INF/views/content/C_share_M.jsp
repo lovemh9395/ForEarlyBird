@@ -15,7 +15,7 @@
 <!-- end head -->
 <style>
 #columns {
-	column-width: 350px;
+	column-width: 300px;
 	column-gap: 15px;
 }
 
@@ -37,14 +37,11 @@
 	padding: 10px;
 	margin-top: 11px;
 }
+
+.modal-backdrop {
+	z-index: -1;
+}
 </style>
-<script>
-	$(document).ready(function(){
-		$("#C_share_M").click(function(){
-			location.href="${contextPath}/content/C_share_make";
-		})
-	})
-</script>
 <body class="">
 	<!-- side bar -->
 	<%@ include file="../include/left_navbar.jsp"%>
@@ -58,68 +55,31 @@
 		<!-- end Header -->
 		<!-- body -->
 		<br>
-		<button type="button" class="btn btn-block btn-info" id="C_share_M">글 쓰기</button>
+		<button type="button" class="btn btn-block btn-info" id="C_share_M"
+			data-toggle="modal" data-target="#modal_share">글 쓰기</button>
 		<br>
 		<div id="columns">
-			<figure>
-				<img
-					src="//s3-us-west-2.amazonaws.com/s.cdpn.io/4273/cinderella.jpg">
-				<figcaption>Cinderella wearing European fashion of the
-					mid-1860’s</figcaption>
-			</figure>
-
-			<figure>
-				<img src="//s3-us-west-2.amazonaws.com/s.cdpn.io/4273/rapunzel.jpg">
-				<figcaption>Rapunzel, clothed in 1820’s period fashion</figcaption>
-			</figure>
-
-			<figure>
-				<img src="//s3-us-west-2.amazonaws.com/s.cdpn.io/4273/belle.jpg">
-				<figcaption>Belle, based on 1770’s French court fashion</figcaption>
-			</figure>
-
-			<figure>
-				<img src="//s3-us-west-2.amazonaws.com/s.cdpn.io/4273/mulan_2.jpg">
-				<figcaption>Mulan, based on the Ming Dynasty period</figcaption>
-			</figure>
-
-			<figure>
-				<img
-					src="//s3-us-west-2.amazonaws.com/s.cdpn.io/4273/sleeping-beauty.jpg">
-				<figcaption>Sleeping Beauty, based on European fashions
-					in 1485</figcaption>
-			</figure>
-
-			<figure>
-				<img
-					src="//s3-us-west-2.amazonaws.com/s.cdpn.io/4273/pocahontas_2.jpg">
-				<figcaption>Pocahontas based on 17th century Powhatan
-					costume</figcaption>
-			</figure>
-
-			<figure>
-				<img
-					src="//s3-us-west-2.amazonaws.com/s.cdpn.io/4273/snow-white.jpg">
-				<figcaption>Snow White, based on 16th century German
-					fashion</figcaption>
-			</figure>
-
-			<figure>
-				<img src="//s3-us-west-2.amazonaws.com/s.cdpn.io/4273/ariel.jpg">
-				<figcaption>Ariel wearing an evening gown of the 1890’s</figcaption>
-			</figure>
-
-			<figure>
-				<img src="//s3-us-west-2.amazonaws.com/s.cdpn.io/4273/tiana.jpg">
-				<figcaption>
-					Tiana wearing the <i>robe de style</i> of the 1920’s
-				</figcaption>
-			</figure>
+			<c:forEach items="${list}" var="list">
+				<figure>
+					<a style="cursor: pointer"
+						onclick="C_view_M('${list.cnt_id }','${list.cnt_connectLink }')"><img
+						src="${contextPath }/shareimage/${list.cnt_thumbnail }"></a>
+					<figcaption>${list.cnt_title }<div class="row"
+							style="align: right; padding-left: 240px; padding-top: 10px;">
+							<h4>
+								<i class="ni ni-active-40 text-blue"></i>${list.cnt_hit }</h4>
+							<h4>
+								<a style="cursor: pointer;"
+									onclick="C_recommand(${list.cnt_id})"> <i
+									class="ni ni-favourite-28 text-red" id="C_recommand"></i>${list.cnt_like }</a>
+							</h4>
+						</div>
+					</figcaption>
+				</figure>
+			</c:forEach>
 		</div>
 		<!-- end body -->
 	</div>
-	<!--   Core   -->
-	<%@ include file="../include/core.jsp"%>
-	<!--  end Core -->
 </body>
+<%@ include file="C_share_make.jsp"%>
 </html>

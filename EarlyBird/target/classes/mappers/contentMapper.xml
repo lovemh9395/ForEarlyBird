@@ -37,4 +37,14 @@
 	<select id="menu_btn" parameterType = "java.util.Map" resultType="kr.co.forearlybird.domain.Content">
 		select * from content where brd_id = (#{brd_id}*100+#{brd_num})
 	</select>
+	
+	<insert id="share_make" parameterType="java.util.Map">
+		insert into 
+		content(brd_id,cnt_title,cnt_thumbnail,cnt_connectlink,cnt_datetime,cnt_updated_datetime,cnt_comment_updated_datetime,mem_userid)
+		values(#{share_brd_id},#{share_title},#{share_image},#{share_link},now(),now(),now(),#{share_mem_userid})
+	</insert>
+	
+	<select id="C_share_list" parameterType="java.lang.Integer" resultType="kr.co.forearlybird.domain.Content">
+		select * from content where brd_id = #{brd_id}
+	</select>
 </mapper>

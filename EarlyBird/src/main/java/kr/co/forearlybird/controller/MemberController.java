@@ -74,6 +74,7 @@ public class MemberController {
 		} else if (map.get("level").toString().equals("9")) { // 관리자인 경우
 			// 세션 부여
 			session.setAttribute("user", map);
+			logger.info(session.toString());
 			session.setAttribute("mem_level", map.get("level"));
 			session.setAttribute("profilephoto", map.get("profilephoto"));
 			session.setAttribute("useridd", map.get("id"));

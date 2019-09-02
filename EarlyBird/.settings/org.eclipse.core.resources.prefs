@@ -1,2 +1,5 @@
 eclipse.preferences.version=1
-encoding//src/main/webapp/WEB-INF/views/content/C_share_make.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/content/smarteditor.jsp=UTF-8
+encoding//src/main/webapp/resources/smarteditor/sample/photo_uploader/file_uploader.jsp=UTF-8
+encoding//src/main/webapp/resources/smarteditor/sample/photo_uploader/file_uploader_html4.jsp=UTF-8
+encoding//src/main/webapp/resources/smarteditor/sample/photo_uploader/file_uploader_html5.jsp=UTF-8

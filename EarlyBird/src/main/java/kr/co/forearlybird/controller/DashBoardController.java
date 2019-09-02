@@ -16,4 +16,5 @@ public class DashBoardController {
 		logger.info("대쉬보드");
 		return "admin/A_dashboard/A_dashBoard";
 	}
+
 }
