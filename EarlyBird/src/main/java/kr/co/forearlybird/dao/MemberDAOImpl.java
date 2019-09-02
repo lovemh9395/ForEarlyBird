@@ -17,6 +17,7 @@ import kr.co.forearlybird.domain.Member;
 import kr.co.forearlybird.domain.Post;
 import kr.co.forearlybird.domain.Reply;
 
+@SuppressWarnings("rawtypes")
 @Repository
 public class MemberDAOImpl implements MemberDAO {
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
@@ -26,7 +27,6 @@ public class MemberDAOImpl implements MemberDAO {
 	@Inject
 	PasswordEncoder passwordEncoder;
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public Map login(Map<String, Object> map) throws Exception {
 		logger.info("로그인 DAO");
@@ -46,7 +46,6 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectOne("member.detail", id);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public Map update(Map<String, Object> map) {
 		logger.info("정보수정 DAO");
@@ -54,12 +53,11 @@ public class MemberDAOImpl implements MemberDAO {
 	}
 
 	@Override
-	public int delete(String id) {
+	public int delete(String mem_userid) {
 		logger.info("회원탈퇴 DAO");
-		return sqlSession.insert("member.delete", id);
+		return sqlSession.insert("member.delete", mem_userid);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public int profile(Map middlemap) {
 		logger.info("프로필업로드 DAO");
@@ -102,7 +100,6 @@ public class MemberDAOImpl implements MemberDAO {
 		sqlSession.selectOne("member.searchPWD", vo);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public String getrawPw(Map map) {
 		logger.info("비밀번호 암호화 비교 DAO");
@@ -110,14 +107,12 @@ public class MemberDAOImpl implements MemberDAO {
 	}
 
 	// Criteria 를 적용한 게시판 페이징 조회
-	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Post> listCriteria(Map map) throws Exception {
 		logger.info("내 글 보기 DAO");
 		return sqlSession.selectList("member.mypostlistCriteria", map);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public int countPaging(Map map) throws Exception {
 		logger.info("내 글 보기 페이징 처리 DAO");
@@ -125,14 +120,12 @@ public class MemberDAOImpl implements MemberDAO {
 	}
 
 	// Criteria 를 적용한 게시판 페이징 조회
-	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Reply> myreplylistCriteria(Map map) throws Exception {
 		logger.info("내 댓글 보기 DAO");
 		return sqlSession.selectList("member.myreplylistCriteria", map);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public int myreplycountPaging(Map map) throws Exception {
 		logger.info("내 댓글 보기 페이징  DAO");
@@ -151,7 +144,6 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectOne("member.CheckId",formId);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public int CheckPass(Map map) {
 		logger.info("로그인 비밀번호 체크 DAO");
@@ -165,7 +157,6 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectOne("member.getMemberNickName", mem_userid);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Map> getMemberListByMinLevel(int mem_level) {
 		logger.info("getMemberListByMinLevelDAO");
@@ -173,8 +164,12 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectList("member.getMemberListByMinLevel", mem_level);
 	}
 
-													 
-	@SuppressWarnings("rawtypes")
+	@Override
+	public List<Member> getMemberList() {
+		logger.info("getMemberListDAO");
+		return sqlSession.selectList("member.getMemberList");
+	}
+	
 	@Override
 	public List<Map> getMemberList(Map map) {
 		logger.info("getMemberListDAO");
@@ -187,7 +182,6 @@ public class MemberDAOImpl implements MemberDAO {
 		}
 	}
 	
-	@SuppressWarnings("rawtypes")
 	@Override
 	public List getMemberListLikesThisName(String keyword) {
 		logger.info("getMemberListLikesThisNameDAO");
@@ -203,4 +197,46 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectOne("member.searchPWDcheck",map);
 	}
 
+	@Override
+	public List<Member> searchMemberList(Map map) {
+		logger.info("searchMemberListDAO");
+		return sqlSession.selectList("member.searchMemberList",map);
+	}
+
+	@Override
+	public List<Member> getAdminList() {
+		logger.info("getAdminListDAO");
+		return sqlSession.selectList("member.getAdminList");
+	}
+
+	@Override
+	public List<Member> searchAdminCandidateList(Map map) {
+		logger.info("searchAdminCandidateListDAO");
+		return sqlSession.selectList("member.searchForAdminList",map);
+	}
+
+
+	@Override
+	public void release(String mem_userid) {
+		logger.info("releaseDAO");
+		sqlSession.update("member.release",mem_userid);
+	}
+
+	@Override
+	public void ban(String mem_userid) {
+		logger.info("banDAO");
+		sqlSession.update("member.ban",mem_userid);
+	}
+
+	@Override
+	public void memberAuthUpdate(Map map) {
+		logger.info("memberAuthUpdateDAO");
+		sqlSession.update("member.memberAuthUpdate",map);
+	}
+
+	@Override
+	public List<Member> getBanMemberList() {
+		logger.info("getBanMemberListDAO");
+		return sqlSession.selectList("member.getBanMemberList");
+	}
 }

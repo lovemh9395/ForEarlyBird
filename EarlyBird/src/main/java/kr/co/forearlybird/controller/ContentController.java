@@ -7,18 +7,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.jsoup.Connection.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.forearlybird.service.ContentService;
 
@@ -113,16 +109,14 @@ public class ContentController {
 			}
 		} else {// viewCookie가 null이 아닐경우 쿠키가 있으므로 조회수 증가 로직을 처리하지 않음.
 			// logger.info("게시물 추천 ----- cookie 있음");
-			String value = viewCookies.getValue();// 쿠키 값 받아옴.
+			viewCookies.getValue();// 쿠키 값 받아옴.
 			// logger.info("게시물 추천 ----- cookie 값 = " + value);
 		}
 		logger.info(""+brd_id);
 		if (brd_id != 0) {
-			logger.info("國國國國國國國國國國國國國國國國國國國國國國國國國");
 			model.addAttribute("list", service.C_list_M(brd_id));
 			return "content/C_list_M";
 		} else {
-			logger.info("國國國國國國國國國國國國國國國國國國國國國國國國國");
 			model.addAttribute("list", service.Main_C_list());
 		}
 		return "Mainpage";
@@ -156,13 +150,12 @@ public class ContentController {
 				logger.info("컨텐츠게시글 조회수 쿠키 Controller ----- 조회수 증가 에러");
 			}
 		} else {
-			String value = viewCookie.getValue();
+			viewCookie.getValue();
 		}
 		if(brd_id != 0) {
 			model.addAttribute("list",service.C_list_M(brd_id));
 			return "content/C_list_M";
 		} else {
-			logger.info("國國國國國國國國國國國國國國國國國國國國國");
 			model.addAttribute("list",service.Main_C_list());
 		}
 		return "Mainpage";

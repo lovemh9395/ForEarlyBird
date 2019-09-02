@@ -51,9 +51,9 @@
 						<!-- 카테고리 -->
 						<td class="left">${list.post_title }</td>
 						<!-- 제목 -->
-						<td><c:if test="${list.post_notice ==1 }">Y</c:if> <c:if
-								test="${list.post_notice ==0 }">N</c:if> / <c:if
-								test="${list.post_del ==1 }">Del</c:if> <c:if
+						<td><c:if test="${list.post_notice ==1 }">공지</c:if> <c:if
+								test="${list.post_notice ==0 }">No</c:if> / <c:if
+								test="${list.post_del ==1 }">삭제</c:if> <c:if
 								test="${list.post_del ==0 }">No</c:if></td>
 						<!-- 공지여부 -->
 						<td>${list.mem_nickname }/${list.mem_userid }</td>

@@ -54,50 +54,49 @@
 				</div>
 			</form>
 			<!-- Navigation --> <!-- nav-link active처리, 페이징 처리시 아이콘변경 -->
+			<hr class="my-3">
 			<h6 class="navbar-heading text-muted">site Management</h6>
 			<ul class="navbar-nav">
-				<li class="nav-item"><a id="1" class="nav-link"
+				<li class="nav-item"><a class="nav-link"
 					href="../admin/A_noticeList"> 
 					<i class="ni ni-air-baloon text-yellow"></i>
 						공지사항 관리
 				</a></li>
-				<li class="nav-item"><a id="1" class="nav-link"
+				<li class="nav-item"><a class="nav-link"
 					href="../admin/A_categoryList"> 
 					<i class="ni ni-archive-2 text-indigo"></i>
 						카테고리 관리
 				</a></li>
-				<li class="nav-item"><a id="1" class="nav-link"
+				<li class="nav-item"><a class="nav-link"
 					href="../admin/A_boardList"> 
 					<i class="ni ni-bullet-list-67 text-rainbow"></i>
 						게시판 관리
 				</a></li>
-				<li class="nav-item"><a id="1" class="nav-link"
+				<li class="nav-item"><a class="nav-link"
+					href="../admin/A_postList?brd_id=1"> 
+					<i class="ni ni-single-copy-04 text-rainbow"></i>
+						게시물 관리
+				</a></li>
+				<li class="nav-item"><a class="nav-link"
 					href="../content/C_list"> 
 					<i class="ni ni-controller text-teal"></i>
 						컨텐츠 관리
 				</a></li>
 			</ul>
 			<hr class="my-3">
+			<h6 class="navbar-heading text-muted">member Management</h6>
 			<ul class="navbar-nav">
 				<li class="nav-item"><a class="nav-link"
-					href="../admin/A_memberSearch"> <i
+					href="../admin/A_adminList"> <i
+						class="ni ni-single-02 text-blue"></i> 관리자 설정
+				</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="../admin/A_memberList"> <i
 						class="ni ni-single-02 text-pink"></i> 회원 관리
 				</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="../admin/A_memberSearch?mem_black=1"> <i
+					href="../admin/A_memberList?mem_level=1"> <i
 						class="ni ni-circle-08 text-black"></i> 블랙리스트 관리
-				</a></li>
-			</ul>
-			<hr class="my-3">
-			<h6 class="navbar-heading text-muted">Summary</h6>
-			<ul class="navbar-nav">
-				<li class="nav-item"><a class="nav-link"
-					href="./examples/register.html"> <i
-						class="ni ni-calendar-grid-58 text-gray"></i> 일간 현황 분석
-				</a></li>
-				<li class="nav-item"><a class="nav-link"
-					href="${contextPath }/admin/dashboard/"> <i
-						class="ni ni-chart-pie-35 text-green"></i> 사이트 요약 분석
 				</a></li>
 			</ul>
 			<!-- Divider -->

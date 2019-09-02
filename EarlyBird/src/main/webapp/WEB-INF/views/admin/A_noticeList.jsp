@@ -8,42 +8,30 @@
 			공지사항 관리<small>ver 1.0</small>
 		</h2>
 	</div>
-	<div>
-		<select>
-			<option value="Y" selected="selected">표시</option>
-			<option value="N">미표시</option>
-			<option value="A">전체</option>
-		</select> <select>
-			<option value="" selected="selected">기본정렬</option>
-			<option value="H">조회수많은순</option>
-		</select> <select class="fSelect" id='list_limit' name="list_limit"
-			onChange="view_board('submit');">
-			<option value="10" selected>10개씩보기
-			<option value="20">20개씩보기
-			<option value="30">30개씩보기
-			<option value="50">50개씩보기
-		</select>
-	</div>
 	<div class="row">
 		<div class="col-md-auto">
-			<a href="#">공지 등록</a>
+			<a href="${contextPath }/admin/A_noticeMake"><input type="button"
+				value="공지등록"></a>
 		</div>
 		<div class="col-md-auto">
-			<a href="#">공지 삭제</a>
+			<input type="button" value="공지 숨기기/복구" id="deleteWhatSelected">
 		</div>
 		<div class="col-md-auto">
-			<a href="#">공지 수정</a>
+			<input type="button" value="공지 수정" onclick="updateNotice()">
+		</div>
+		<div class="col-md-auto">
+			<input type="button" value="공지 해제" id="dropWhatSelected">
 		</div>
 	</div>
-	<div class="table-responsive">
+	<div class="table-responsive" id="noticeTable">
 		<table class="table align-items-center table-flush">
 			<thead>
 				<tr>
-					<th scope="col"><input type="checkbox" class="allChk" /></th>
+					<th scope="col"><input type="checkbox" id="allChk"
+						class="allChk" /></th>
 					<th scope="col">번호</th>
 					<th scope="col">분류</th>
-					<th scope="col" style="display: none;">카테고리</th>
-					<th scope="col"><a href="#">제목</a></th>
+					<th scope="col">제목</th>
 					<th scope="col">표시/미표시</th>
 					<th scope="col">작성자</th>
 					<th scope="col">작성일</th>
@@ -51,39 +39,135 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td><input type="checkbox" name="bbs_no[]" value="1"
-						class="rowChk" /> <input type="hidden" name="no[]" value="1">
-						<input type="hidden" id="iBoardNo_1" value="1"> <input
-						type="hidden" id="iBoardGroup_1" value="1"> <input
-						type="hidden" id="eIsDeleted_1" value="F"> <input
-						type="hidden" id="iBoardGroup_1" value="1"> <input
-						type="hidden" id="iNotice_1" value="F"> <input
-						type="hidden" id="iFixed_1" value="F"></td>
-					<!-- 번호 -->
-					<td>1</td>
-					<!-- 분류명 -->
-					<td>공지사항</td>
-					<!-- 카테고리 -->
-					<td style="display: none;"></td>
-					<!-- 제목 -->
-					<td class="left">몰 오픈을 축하합니다.</td>
-					<!-- 표시/미표시 -->
-					<td><span>미리보기</span></td>
-					<!-- 작성자 -->
-					<td>EC Hosting <br /> (비회원)
-					</td>
-					<!-- 작성일 -->
-					<td>2019-07-25 07:12:13</td>
-					<!-- 조회 -->
-					<td class="right">0</td>
-				</tr>
+				<c:forEach items="${noticeList }" var="list" varStatus="status">
+					<tr>
+						<td><input type="checkbox" name="chk"
+							value="${list.post_id }"> <input type="hidden"
+							id="chk_${list.post_id }" value="${list.post_del }"> <input
+							type="hidden" id="chkNotice_${list.post_id }" value="${list.post_notice }">
+						<td>${list.post_id }</td>
+						<!-- 글 번호 -->
+						<td><c:if test="${list.brd_id ==0 }">공지사항</c:if> <c:if
+								test="${list.brd_id !=0 }">${list.category_name}</c:if></td>
+						<!-- 대분류 -->
+						<td class="left"><a
+							href="${contextPath }/admin/A_noticeDetail?post_id=${list.post_id }">${list.post_title }</a></td>
+						<!-- 제목 -->
+						<td><c:if test="${list.post_del == 0 }">표시</c:if> <c:if
+								test="${list.post_del == 1 }">No</c:if> <!-- 공지여부 -->
+						<td>${list.mem_nickname }/${list.mem_userid }</td>
+						<!-- 작성자 아이디-->
+						<td>${list.post_simpletime }</td>
+						<!-- 작성일 -->
+						<td class="right">${list.post_hit }</td>
+						<!-- 조회 -->
+					</tr>
+				</c:forEach>
 			</tbody>
 		</table>
 	</div>
-	<div>
-		<span>첫</span> / <span>이전 10</span>/ 1 /<span>다음 10</span> / <span>마지막</span>
-	</div>
 </div>
+<script>
+	function getCheckedValue() {
+		var resultArray = [];
+		$("input[name='chk']:checked").each(function() {
+			resultArray.push($(this).val());
+		});
+		return resultArray;
+	};
+
+	function isDeleteWhatChecked() {
+		var resultArray = [];
+		$("input[name='chk']:checked").each(function() {
+			var tmp = "#chk_" + $(this).val();
+			resultArray.push($(tmp).val());
+		});
+		return resultArray;
+	};
+
+	function isNoticeWhatChecked() {
+		var resultArray = [];
+		$("input[name='chk']:checked").each(function() {
+			var tmp = "#chkNotice_" + $(this).val();
+			resultArray.push($(tmp).val());
+		});
+		return resultArray;
+	};
+
+	function updateNotice() {
+		var checkedList = getCheckedValue();
+		if (checkedList[1] != null) {
+			alert("하나의 항목만 선택하여 주십시오");
+		} else if (checkedList[0] == null) {
+			alert("항목을 선택하여 주십시오");
+		} else {
+			if (confirm("선택한 항목을 수정하시겠습니까?")) {
+				var e = checkedList[0];
+				window.location.href = "${contextPath}/admin/A_noticeUpdate?post_id="
+						+ e;
+			}
+		}
+	}
+
+	$(document).ready(function() {
+		$(document).on('click', '#allChk', function() {
+			$("input[name='chk']").prop("checked", this.checked);
+		});
+
+		$(document).on('click', '#deleteWhatSelected', function() {
+			var checkedList = getCheckedValue();
+			var NoticeOrNot = isDeleteWhatChecked();
+
+			var query = {
+				"brd_id" : 0,
+				"checkedList" : checkedList,
+				"NoticeOrNot" : NoticeOrNot
+			};
+			if (checkedList[0] == null) {
+				alert("항목을 선택하여 주십시오");
+			} else {
+				if (confirm("선택된 항목을 변경하시겠습니까?")) {
+					$.ajax({
+						traditional : true,
+						async : false,
+						type : "post",
+						url : "${contextPath}/admin/A_noticeDelete",
+						data : query,
+						success : function(data) {
+							var e = $(data).find("#noticeTable");
+							$("#noticeTable").html(e).trigger("create");
+						}
+					});
+				}
+			}
+		});
+
+		$(document).on('click', '#dropWhatSelected', function() {
+			var checkedList = getCheckedValue();
+
+			var query = {
+				"brd_id" : 0,
+				"checkedList" : checkedList,
+			};
+			if (checkedList[0] == null) {
+				alert("항목을 선택하여 주십시오");
+			} else {
+				if (confirm("선택된 항목을 변경하시겠습니까?")) {
+					$.ajax({
+						traditional : true,
+						async : false,
+						type : "post",
+						url : "${contextPath}/admin/A_noticeDrop",
+						data : query,
+						success : function(data) {
+							var e = $(data).find("#noticeTable");
+							$("#noticeTable").html(e).trigger("create");
+						}
+					});
+				}
+			}
+		});
+	});
+</script>
 <!-- end of body -->
 <%@include file="include/A_footer.jsp"%>

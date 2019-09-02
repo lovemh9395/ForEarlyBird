@@ -7,14 +7,13 @@ import java.util.Map;
 import kr.co.forearlybird.domain.A_postListDTO;
 import kr.co.forearlybird.domain.Post;
 
+@SuppressWarnings("rawtypes")
 public interface AdminService {
 
 	// 대분류 카테고리 리스트 불러오기
-	@SuppressWarnings("rawtypes")
 	List<Map> largeCategoryList() throws Exception;
 
 	// 소분류 카테고리 리스트 불러오기
-	@SuppressWarnings("rawtypes")
 	List<Map> CategoryList();
 
 	// 대분류 카테고리 만들기
@@ -27,44 +26,83 @@ public interface AdminService {
 
 	int leaveCategory(int category_id);
 
-	@SuppressWarnings("rawtypes")
 	List<Map> getBoardList();
 
 	List<String> getAdminNickname(int brd_id);
 
-	@SuppressWarnings("rawtypes")
 	List<Map> getMemberListForBoardAdmin();
 
-	@SuppressWarnings("rawtypes")
 	int updateAdmin(Map map);
 
 	int checkAdminId(int brd_id, String mem_userid);
 
-	@SuppressWarnings("rawtypes")
 	List<Map> searchMembersForBoardAdmin(Map map);
 
-	@SuppressWarnings("rawtypes")
 	void makeBoard(Map map);
 
-	@SuppressWarnings("rawtypes")
 	List<Map> CategoryList(int large_id);
 
 	int leaveBoard(int brd_id);
 
 	int changeBoardVisibility(int brd_id, int brd_exposure);
 
-	@SuppressWarnings("rawtypes")
 	List<Post> searchPostToBoard(Map map) throws Exception;
 
-	@SuppressWarnings("rawtypes")
 	List<A_postListDTO> ListPostToBoard(Map map) throws ParseException;
 
-	@SuppressWarnings("rawtypes")
 	void deletePostToBoard(Map map);
 
-	@SuppressWarnings("rawtypes")
 	void reViewPostToBoard(Map map);
 
-	@SuppressWarnings("rawtypes")
-	void updatePostToBoard(Map map); 
+	void updatePostToBoard(Map map);
+
+	List<A_postListDTO> getNoticeListFromBoard() throws ParseException;
+
+	void makeNotice(Post post);
+
+	Post getPost(int post_id);
+
+	void updateNotice(Post post);
+
+	List<Map> getMemberList();
+
+	List<Map> searchMemberList(Map map);
+
+	List<Map> getAdminList();
+
+	List<Map> searchAdminCandidateList(Map map);
+
+	void deleteMembers(Map map);
+
+	void releaseMembers(Map map) throws Exception;
+
+	void banMembers(Map map);
+
+	List<Map> getBanMemberList();
+
+	String getNickname(String mem_userid);
+
+	List<A_postListDTO> getPostListFromWriter(String mem_userid) throws Exception;
+
+	List<Map> getRplListFromWriter(String mem_userid) throws Exception;
+
+	int getPostNumWritenBy(String mem_userid);
+
+	int getReplyNumWritenBy(String mem_userid);
+
+	void memberAuthUpdate(List checklist, List memberAuthList);
+
+	int getPostNumWritenBy(Map map);
+
+	List<A_postListDTO> getPostListFromWriter(Map map) throws Exception;
+
+	int getReplyNumWritenBy(Map map);
+
+	List<Map> getRplListFromWriter(Map map) throws Exception;
+
+	void updatePost(Map map);
+
+	void updateReply(Map map);
+
+	void deleteAdmin(Map map);
 }

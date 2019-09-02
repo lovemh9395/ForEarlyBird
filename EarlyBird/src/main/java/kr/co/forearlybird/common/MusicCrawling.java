@@ -56,15 +56,12 @@ public class MusicCrawling {
 				pstmt = conn.prepareStatement(sql);
 				rs = pstmt.executeQuery();
 				int cnt = 0;
-				System.out.println("1");
 //				while (rs.next()) {
 //					cnt = rs.getInt(1);
 //				}
 //				if (cnt == 0) { // DB가 아예 없을 때
-					System.out.println("2");
 					sql = "insert into content(brd_id,cnt_title,cnt_thumbnail,cnt_connectlink,cnt_datetime,cnt_updated_datetime,cnt_comment_updated_datetime)"
 							+ " values('"+brd_id+"',?,?,?,now(),now(),now())";
-						System.out.println("2");	
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, cnt_title);
 					pstmt.setString(2, cnt_thumbnail);

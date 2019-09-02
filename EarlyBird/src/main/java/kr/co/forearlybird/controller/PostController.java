@@ -131,7 +131,7 @@ public class PostController {
 		else {
 			//logger.info("게시물 추천 ----- cookie 있음");
 			// 쿠키 값 받아옴.
-			String value = viewCookies.getValue();
+			viewCookies.getValue();
 			//logger.info("게시물 추천 ----- cookie 값 : " + value);
 		}
 		view.setViewName("post/P_detail");
@@ -203,7 +203,7 @@ public class PostController {
 			else {
 				//logger.info("게시물 목록보기 및 조회수 증가 방지 --------cookie 있음");
 				// 쿠키 값 받아옴.
-				String value = viewCookie.getValue();
+				viewCookie.getValue();
 				//logger.info("게시물 목록보기 및 조회수 증가 방지 --------cookie 값 : " + value);
 			}
 			view.setViewName("post/P_detail");

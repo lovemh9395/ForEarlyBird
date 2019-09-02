@@ -19,6 +19,7 @@ import kr.co.forearlybird.paging.Criteria;
 import kr.co.forearlybird.paging.PageMaker;
 import kr.co.forearlybird.service.ReplyService;
 
+@SuppressWarnings({ "unchecked", "rawtypes" })
 @Controller
 @RequestMapping("reply")
 public class ReplyController {
@@ -28,7 +29,6 @@ public class ReplyController {
 	ReplyService service;
 
 	// 댓글 등록
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value = "/R_make", method = { RequestMethod.GET, RequestMethod.POST })
 	public String R_make(HttpSession session, HttpServletRequest request, Map map, Model model,
 			@ModelAttribute("cri") Criteria cri) throws Exception {
@@ -75,7 +75,6 @@ public class ReplyController {
 		return "reply/R_list";
 	}
 
-	@SuppressWarnings("rawtypes")
 	private PageMaker makePageMaker(Map map) throws Exception {
 		logger.info("댓글 페이징 처리 메소드");
 		PageMaker pageMaker = new PageMaker();

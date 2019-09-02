@@ -3,10 +3,15 @@
 <%@include file="../admin/include/A_header.jsp"%>
 <!-- body -->
 <div class="container">
-	<div>
-		<h2>
-			컨텐츠 관리<small>ver 1.0</small>
-		</h2>
+	<div class="row">
+		<div class="col-4">
+			<h2>
+				컨텐츠 관리<small>ver 1.0</small>
+			</h2>
+		</div>
+		<div class="col-8" align="right">
+			<button type="button">컨텐츠 스크래핑</button>
+		</div>
 	</div>
 	<div class="table-responsive">
 		<table class="table align-items-center table-flush">

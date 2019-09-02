@@ -46,7 +46,21 @@
 		update member
 		set mem_level =
 		'4'
-		where mem_userid=#{id}
+		where mem_userid=#{mem_userid}
+	</update>
+
+	<update id="release" parameterType="java.lang.String">
+		update member
+		set mem_level =
+		'2'
+		where mem_userid=#{mem_userid}
+	</update>
+
+	<update id="ban" parameterType="java.lang.String">
+		update member
+		set mem_level =
+		'1'
+		where mem_userid=#{mem_userid}
 	</update>
 
 	<update id="profileupdate" parameterType="java.util.Map">
@@ -68,8 +82,8 @@
 
 	<insert id="insertUser">
 		insert into
-		member(mem_userid,mem_password,mem_nickname,mem_username,mem_phone,mem_birthday,mem_open_profile,mem_register_datetime,mem_lastlogin_datetime,mem_register_ip,mem_lastlogin_ip)
-		values(#{mem_userid},#{mem_password},#{mem_nickname},#{mem_username},#{mem_phone},#{mem_birthday},#{mem_open_profile},now(),now(),now(),now())
+		member(mem_userid,mem_password,mem_nickname,mem_username,mem_phone,mem_birthday,mem_open_profile,mem_register_datetime,mem_lastlogin_datetime)
+		values(#{mem_userid},#{mem_password},#{mem_nickname},#{mem_username},#{mem_phone},#{mem_birthday},#{mem_open_profile},now(),now())
 	</insert>
 
 	<update id="createAuthKey">
@@ -83,6 +97,11 @@
 		update member set
 		mem_level=3
 		where mem_userid=#{mem_profile_content}
+	</update>
+
+	<update id="memberAuthUpdate" parameterType="java.util.Map">
+		update member set
+		mem_level=#{mem_level} where mem_userid=#{mem_userid}
 	</update>
 
 	<update id="searchPWD">
@@ -193,7 +212,7 @@
 
 	<select id="getMemberListLikesThisName"
 		parameterType="java.lang.String" resultType="java.lang.String">
-		SELECT mem_level FROM
+		SELECT mem_userid FROM
 		member WHERE mem_nickname LIKE CONCAT('%', #{keyword}, '%')
 	</select>
 
@@ -209,4 +228,50 @@
 		mem_username = #{mem_username} and mem_phone = #{mem_phone} and
 		mem_birthday = #{mem_birthday}
 	</select>
+
+	<select id="getMemberList"
+		resultType="kr.co.forearlybird.domain.Member">
+		SELECT * FROM member WHERE mem_level != 9
+	</select>
+	
+	<select id="getBanMemberList"
+		resultType="kr.co.forearlybird.domain.Member">
+		SELECT * FROM member WHERE mem_level = 1 or mem_level = 6
+	</select>
+
+	<select id="getAdminList"
+		resultType="kr.co.forearlybird.domain.Member">
+		SELECT * FROM member WHERE mem_level = 8
+	</select>
+
+	<select id="searchMemberList"
+		resultType="kr.co.forearlybird.domain.Member">
+		SELECT * FROM member WHERE mem_level != 9
+		<include refid="searchKeywordToType"></include>
+	</select>
+
+	<select id="searchForAdminList"
+		resultType="kr.co.forearlybird.domain.Member">
+		SELECT * FROM member WHERE (mem_level = 2 or mem_level = 3 or mem_level = 8)
+		<include refid="searchKeywordToType"></include>
+	</select>
+
+	<sql id="searchKeywordToType">
+		<if test="keytype!='allthing'.toString()">
+			<if test="keyword!=null">
+				<if test="keytype=='mem_userid'.toString()">
+					and mem_userid like concat('%', #{keyword}, '%')
+				</if>
+				<if test="keytype=='mem_username'.toString()">
+					and mem_username like concat('%', #{keyword}, '%')
+				</if>
+				<if test="keytype=='mem_levelname'.toString()">
+					and mem_level = #{keyword}
+				</if>
+				<if test="keytype=='mem_nickname'.toString()">
+					and mem_nickname like concat('%', #{keyword}, '%')
+				</if>
+			</if>
+		</if>
+	</sql>
 </mapper>

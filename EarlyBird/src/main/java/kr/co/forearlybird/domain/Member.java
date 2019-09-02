@@ -7,7 +7,7 @@ import lombok.Data;
 //Lombok을 이용함(getter,setter 등등 한번에 처리 가능)
 @Data
 public class Member {
-	private int mem_id; //PK
+	//private int mem_id; //PK
 	private String mem_userid; //회원 아이디
 	private String mem_password; //회원 패스워드
 	private String mem_nickname; //회원 닉네임
@@ -24,9 +24,7 @@ public class Member {
 	private String mem_photo; //회원 이미지 경로
 	private String mem_profile_content; //자기소개, 프로필 페이지에 나타남 //userAuth 작동용으로 user_authcode 대신 사용
 	private Date mem_register_datetime; //회원 등록일
-	private String mem_register_ip; //회원 등록 IP
 	private Date mem_lastlogin_datetime; //최종 로그인 시간
-	private String mem_lastlogin_ip; //최종 로그인 IP
 	private String mem_adminmemo; //관리자용 메모 //userAuth 작동용으로 user_email 대신 사용
 	
 }

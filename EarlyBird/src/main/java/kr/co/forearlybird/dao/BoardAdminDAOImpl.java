@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+@SuppressWarnings("rawtypes")
 @Repository
 public class BoardAdminDAOImpl implements BoardAdminDAO{
 	private static final Logger logger = LoggerFactory.getLogger(BoardAdminDAOImpl.class);
@@ -22,7 +23,6 @@ public class BoardAdminDAOImpl implements BoardAdminDAO{
 		return sqlsession.selectList("boardAdmin.getAdminID", brd_id);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public int checkAdminId(Map map) {
 		logger.info("checkAdminIdDAO");
@@ -31,10 +31,15 @@ public class BoardAdminDAOImpl implements BoardAdminDAO{
 		return result;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public int makeAdmin(Map map) {
 		logger.info("makeAdminDAO");
 		return sqlsession.insert("boardAdmin.makeAdmin", map);
+	}
+
+	@Override
+	public void deleteAdmin(Map map) {
+		logger.info("deleteAdminDAO");
+		sqlsession.delete("boardAdmin.deleteAdmin", map);
 	}
 }

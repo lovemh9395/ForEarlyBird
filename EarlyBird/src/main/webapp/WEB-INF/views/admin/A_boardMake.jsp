@@ -12,7 +12,17 @@
 			<div class="modal-body p-0">
 				<div class="card bg-secondary shadow border-0">
 					<div class="card-header px-lg-20 py-lg-20">
-						<h2>게시판 추가하기</h2>
+						<div class="row">
+							<h2 class="col-11">
+								게시판 추가하기 <small>ver1.0</small>
+							</h2>
+							<div class="col-1" style="float: 'right'">
+								<input type="button"
+									style="float: 'right'; padding: 1px; margin: 1px; border: 1px;"
+									class="btn btn-default" data-dismiss="modal"
+									value="&nbsp;X&nbsp;">
+							</div>
+						</div>
 					</div>
 					<div class="card-body px-lg-20 py-lg-20">
 						<form class="form-horizontal"
@@ -56,8 +66,8 @@
 								<div class="row">
 									<div class="col-12 form-group">
 										<label class="input-inline" for="brd_name">게시판명 : <input
-											type="text" align="center"
-											class="form-control form-control-alternative" id="brd_name">
+											type="text" class="form-control form-control-alternative"
+											id="brd_name">
 										</label> <input type="button" class="btn" onclick="makeBoard();"
 											value="제출">
 									</div>

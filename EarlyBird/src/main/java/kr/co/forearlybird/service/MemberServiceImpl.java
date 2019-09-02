@@ -27,6 +27,7 @@ import kr.co.forearlybird.domain.Reply;
 import kr.co.forearlybird.email.MailHandler;
 import kr.co.forearlybird.email.TempKey;
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 @Service
 public class MemberServiceImpl implements MemberService {
 	private static final Logger logger = LoggerFactory.getLogger(MemberDAO.class);
@@ -37,7 +38,6 @@ public class MemberServiceImpl implements MemberService {
 	@Autowired
 	private MemberDAO memberDAO;
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Map login(HttpServletRequest request) throws Exception {
 		logger.info("로그인 service");
@@ -94,7 +94,6 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.delete(id);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public Map update(Map<String, Object> map) {
 		logger.info("정보수정 service");
@@ -103,7 +102,6 @@ public class MemberServiceImpl implements MemberService {
 
 	private static final String SAVE_PATH = "D:/Project/ForEarlyBird/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/EarlyBird/resources/uploadimage/";
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Map restore(Map postmap, HttpSession session) {
 		logger.info("프로필 업로드 service");
@@ -196,7 +194,6 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public void create(Member vo) throws Exception {
 		String encPassword = passwordEncoder.encode(vo.getMem_password());
-		logger.info("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" + encPassword);
 		vo.setMem_password(encPassword);
 
 		memberDAO.insertUser(vo); // 회원가입 DAO
@@ -223,53 +220,38 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public void serachPWD(Member vo) throws Exception {
 		logger.info("비밀번호 찾기 service");
-		System.out.println("+++++++++++++++++++++++++++++++++" + vo);
 		String key = new TempKey().getKey(10, false); // 인증키 생성
-
-		System.out.println("---------------------vo :" + vo + "---------key" + key);
 		memberDAO.searchPWD(vo, key); // 인증키 DB저장 비밀번호로
-		logger.info("2");
 		MailHandler sendMail = new MailHandler(mailSender);
-		logger.info("3");
 		sendMail.setSubject("[ForEarlyBird 서비스 이메일 인증]");
-		logger.info("4");
 		sendMail.setText(
 				new StringBuffer().append("<h1>메일인증</h1>").append("회원님의 임시 비밀번호는 " + key + " 입니다.")
 						.append("<a href='http://localhost:9002/member/M_newJoin?user_email=")
 						.append(vo.getMem_profile_content()).append("&key=").append(key)
 						.append("' target='_blenk'>이메일 인증 확인</a>").toString());
-		logger.info("5");
 		sendMail.setFrom("lovemh9395", "ForEarlyBird");
-		logger.info("6");
 		sendMail.setTo(vo.getMem_userid());
-		logger.info("7");
 		sendMail.send();
-		logger.info("8");
 	}
 
-	
-	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Post> listCriteria(Map map) throws Exception {
 		logger.info("내 글 보기 Post Service");
 		return memberDAO.listCriteria(map);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public int listCountCriteria(Map map) throws Exception {
 		logger.info("내 글 보기 Count Paging Service");
 		return memberDAO.countPaging(map);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Reply> myreplylistCriteria(Map map) throws Exception {
 		logger.info("내 댓글 보기 Post Service");
 		return memberDAO.myreplylistCriteria(map);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public int myreplylistCountCriteria(Map map) throws Exception {
 		logger.info("내 댓글 보기 Count Paging Service");
@@ -282,7 +264,6 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.CheckId(formId);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public int CheckPass(Map map) {
 		logger.info("로그인 비밀번호 체크 Service");

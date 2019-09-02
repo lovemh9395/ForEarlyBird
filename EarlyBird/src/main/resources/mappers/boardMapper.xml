@@ -64,4 +64,19 @@
 		SELECT large_id,
 		category_id FROM board WHERE brd_id=#{brd_id}
 	</select>
+	
+	<select id="checkBoardId"
+		parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT COUNT(brd_id) FROM board WHERE brd_id=#{category_id}
+	</select>
+	
+	<select id="checkBoardIdByCategory"
+		parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT COUNT(brd_id) FROM board WHERE category_id=#{category_id}
+	</select>
+	
+	<select id="getBoardMAXIDUnderCategory"
+		parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT IFNULL(MAX(brd_id),0) FROM board WHERE category_id=#{category_id}
+	</select>
 </mapper>

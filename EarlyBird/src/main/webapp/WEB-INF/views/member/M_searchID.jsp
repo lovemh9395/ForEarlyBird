@@ -21,7 +21,6 @@
 						"mem_phone" : userphone
 					},
 					success : function(data) {
-						alert(data);
 						if($(data).find("#IDsearchName").val() != "") {
 						$(data).modal();
 						<%session.removeAttribute("FindId");%>

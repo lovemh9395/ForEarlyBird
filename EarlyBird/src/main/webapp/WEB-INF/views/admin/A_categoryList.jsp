@@ -29,20 +29,24 @@ $(document).ready(function(){
 	$("#CategoryAddButton").click(function(){
 		var large_id = document.getElementById("large_id").value;
 		var category_name = document.getElementById("category_name").value;
-		$.ajax({
-			type:"post",
-			url:"${contextPath}/admin/A_categoryMake",
-			data:{"large_id":large_id ,"category_name":category_name},
-			success:function(data){
-				if (data==1) {
-					alert("success");
-				} else if (data<0){
-					alert("fail");
+		if (category_name!="") {
+			$.ajax({
+				type:"post",
+				url:"${contextPath}/admin/A_categoryMake",
+				data:{"large_id":large_id ,"category_name":category_name},
+				success:function(data){
+					if (data==1) {
+						alert("success");
+					} else if (data<0){
+						alert("fail");
+					}
+					window.location.reload();
 				}
-				window.location.reload();
-			}
-		});
-	}); 
+			});
+		} else {
+			alert("올바른 값을 입력하여 주십시오");
+		}
+	});
 });
 
 
@@ -208,8 +212,7 @@ function smallDelete(index){
 											<th scope="col">분류코드</th>
 											<th scope="col">대분류명</th>
 											<th scope="col">분류명</th>
-											<th scope="col">하위 게시판수</th>
-											<th scope="col"></th>
+											<th scope="col">게시판수</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -220,8 +223,8 @@ function smallDelete(index){
 												<td>${list.large_name }
 												<td>${list.name }</td>
 												<td>${list.boardNum }<input type="hidden"
-													id="childBoardNum${list.index }" value="${list.boardNum }"></td>
-												<td><button class="btn btn-default"
+													id="childBoardNum${list.index }" value="${list.boardNum }">
+													&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-default"
 														style="padding: 1px; margin: 1px; border: 1px;"
 														onclick="smallDelete(${list.index });">삭제</button></td>
 											</tr>

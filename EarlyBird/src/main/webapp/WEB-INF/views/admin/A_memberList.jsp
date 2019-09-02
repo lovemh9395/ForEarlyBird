@@ -4,10 +4,10 @@
 <!-- body -->
 <div class="container">
 	<h2>
-		관리자 설정<small>v1.0</small>
+		회원 관리<small>v1.0</small>
 	</h2>
 	<div class="panel panel-default">
-		<div class="panel-heading">관리자 후보 회원목록 검색</div>
+		<div class="panel-heading">회원 정보 검색</div>
 		<div class="panel-body">
 			<form method="post" class="form-inline">
 				<div class="form-group col-md-auto">
@@ -29,6 +29,7 @@
 						<option value="4">탈퇴 회원</option>
 						<option value="5">장기 미 접속자</option>
 						<option value="6">이용제한 유저</option>
+						<option value="8">스태프</option>
 					</select>
 				</div>
 				<button type="button" id="memberSearch">Search</button>
@@ -40,7 +41,9 @@
 		<div class="row">
 			<div class="col-2">회원 명단 출력</div>
 			<div class="col-10" align="right">
-				<button type="button" id="updateAuth">스태프 승급/해제</button>
+				<button type="button" id="banWhatSelected">일괄 차단</button>
+				<button type="button" id="deleteWhatSelected">일괄 탈퇴처리</button>
+				<button type="button" id="releaseWhatSelected">일괄 복구</button>
 			</div>
 		</div>
 		<div class="panel-body">
@@ -61,13 +64,10 @@
 					<%-- JSTL, EL을 이용한 동적 데이터 출력 --%>
 					<c:forEach var="list" items="${memberList}" varStatus="Status">
 						<tr>
-							<td><input type="checkbox" name="chk" value="${Status.count}">
-								<input type="hidden" id="id_${Status.count }" value="${list.mem_userid}">
-								<input type="hidden" id="chk_${Status.count }" value="${list.mem_level}">
-								</td>
+							<td><input type="checkbox" name="chk"
+								value="${list.mem_userid}"></td>
 							<td>${Status.count}</td>
-							<td><a
-								href="${contextPath }/admin/A_memberDetail?mem_userid=${list.mem_userid}">${list.mem_userid}</a></td>
+							<td><a href="${contextPath }/admin/A_memberDetail?mem_userid=${list.mem_userid}">${list.mem_userid}</a></td>
 							<td>${list.mem_nickname}</td>
 							<td>${list.mem_levelname}</td>
 							<td>${list.mem_phone}</td>
@@ -78,22 +78,13 @@
 			</table>
 		</div>
 	</div>
+	<div id="divForModal"></div>
 </div>
 <script type="text/javascript">
 	function getCheckedValue() {
 		var resultArray = [];
 		$("input[name='chk']:checked").each(function() {
-			var index = "#id_" + $(this).val();
-			resultArray.push($(index).val());
-		});
-		return resultArray;
-	};
-
-	function getAuthWhoChecked() {
-		var resultArray = [];
-		$("input[name='chk']:checked").each(function() {
-			var index = "#chk_" + $(this).val();
-			resultArray.push($(index).val());
+			resultArray.push($(this).val());
 		});
 		return resultArray;
 	};
@@ -144,7 +135,7 @@
 				async : false,
 				type : "post",
 				data : query,
-				url : "${contextPath}/admin/A_AdminCandidateSearch",
+				url : "${contextPath}/admin/A_memberSearch",
 				success : function(data) {
 					var e = $(data).find("#membertable");
 					$("#membertable").html(e).trigger("create");
@@ -152,23 +143,68 @@
 			});
 		});
 
-		$(document).on('click', '#updateAuth', function() {
+		$(document).on('click', '#deleteWhatSelected', function() {
 			var checkedList = getCheckedValue();
-			var AuthList = getAuthWhoChecked();
 			var query = {
 				"checkedList" : checkedList,
-				"AuthList" : AuthList
 			};
-
-			if (checkedList[0] == "") {
-				alert("올바른 항목을 선택하여 주십시오");
+			if (checkedList[0] == null) {
+				alert("항목을 선택하여 주십시오");
 			} else {
-				if (confirm("선택된 회원의 등급을 변경하시겠습니까?")) {
+				if (confirm("선택된 항목들을 삭제하시겠습니까?")) {
 					$.ajax({
 						traditional : true,
 						async : false,
 						type : "post",
-						url : "${contextPath}/admin/A_adminUpdate",
+						url : "${contextPath}/admin/A_memberDelete",
+						data : query,
+						success : function(data) {
+							var e = $(data).find("#membertable");
+							$("#membertable").html(e).trigger("create");
+						}
+					});
+				}
+			}
+		});
+
+		$(document).on('click', '#banWhatSelected', function() {
+			var checkedList = getCheckedValue();
+			var query = {
+				"checkedList" : checkedList,
+			};
+			if (checkedList[0] == null) {
+				alert("항목을 선택하여 주십시오");
+			} else {
+				if (confirm("선택된 항목들을 차단하시겠습니까?")) {
+					$.ajax({
+						traditional : true,
+						async : false,
+						type : "post",
+						url : "${contextPath}/admin/A_memberBan",
+						data : query,
+						success : function(data) {
+							var e = $(data).find("#membertable");
+							$("#membertable").html(e).trigger("create");
+						}
+					});
+				}
+			}
+		});
+
+		$(document).on('click', '#releaseWhatSelected', function() {
+			var checkedList = getCheckedValue();
+			var query = {
+				"checkedList" : checkedList,
+			};
+			if (checkedList[0] == null) {
+				alert("항목을 선택하여 주십시오");
+			} else {
+				if (confirm("선택된 항목들을 차단 해제하시겠습니까?")) {
+					$.ajax({
+						traditional : true,
+						async : false,
+						type : "post",
+						url : "${contextPath}/admin/A_memberRelease",
 						data : query,
 						success : function(data) {
 							var e = $(data).find("#membertable");

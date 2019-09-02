@@ -6,8 +6,8 @@
 	<insert id="R_make" parameterType="java.util.Map">
 		insert into
 		reply(mem_userid,
-		post_id, rpl_content, rpl_datetime,rpl_ip,rpl_updated_datetime)
-		values(#{mem_userid},#{post_id},#{rpl_content},now(),now(),now())
+		post_id, rpl_content, rpl_datetime)
+		values(#{mem_userid},#{post_id},#{rpl_content},now())
 	</insert>
 
 	<update id="R_delete" parameterType="java.lang.Integer">
@@ -15,7 +15,6 @@
 		set rpl_del = 1
 		where rpl_id = #{rpl_id}
 	</update>
-
 
 	<!-- criteria 를 적용한 게시판 페이징 조회 -->
 	<select id="replylistCriteria" parameterType="java.util.Map"
@@ -42,4 +41,31 @@
 		0
 	</select>
 
+	<select id="getReplyList" parameterType="java.lang.String"
+		resultType="kr.co.forearlybird.domain.Reply">
+		SELECT * FROM reply WHERE mem_userid=#{mem_userid}
+	</select>
+
+	<select id="getReplyListbyMap" parameterType="java.util.Map"
+		resultType="kr.co.forearlybird.domain.Reply">
+		SELECT * FROM reply WHERE mem_userid=#{mem_userid} and
+		rpl_del=#{rpl_del}
+	</select>
+
+	<select id="getReplyNumWritenBy"
+		parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM reply
+		WHERE mem_userid=#{mem_userid}
+	</select>
+
+	<select id="getReplyNumWritenByMap"
+		parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM reply
+		WHERE mem_userid=#{mem_userid} and rpl_del=#{rpl_del}
+	</select>
+
+	<update id="updateReplyDel" parameterType="java.util.Map">
+		update reply set
+		rpl_del = #{rpl_del} where rpl_id = #{rpl_id}
+	</update>
 </mapper>

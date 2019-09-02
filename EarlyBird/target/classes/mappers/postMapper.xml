@@ -38,8 +38,8 @@
 
 	<insert id="P_make" parameterType="java.util.Map">
 		insert into
-		post(brd_id,mem_userid,post_title,post_content,post_datetime,post_updated_datetime,post_ip)
-		values(#{brd_id},#{mem_userid},#{post_title},#{post_content},now(),now(),now())
+		post(brd_id,mem_userid,post_title,post_content,post_datetime,post_updated_datetime)
+		values(#{brd_id},#{mem_userid},#{post_title},#{post_content},now(),now())
 	</insert>
 
 	<update id="P_delete" parameterType="java.lang.Integer">
@@ -53,6 +53,7 @@
 		set post_del=0
 		where post_id=#{post_id}
 	</update>
+
 	<update id="P_update" parameterType="java.util.Map">
 		update post
 		set
@@ -84,6 +85,29 @@
 	<select id="getPostList" parameterType="java.util.Map"
 		resultType="kr.co.forearlybird.domain.Post">
 		SELECT * FROM post WHERE brd_id=#{brd_id}
+	</select>
+
+	<select id="getPostListWritenBy"
+		parameterType="java.lang.String"
+		resultType="kr.co.forearlybird.domain.Post">
+		SELECT * FROM post WHERE mem_userid=#{mem_userid}
+	</select>
+
+	<select id="getPostListWhereIdDel" parameterType="java.util.Map"
+		resultType="kr.co.forearlybird.domain.Post">
+		SELECT * FROM post WHERE mem_userid=#{mem_userid} and
+		post_del = #{post_del}
+	</select>
+
+	<select id="getPostNumWritenBy" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM post WHERE mem_userid=#{mem_userid}
+	</select>
+
+	<select id="getPostNumWritenByMap"
+		parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM post
+		WHERE mem_userid=#{mem_userid} and post_del = #{post_del}
 	</select>
 
 	<select id="getPostList2" parameterType="java.util.Map"
@@ -173,5 +197,42 @@
 	<update id="changeParamNotice" parameterType="java.util.Map">
 		UPDATE post SET
 		post_notice=#{post_notice} WHERE post_id=#{post_id}
+	</update>
+
+	<update id="changeParamDelete" parameterType="java.util.Map">
+		UPDATE post SET
+		post_del=#{post_delete} WHERE post_id=#{post_id}
+	</update>
+
+	<select id="getNoticeList"
+		resultType="kr.co.forearlybird.domain.Post">
+		SELECT * FROM post WHERE post_notice=1 and brd_id = 1
+	</select>
+
+	<insert id="P_makeNotice"
+		parameterType="kr.co.forearlybird.domain.Post">
+		insert into
+		post(brd_id,mem_userid,post_title,post_content,post_datetime,post_updated_datetime,post_notice)
+		values(#{brd_id},#{mem_userid},#{post_title},#{post_content},now(),now(),#{post_notice})
+	</insert>
+
+	<update id="P_updateNotice"
+		parameterType="kr.co.forearlybird.domain.Post">
+		update post
+		set
+		post_title =
+		#{post_title},post_content=#{post_content},post_updated_datetime=now()
+		where
+		post_id = #{post_id}
+	</update>
+
+	<update id="dropNoticePost" parameterType="java.lang.Integer">
+		update post set
+		post_del = 1, post_notice = 0 where post_id = #{post_id}
+	</update>
+
+	<update id="updatePostDel" parameterType="java.util.Map">
+		update post set
+		post_del = ${post_del} where post_id = #{post_id}
 	</update>
 </mapper>

@@ -52,7 +52,6 @@
 				"brd_num" : brd_num
 			},
 			success : function(data) {
-				alert(data);
 				var b = $(data).find("#menu_btn");
 				$("#menu_btn").html(b);
 			}

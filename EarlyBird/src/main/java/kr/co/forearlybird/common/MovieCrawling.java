@@ -57,16 +57,13 @@ public class MovieCrawling {
 				pstmt = conn.prepareStatement(sql);
 				rs = pstmt.executeQuery();
 				int cnt = 0;
-				System.out.println("1");
 				while (rs.next()) { //페이지 줘까치 만들었내;; ㅋㅋㅋㅋㅋㅋ ㅇㅈ
-					System.out.println("2");
 					cnt = rs.getInt(1);
 					System.out.println("while cnt = "+ cnt);
 				}
 				if (cnt == 0) { // DB가 아예 없을 때
 					sql = "insert into content(brd_id,cnt_title,cnt_thumbnail,cnt_connectlink,cnt_datetime,cnt_updated_datetime,cnt_comment_updated_datetime)"
 							+ " values('"+brd_id+"',?,?,?,now(),now(),now())";
-						System.out.println("3");	
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, cnt_title);
 					pstmt.setString(2, cnt_thumbnail);
@@ -76,15 +73,12 @@ public class MovieCrawling {
 					sql = "select cnt_title from content where brd_id="+brd_id;
 					pstmt = conn.prepareStatement(sql);
 					rs = pstmt.executeQuery();
-					System.out.println("4");
 					while (rs.next() && !done) { 
 						System.out.println(rs.getString(1));
 						if (rs.getString(1).equals(e.select(".box-contents").select(".title").text())) { //ㄱㄱ
-							System.out.println("5");
 							done=true; 
 							break;
 						} else {
-							System.out.println("혹시 안들어오니?");
 							sql = "insert into content(brd_id,cnt_title,cnt_thumbnail,cnt_connectlink,cnt_datetime,cnt_updated_datetime,cnt_comment_updated_datetime)"
 									+ " values('"+brd_id+"',?,?,?,now(),now(),now())";
 							pstmt = conn.prepareStatement(sql);
@@ -93,7 +87,6 @@ public class MovieCrawling {
 							pstmt.setString(3, mainURL + cnt_link);
 							pstmt.executeUpdate();
 						}
-						System.out.println("여기는?");
 						break;
 					}
 				}

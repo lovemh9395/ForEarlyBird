@@ -1,5 +1,6 @@
 package kr.co.forearlybird.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import kr.co.forearlybird.domain.Reply;
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 @Repository
 public class ReplyDAOImpl implements ReplyDAO {
 	private static final Logger logger = LoggerFactory.getLogger(MemberDAO.class);
@@ -18,7 +20,6 @@ public class ReplyDAOImpl implements ReplyDAO {
 	@Autowired
 	SqlSession sqlSession;
 	
-	@SuppressWarnings("rawtypes")
 	@Override
 	public int R_make(Map map) {
 		logger.info("댓글 쓰기 DAO");
@@ -36,7 +37,6 @@ public class ReplyDAOImpl implements ReplyDAO {
 		return sqlSession.selectList("reply.R_list",post_id);
 	}
 	
-	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Reply> replylistCriteria(Map map) throws Exception {
 		logger.info("페이징처리3 DAO");
@@ -44,10 +44,42 @@ public class ReplyDAOImpl implements ReplyDAO {
 	}
 	
 	
-	@SuppressWarnings("rawtypes")
 	@Override
 	public int replyCountPaging(Map map) throws Exception {
 		logger.info("reply 페이징처리4 DAO");
 		return sqlSession.selectOne("reply.replyCountPaging", map);
+	}
+
+	@Override
+	public List<Reply> getReplyList(String mem_userid) {
+		logger.info("getReplyList DAO");
+		return sqlSession.selectList("reply.getReplyList", mem_userid);
+	}
+
+	@Override
+	public int getReplyNumWritenBy(String mem_userid) {
+		logger.info("getReplyNumWritenBy DAO");
+		return sqlSession.selectOne("reply.getReplyNumWritenBy", mem_userid);
+	}
+
+	@Override
+	public int getReplyNumWritenBy(Map map) {
+		logger.info("getReplyNumWritenBy DAO");
+		return sqlSession.selectOne("reply.getReplyNumWritenByMap", map);
+	}
+
+	@Override
+	public List<Reply> getReplyList(String mem_userid, int rpl_del) {
+		Map map = new HashMap();
+		map.put("mem_userid", mem_userid);
+		map.put("rpl_del", rpl_del);
+		logger.info("getReplyList DAO");
+		return sqlSession.selectList("reply.getReplyListbyMap", map);
+	}
+
+	@Override
+	public void updateReplyDel(Map tmp) {
+		logger.info("updateReplyDel DAO");
+		sqlSession.update("reply.updateReplyDel", tmp);
 	}
 }

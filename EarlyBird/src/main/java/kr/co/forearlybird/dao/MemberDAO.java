@@ -7,20 +7,20 @@ import kr.co.forearlybird.domain.Member;
 import kr.co.forearlybird.domain.Post;
 import kr.co.forearlybird.domain.Reply;
 
+@SuppressWarnings("rawtypes")
 public interface MemberDAO  {
-	@SuppressWarnings("rawtypes")
 	public Map login(Map<String, Object> map) throws Exception;
 	
 	public int make(Member member);
 	
-	public Member detail(String id);
+	public Member detail(String mem_userid);
 	
-	@SuppressWarnings("rawtypes")
 	public Map update(Map<String, Object> map);
 	
-	public int delete(String id);
+	public int delete(String mem_userid);
 	
-	@SuppressWarnings("rawtypes")
+	public void release(String mem_userid);
+	
 	public int profile(Map middlemap);
 	
 	public String searchID(Member member);
@@ -33,44 +33,47 @@ public interface MemberDAO  {
 	
 	public void searchPWD(Member vo, String mem_password) throws Exception;
 
-	@SuppressWarnings("rawtypes")
 	public String getrawPw(Map map);
 	
 	//내 글 보기 페이징 및 보여주기
-	@SuppressWarnings("rawtypes")
 	public List<Post> listCriteria(Map map) throws Exception;
 	
-	@SuppressWarnings("rawtypes")
 	public int countPaging(Map map) throws Exception;
 	
 	//내 댓글 보기 페이징 및 보여주기
-	@SuppressWarnings("rawtypes")
 	public List<Reply> myreplylistCriteria(Map map) throws Exception;
 	
-	@SuppressWarnings("rawtypes")
 	public int myreplycountPaging(Map map) throws Exception;
 	
-	public void mem_logintime(String id);
+	public void mem_logintime(String mem_userid);
 	
 	public int CheckId(String formId) throws Exception;
 	
-	@SuppressWarnings("rawtypes")
 	public int CheckPass(Map map);
 	
 	public String getMemberNickName(String mem_userid);
 
-	@SuppressWarnings("rawtypes")
 	public List<Map> getMemberList(Map map);
 
-	@SuppressWarnings("rawtypes")
 	public List<Map> getMemberListByMinLevel(int minlevel);
 
-											   
-	@SuppressWarnings("rawtypes")
-	public List getMemberListLikesThisName(String string);
-	
+	public List getMemberListLikesThisName(String mem_nickname);
+
+	public List<Member> getMemberList();
+
+	public List<Member> searchMemberList(Map map);
+
+	public List<Member> getAdminList();
+
+	public List<Member> searchAdminCandidateList(Map map);
+
+	public void ban(String mem_userid);
+
+	public void memberAuthUpdate(Map tmp);
+
+	public List<Member> getBanMemberList();
+
+	int searchPWDcheck(Map map);
+
 	public int CheckLevel(Map map);
-	
-	public int searchPWDcheck(Map map);
-	
 }

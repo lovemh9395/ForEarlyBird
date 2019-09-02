@@ -36,6 +36,7 @@ import kr.co.forearlybird.paging.replyPageMaker;
 import kr.co.forearlybird.service.ContentService;
 import kr.co.forearlybird.service.MemberService;
 
+@SuppressWarnings({ "unchecked", "rawtypes" })
 @Controller
 @RequestMapping(value = "member")
 public class MemberController {
@@ -58,7 +59,6 @@ public class MemberController {
 	}
 
 	// 로그인 처리하기
-	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/M_login", method = RequestMethod.POST)
 	public String login(HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model)
 			throws Exception {
@@ -164,7 +164,6 @@ public class MemberController {
 	}
 
 	// 내 글 보기
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value = "/M_list", method = RequestMethod.GET)
 	public String M_list(HttpServletRequest request, @ModelAttribute("cri") Criteria cri, Model model, Map map,
 			HttpSession session) throws Exception {
@@ -225,7 +224,6 @@ public class MemberController {
 	}
 
 	// 프로필 업로드 입니당
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/upload")
 	public String upload(HttpSession session, Model model, @RequestParam("file1") MultipartFile file,
 			HttpServletRequest request) throws Exception {
@@ -334,7 +332,6 @@ public class MemberController {
 		return 0;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@ResponseBody
 	@RequestMapping(value = "/login_Check", method = { RequestMethod.GET, RequestMethod.POST })
 	public int login_Check(HttpServletRequest request, Map map) throws Exception {
