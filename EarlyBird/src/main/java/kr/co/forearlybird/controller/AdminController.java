@@ -63,19 +63,16 @@ public class AdminController {
 		return "admin/A_adminList";
 	}
 
-	@RequestMapping(value = "/A_adminUpdate", method = RequestMethod.GET)
-	public String A_adminUpdate(String[] checkedList, String[] authList, HttpSession session, Model model) {
+	@RequestMapping(value = "/A_adminUpdate", method = RequestMethod.POST)
+	public String A_adminUpdate(String[] checkedList, int[] AuthList, HttpSession session, Model model) {
 		logger.info("회원 등급변경 페이지");
-		Map map = new HashMap();
-		List<String> checklist = new ArrayList<>();
-		List<String> memberAuthList = new ArrayList<>();
+		List checklist = new ArrayList<>();
+		List memberAuthList = new ArrayList<>();
 		for (int i = 0; i < checkedList.length; i++) {
 			checklist.add(checkedList[i]);
-			memberAuthList.add(authList[i]);
+			memberAuthList.add(AuthList[i]);
 		}
-		map.put("checklist", checklist);
-		map.put("authlist", memberAuthList);
-		service.memberAuthUpdate(map);
+		service.memberAuthUpdate(checklist, memberAuthList);
 		model.addAttribute("memberList", service.getAdminList());
 		return "admin/A_adminList";
 	}
@@ -122,6 +119,28 @@ public class AdminController {
 		model.addAttribute("adminNicknames", adminNicknames);
 		model.addAttribute("adminList", adminList);
 
+		return "admin/A_boardAdminList";
+	}
+	
+	@RequestMapping(value = "/A_boardAdminDelete", method = { RequestMethod.GET, RequestMethod.POST })
+	public String A_boardAdminDelete(HttpServletRequest request, HttpSession session, Model model) {
+		logger.info("게시판 관리자 변경 페이지");
+		int brd_id = Integer.parseInt(request.getParameter("brd_id"));
+		String mem_userid = request.getParameter("mem_userid");
+		
+		Map map = new HashMap();
+		map.put("brd_id", brd_id);
+		map.put("mem_userid", mem_userid);
+		
+		service.deleteAdmin(map);
+		
+		List<String> adminNicknames = service.getAdminNickname(brd_id);
+		List<Map> adminList = service.getMemberListForBoardAdmin();
+		
+		model.addAttribute("brd_id", brd_id);
+		model.addAttribute("adminNicknames", adminNicknames);
+		model.addAttribute("adminList", adminList);
+		
 		return "admin/A_boardAdminList";
 	}
 
@@ -227,12 +246,78 @@ public class AdminController {
 		}
 		return "admin/A_memberDetail";
 	}
+	
+	@RequestMapping(value = "/A_memberPostListUpdate", method = RequestMethod.POST)
+	public String A_memberPostListUpdate(String[] checkedList, String[] isDelList, HttpServletRequest request, HttpSession session, Model model) throws Exception {
+		logger.info("회원 작성글 열람 페이지");
+		Map map = new HashMap();
+		List<String> checklist = new ArrayList<>();
+		List<String> dellist = new ArrayList<>();
+		for (int i = 0; i < checkedList.length; i++) {
+			checklist.add(checkedList[i]);
+			dellist.add(isDelList[i]);
+		}
+		map.put("checklist", checklist);
+		map.put("dellist", dellist);
+		service.updatePost(map);
+		
+		String mem_userid = request.getParameter("mem_userid");
+		if (service.getPostNumWritenBy(mem_userid) > 0) {
+			model.addAttribute("postList", service.getPostListFromWriter(mem_userid));
+		}
+		if (service.getReplyNumWritenBy(mem_userid) > 0) {
+			model.addAttribute("replyList", service.getRplListFromWriter(mem_userid));
+		}
+		model.addAttribute("mem_userid", mem_userid);
+		model.addAttribute("mem_nickname", service.getNickname(mem_userid));
+		return "admin/A_memberDetail";
+	}
+	
+	@RequestMapping(value = "/A_memberReplyListUpdate", method = RequestMethod.POST)
+	public String A_memberReplyListUpdate(String[] checkedList, String[] isDelList, HttpServletRequest request, HttpSession session, Model model) throws Exception {
+		logger.info("회원 작성글 열람 페이지");
+		Map map = new HashMap();
+		List<String> checklist = new ArrayList<>();
+		List<String> dellist = new ArrayList<>();
+		for (int i = 0; i < checkedList.length; i++) {
+			checklist.add(checkedList[i]);
+			dellist.add(isDelList[i]);
+		}
+		map.put("checklist", checklist);
+		map.put("dellist", dellist);
+		service.updateReply(map);
+		
+		String mem_userid = request.getParameter("mem_userid");
+		if (service.getPostNumWritenBy(mem_userid) > 0) {
+			model.addAttribute("postList", service.getPostListFromWriter(mem_userid));
+		}
+		if (service.getReplyNumWritenBy(mem_userid) > 0) {
+			model.addAttribute("replyList", service.getRplListFromWriter(mem_userid));
+		}
+		model.addAttribute("mem_userid", mem_userid);
+		model.addAttribute("mem_nickname", service.getNickname(mem_userid));
+		return "admin/A_memberDetail";
+	}
 
 	// 회원 글 보기
-	@RequestMapping(value = "/A_memberPostList", method = RequestMethod.GET)
-	public String A_memberPostList(HttpSession session, Model model) {
+	@RequestMapping(value = "/A_memberPostList", method = RequestMethod.POST)
+	public String A_memberPostList(HttpServletRequest request, HttpSession session, Model model) throws Exception {
 		logger.info("회원 글 보기 페이지");
-		return "admin/A_memberPostList";
+		String mem_userid = request.getParameter("mem_userid");
+		String post_del = request.getParameter("post_del");
+		if (!post_del.equals("none")) {
+			Map map = new HashMap();
+			map.put("mem_userid", mem_userid);
+			map.put("post_del", post_del);
+			if (service.getPostNumWritenBy(map) > 0) {
+				model.addAttribute("postList", service.getPostListFromWriter(map));
+			}
+		} else {
+			if (service.getPostNumWritenBy(mem_userid) > 0) {
+				model.addAttribute("postList", service.getPostListFromWriter(mem_userid));
+			}
+		}
+		return "admin/A_memberDetail";
 	}
 
 	// 회원 글 이관
@@ -243,10 +328,24 @@ public class AdminController {
 	}
 
 	// 회원 댓글 보기
-	@RequestMapping(value = "/A_memberReplyList", method = RequestMethod.GET)
-	public String A_memberReplyList(HttpSession session, Model model) {
+	@RequestMapping(value = "/A_memberReplyList", method = RequestMethod.POST)
+	public String A_memberReplyList(HttpServletRequest request, HttpSession session, Model model) throws Exception {
 		logger.info("회원 댓글 보기 페이지");
-		return "admin/A_memberReplyList";
+		String mem_userid = request.getParameter("mem_userid");
+		String rpl_del = request.getParameter("rpl_del");
+		if (!rpl_del.equals("none")) {
+			Map map = new HashMap();
+			map.put("mem_userid", mem_userid);
+			map.put("rpl_del", rpl_del);
+			if (service.getReplyNumWritenBy(map) > 0) {
+				model.addAttribute("replyList", service.getRplListFromWriter(map));
+			}
+		} else {
+			if (service.getReplyNumWritenBy(mem_userid) > 0) {
+				model.addAttribute("replyList", service.getRplListFromWriter(mem_userid));
+			}
+		}
+		return "admin/A_memberDetail";
 	}
 
 	// 회원 댓글 이관

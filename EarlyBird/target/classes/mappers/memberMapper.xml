@@ -219,7 +219,7 @@
 	
 	<select id="getBanMemberList"
 		resultType="kr.co.forearlybird.domain.Member">
-		SELECT * FROM member WHERE mem_level = 1 and mem_level = 6
+		SELECT * FROM member WHERE mem_level = 1 or mem_level = 6
 	</select>
 
 	<select id="getAdminList"
@@ -235,7 +235,7 @@
 
 	<select id="searchForAdminList"
 		resultType="kr.co.forearlybird.domain.Member">
-		SELECT * FROM member WHERE mem_level != 9 and mem_level != 8
+		SELECT * FROM member WHERE (mem_level = 2 or mem_level = 3 or mem_level = 8)
 		<include refid="searchKeywordToType"></include>
 	</select>
 

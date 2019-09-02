@@ -155,11 +155,48 @@ function changeAdmin(mem_userid,brd_id){
 	});
 }
 
+function deleteAdmin(mem_userid,brd_id){
+	var result = false;
+	$.ajax({
+		async:false,
+		type:"post",
+		url:"${contextPath}/admin/A_checkAdminId",
+		data:{"brd_id":brd_id ,"mem_userid":mem_userid},
+		success:function(data){
+			if (data>0) {
+				var datum = {"brd_id":brd_id ,"mem_userid":mem_userid}
+				deladmin(datum);
+			} else {
+				alert("관리자가 아닌 계정입니다.");
+			}
+		}
+	});
+}
+
 function makeadmin(datum){
 	$.ajax({
 		async:false,
 		type:"post",
 		url:"${contextPath}/admin/A_boardAdminUpdate",
+		data:datum,
+		success:function(data){
+			$("#modal-admin").on("shown.bs.modal", function(){
+				$(".modal-backdrop").remove();
+			});
+			$("#formodal").html(data);
+			$("#modal-admin").modal({
+				show:true,
+				backdrop:false
+			});
+		}
+	});
+}
+
+function deladmin(datum){
+	$.ajax({
+		async:false,
+		type:"post",
+		url:"${contextPath}/admin/A_boardAdminDelete",
 		data:datum,
 		success:function(data){
 			$("#modal-admin").on("shown.bs.modal", function(){

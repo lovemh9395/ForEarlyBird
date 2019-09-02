@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%
 	request.setCharacterEncoding("UTF-8");
 %>
@@ -53,21 +54,28 @@
 								</thead>
 								<div style="width: 746px" class="row">
 									<div class="col-2">현재 관리자</div>
-									<div class="col-auto">
-										<c:forEach items="${adminNicknames }" var="list">
+									<div id="adminlist" class="col-auto">
+										<c:forEach items="${adminNicknames }" var="list"
+											varStatus="status">
 											<c:out value="${list }  " />
+											<input type="hidden" name="list" value="${list }">
 										</c:forEach>
 									</div>
 								</div>
 								<tbody>
-									<c:forEach items="${adminList }" var="list" varStatus="status">
+									<c:forEach items="${adminList}" var="list" varStatus="status">
 										<tr>
 											<td>${status.count }</td>
 											<td>${list.mem_userid }</td>
-											<td>${list.mem_nickname }</td>
+											<td>${list.mem_nickname }<input type="hidden"
+												name="nickname" value="${status.count }"> <input
+												type="hidden" id="nickname_${status.count }"
+												value="${list.mem_nickname }"> <input type="hidden"
+												id="id_${status.count }" value="${list.mem_userid}">
+											</td>
 											<td>${list.mem_levelname }</td>
-											<td><input type="button" style="float: right"
-												class="btn btn-default"
+											<td id="target_${status.count }"><input type="button"
+												style="float: right"
 												onclick="changeAdmin('${list.mem_userid}', ${brd_id});"
 												data-backdrop="false" value="추가"></td>
 										</tr>
@@ -81,4 +89,29 @@
 		</div>
 	</div>
 </div>
+<script>
+function getNamesValue() {
+	var resultArray = [];
+	$("input[name='list']").each(function() {
+		resultArray.push($(this).val());
+	});
+	return resultArray;
+};
+
+$(document).ready(function(){
+	var adminList = getNamesValue()
+	$("input[name='nickname']").each(function() {
+		var list = adminList;
+		var cnt = $(this).val();
+		var nick = "#nickname_"+cnt;
+		var id = "#id_"+cnt;
+		var target = "#target_"+cnt;
+		if (list.includes($(nick).val())) {
+			var name=$(id).val();
+			var tag = "<input type=button onclick=deleteAdmin('"+name+"',${brd_id}); value=해제>";
+			$(target).append(tag);
+		}
+	});
+});
+</script>
 <!-- end of body -->

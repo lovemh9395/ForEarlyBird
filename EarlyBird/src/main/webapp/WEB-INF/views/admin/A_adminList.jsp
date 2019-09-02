@@ -61,10 +61,13 @@
 					<%-- JSTL, EL을 이용한 동적 데이터 출력 --%>
 					<c:forEach var="list" items="${memberList}" varStatus="Status">
 						<tr>
-							<td><input type="checkbox" name="chk" value="${mem_userid}"><input
-								type="hidden" name="chk_${list.mem_userid}" value="${list.mem_level}"></td>
+							<td><input type="checkbox" name="chk" value="${Status.count}">
+								<input type="hidden" id="id_${Status.count }" value="${list.mem_userid}">
+								<input type="hidden" id="chk_${Status.count }" value="${list.mem_level}">
+								</td>
 							<td>${Status.count}</td>
-							<td><a href="${contextPath }/admin/A_memberDetail?mem_userid=${list.mem_userid}<">${list.mem_userid}</a></td>
+							<td><a
+								href="${contextPath }/admin/A_memberDetail?mem_userid=${list.mem_userid}">${list.mem_userid}</a></td>
 							<td>${list.mem_nickname}</td>
 							<td>${list.mem_levelname}</td>
 							<td>${list.mem_phone}</td>
@@ -80,7 +83,8 @@
 	function getCheckedValue() {
 		var resultArray = [];
 		$("input[name='chk']:checked").each(function() {
-			resultArray.push($(this).val());
+			var index = "#id_" + $(this).val();
+			resultArray.push($(index).val());
 		});
 		return resultArray;
 	};
@@ -88,11 +92,8 @@
 	function getAuthWhoChecked() {
 		var resultArray = [];
 		$("input[name='chk']:checked").each(function() {
-			var tmp = "#chk_" + $(this).val();
-			if ($(this).val()==1||$(this).val()==4||$(this).val()==5||$(this).val()==6||$(this).val()==7) {
-				return null;
-			}
-			resultArray.push($(tmp).val());
+			var index = "#chk_" + $(this).val();
+			resultArray.push($(index).val());
 		});
 		return resultArray;
 	};
@@ -156,12 +157,14 @@
 			var AuthList = getAuthWhoChecked();
 			var query = {
 				"checkedList" : checkedList,
-				"authList" : AuthList
+				"AuthList" : AuthList
 			};
-			if (checkedList[0] == null||AuthList == null) {
+
+			if (checkedList[0] == "") {
 				alert("올바른 항목을 선택하여 주십시오");
 			} else {
 				if (confirm("선택된 회원의 등급을 변경하시겠습니까?")) {
+					alert(query.checkedList + " / " + query.AuthList)
 					$.ajax({
 						traditional : true,
 						async : false,

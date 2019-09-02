@@ -10,7 +10,8 @@
 
 	<select id="checkAdminId" parameterType="java.util.Map"
 		resultType="java.lang.Integer">
-		SELECT IFNULL(SUM(bam_id) ,0) FROM boardadmin WHERE brd_id = #{brd_id}
+		SELECT IFNULL(SUM(bam_id) ,0) FROM boardadmin WHERE brd_id
+		= #{brd_id}
 		AND mem_userid = #{mem_userid}
 	</select>
 
@@ -18,4 +19,9 @@
 		INSERT INTO
 		boardadmin(brd_id, mem_userid) VALUES(#{brd_id},#{mem_userid})
 	</insert>
+
+	<delete id="deleteAdmin" parameterType="java.util.Map">
+		DELETE FROM boardadmin
+		WHERE brd_id = #{brd_id} and mem_userid = #{mem_userid};
+	</delete>
 </mapper>

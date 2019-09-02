@@ -40,14 +40,32 @@
 		where post_id = #{post_id} and rpl_del =
 		0
 	</select>
-	
+
 	<select id="getReplyList" parameterType="java.lang.String"
 		resultType="kr.co.forearlybird.domain.Reply">
 		SELECT * FROM reply WHERE mem_userid=#{mem_userid}
 	</select>
-	
-	<select id="getReplyNumWritenBy" parameterType="java.lang.String"
-		resultType="java.lang.Integer">
-		SELECT COUNT(*) FROM reply WHERE mem_userid=#{mem_userid}
+
+	<select id="getReplyListbyMap" parameterType="java.util.Map"
+		resultType="kr.co.forearlybird.domain.Reply">
+		SELECT * FROM reply WHERE mem_userid=#{mem_userid} and
+		rpl_del=#{rpl_del}
 	</select>
+
+	<select id="getReplyNumWritenBy"
+		parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM reply
+		WHERE mem_userid=#{mem_userid}
+	</select>
+
+	<select id="getReplyNumWritenByMap"
+		parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM reply
+		WHERE mem_userid=#{mem_userid} and rpl_del=#{rpl_del}
+	</select>
+
+	<update id="updateReplyDel" parameterType="java.util.Map">
+		update reply set
+		rpl_del = #{rpl_del} where rpl_id = #{rpl_id}
+	</update>
 </mapper>

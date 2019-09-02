@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -59,12 +60,12 @@ public class AdminServiceImpl implements AdminService {
 	private JavaMailSender mailSender;
 
 	// ------------------------------------------
-	private static final String[] levelname = { "차단회원", "비회원", "미인증 회원", "인증 회원", "탈퇴 회원", "장기 미접속 회원", "기간 차단 회원",
+	private static final String[] levelname = { "비회원", "차단회원", "미인증 회원", "인증 회원", "탈퇴 회원", "장기 미접속 회원", "기간 차단 회원",
 			"(공석)", "스태프", "관리자" };
 	private static final String[] keyword = { "회원", "스태프", "관리자" };
 	private static final int[] keywordToLevel = { 3, 8, 9 }; // 3 8 9
-	private static final String[] Authname = { "비회원", "회원", "관리자" };
-	private static final int[] Authlvl = { 1, 2, 8 };
+	private static final String[] Authname = { "차단회원", "미 인증 회원", "인증 회원", "관리자" };
+	private static final int[] Authlvl = { 1, 2, 3, 8 };
 
 	private String changeLevelToName(int mem_level) {
 		String result = null;
@@ -153,15 +154,9 @@ public class AdminServiceImpl implements AdminService {
 		result.setMem_nickname(memberDAO.getMemberNickName(post.getMem_userid()));
 		return result;
 	}
-	
-	/*
-	 * private String DateToString(Date from) throws ParseException {
-	 * SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd"); String to
-	 * = transFormat.format(from); return to; }
-	 */
 
 	private LocalDate simpledate(Date date) throws ParseException {
-		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
 		String dateString = transFormat.format(date);
 		LocalDate local = LocalDate.parse(dateString);
 		return local;
@@ -400,6 +395,12 @@ public class AdminServiceImpl implements AdminService {
 	public int updateAdmin(Map map) {
 		logger.info("updateAdmin");
 		return boardAdminDAO.makeAdmin(map);
+	}
+	
+	@Override
+	public void deleteAdmin(Map map) {
+		logger.info("deleteAdmin");
+		boardAdminDAO.deleteAdmin(map);
 	}
 
 	@Override
@@ -686,16 +687,14 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public void memberAuthUpdate(Map map) {
+	public void memberAuthUpdate(List checklist, List memberAuthList) {
 		logger.info("memberAuthUpdate");
-		List<String> checklist = (List<String>) map.get("checklist");
-		List<Integer> authlist = (List<Integer>) map.get("authlist");
 		for (int i = 0; i < checklist.size(); i++) {
-			if (authlist.get(i) != 1 || authlist.get(i) != 4 || authlist.get(i) != 5 || authlist.get(i) != 6
-					|| authlist.get(i) != 7) {
+			int auth = (int) memberAuthList.get(i);
+			if (auth == 2 || auth == 3 || auth == 8) {
 				Map tmp = new HashMap();
 				tmp.put("mem_userid", checklist.get(i));
-				if (authlist.get(i) > 7) {
+				if (auth > 7) {
 					tmp.put("mem_level", 3);
 				} else {
 					tmp.put("mem_level", 8);
@@ -751,11 +750,12 @@ public class AdminServiceImpl implements AdminService {
 
 	private Map castReplyVOtoMap(Reply reply) throws Exception {
 		Map result = new HashMap();
-		result.put("mem_userid",reply.getMem_userid());
+		result.put("mem_userid", reply.getMem_userid());
 		result.put("post_id", reply.getPost_id());
 		result.put("rpl_id", reply.getRpl_id());
 		result.put("rpl_content", reply.getRpl_content());
 		result.put("rpl_del", reply.getRpl_del());
+		result.put("rpl_datetime", reply.getRpl_datetime());
 		result.put("rpl_simpletime", simpledate(reply.getRpl_datetime()));
 		return result;
 	}
@@ -770,5 +770,84 @@ public class AdminServiceImpl implements AdminService {
 	public int getReplyNumWritenBy(String mem_userid) {
 		logger.info("getRplListFromWriter");
 		return replyDAO.getReplyNumWritenBy(mem_userid);
+	}
+
+	@Override
+	public int getPostNumWritenBy(Map map) {
+		logger.info("getRplListFromWriter");
+		return postDAO.getPostNumWritenBy(map);
+	}
+
+	@Override
+	public List<A_postListDTO> getPostListFromWriter(Map map) throws Exception {
+		logger.info("getPostListFromWriter");
+		String mem_userid = (String) map.get("mem_userid");
+		int post_del = Integer.parseInt((String) map.get("post_del"));
+		List<A_postListDTO> result = new ArrayList();
+		List<Post> postList = postDAO.getPostList(mem_userid, post_del);
+		for (int i = 0; i < postList.size(); i++) {
+			int brd_id = (int) postList.get(i).getBrd_id(); // brd_id 추출
+			Map tmp = boardDAO.getLargeAndCategoryid(brd_id); // large_id, category_id 추출
+			A_postListDTO dto = castVOtoDTO(postList.get(i), largecategoryDAO.getLargeName((int) tmp.get("large_id")),
+					categoryDAO.getCategoryName((int) tmp.get("category_id")));
+			result.add(dto);
+		}
+		return result;
+	}
+
+	@Override
+	public int getReplyNumWritenBy(Map map) {
+		logger.info("getRplListFromWriter");
+		return replyDAO.getReplyNumWritenBy(map);
+	}
+
+	@Override
+	public List<Map> getRplListFromWriter(Map map) throws Exception {
+		logger.info("getRplListFromWriter");
+		String mem_userid = (String) map.get("mem_userid");
+		int rpl_del = Integer.parseInt((String) map.get("rpl_del"));
+		List<Map> result = new ArrayList();
+		List<Reply> replyList = replyDAO.getReplyList(mem_userid, rpl_del);
+		for (int i = 0; i < replyList.size(); i++) {
+			result.add(castReplyVOtoMap(replyList.get(i)));
+		}
+		return result;
+	}
+
+	@Override
+	public void updatePost(Map map) {
+		logger.info("updatePost");
+		List<String> checklist = (List<String>) map.get("checklist");
+		List<String> isDelList = (List<String>) map.get("dellist");
+		for (int i = 0; i < checklist.size(); i++) {
+			Map tmp = new HashMap();
+			int delnum = Integer.parseInt(isDelList.get(i));
+			if (delnum == 1) {
+				tmp.put("post_del", delnum - 1);
+			} else {
+				tmp.put("post_del", delnum + 1);
+			}
+			tmp.put("post_id", checklist.get(i));
+
+			postDAO.updatePostDel(tmp);
+		}
+	}
+
+	@Override
+	public void updateReply(Map map) {
+		logger.info("updateReply");
+		List<String> checklist = (List<String>) map.get("checklist");
+		List<String> isDelList = (List<String>) map.get("dellist");
+		for (int i = 0; i < checklist.size(); i++) {
+			Map tmp = new HashMap();
+			int delnum = Integer.parseInt(isDelList.get(i));
+			if (delnum == 1) {
+				tmp.put("rpl_del", delnum - 1);
+			} else {
+				tmp.put("rpl_del", delnum + 1);
+			}
+			tmp.put("rpl_id", checklist.get(i));
+			replyDAO.updateReplyDel(tmp);
+		}
 	}
 }

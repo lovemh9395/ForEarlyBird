@@ -54,6 +54,7 @@
 				</div>
 			</form>
 			<!-- Navigation --> <!-- nav-link active처리, 페이징 처리시 아이콘변경 -->
+			<hr class="my-3">
 			<h6 class="navbar-heading text-muted">site Management</h6>
 			<ul class="navbar-nav">
 				<li class="nav-item"><a class="nav-link"
@@ -96,18 +97,6 @@
 				<li class="nav-item"><a class="nav-link"
 					href="../admin/A_memberList?mem_level=1"> <i
 						class="ni ni-circle-08 text-black"></i> 블랙리스트 관리
-				</a></li>
-			</ul>
-			<hr class="my-3">
-			<h6 class="navbar-heading text-muted">Summary</h6>
-			<ul class="navbar-nav">
-				<li class="nav-item"><a class="nav-link"
-					href="./examples/register.html"> <i
-						class="ni ni-calendar-grid-58 text-gray"></i> 일간 현황 분석
-				</a></li>
-				<li class="nav-item"><a class="nav-link"
-					href="${contextPath }/admin/dashboard/"> <i
-						class="ni ni-chart-pie-35 text-green"></i> 사이트 요약 분석
 				</a></li>
 			</ul>
 			<!-- Divider -->
