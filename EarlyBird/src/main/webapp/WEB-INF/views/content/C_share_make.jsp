@@ -1,140 +1,118 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%
-	request.setCharacterEncoding("UTF-8");
-%>
-<c:set var="contextPath" value="${pageContext.request.contextPath}" />
-<!DOCTYPE html>
-<html lang="en">
-<!--   Core   -->
-<%@ include file="../include/core.jsp"%>
-<!--  end Core -->
-<!-- head -->
-<%@ include file="../include/head.jsp"%>
-<!-- end head -->
-<script type="text/javascript"
-	src="${contextPath }/resources/smarteditor/js/HuskyEZCreator.js"></script>
+<!-- Modal -->
 <style>
-.nse_content {
-	width: 1650px;
-	height: 700px;
+.modal-backdrop {
+	z-index: auto;
+}
+
+.modal-backdrop {
+	z-index: -1;
+}
+
+.file_input_textbox {
+	float: left
+}
+
+.file_input_div {
+	position: relative;
+	width: 100px;
+	height: 30px;
+	overflow: hidden;
+}
+
+.file_input_button {
+	width: 100px;
+	position: absolute;
+	top: 0px;
+	background-color: #aaa;
+	color: #fff;
+	border-style: solid;
+}
+
+.file_input_hidden {
+	font-size: 70px;
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	opacity: 0;
+	filter: alpha(opacity = 0);
+	-ms-filter: "alpha(opacity=0)";
+	-khtml-opacity: 0;
+	-moz-opacity: 0;
 }
 </style>
-<body class="">
-	<!-- side bar -->
-	<%@ include file="../include/left_navbar.jsp"%>
-	<!-- end side bar -->
-	<div class="main-content">
-		<!-- main_header -->
-		<%@ include file="../include/main_navbar.jsp"%>
-		<!-- end main header -->
-		<!-- Header -->
-		<%@ include file="../include/main_header.jsp"%>
-		<!-- end Header -->
-		<!-- body -->
-		<div>
-			<input type="text" class="form-control" placeholder="제목을 입력해주세요." />
-			<table style="width: 1670px;">
-				<tr>
-					<td><textarea name="popContent" id="popContent"
-							class="nse_content"></textarea></td>
-				</tr>
-			</table>
+<script>
+	$(document).ready(function() {
+		$("#share_upload_button").click(function() {
+			if ($("#share_file").val() != null) {
+				console.log($("#share_file").val());
+				document.getElementById('share_upload').submit();
+			} else {
+				alert("사진을 넣어주세요");
+				return false;
+			}
+		});
+	});
+</script>
+<div class="modal fade" id="modal_share" tabindex="-1" role="dialog"
+	aria-labelledby="modal-form" aria-hidden="true">
+	<div id="share_modal"
+		class="modal-dialog modal-dialog-centered modal-sm" role="document">
+		<div class="modal-content" id="modal-content-login">
+			<div class="modal-body p-0">
+				<div class="card bg-secondary shadow border-0">
+					<div class="card-body px-lg-5 py-lg-5">
+						<div class="text-center text-muted mb-4">
+							<a class="navbar-brand pt-0"> <img
+								src="/resources/assets/img/brand/logo.png"
+								class="navbar-brand-img" alt="..."
+								style="width: 200px; height: auto;">
+							</a>
+						</div>
+						<form id="share_upload" method="post"
+							action="${contextPath }/content/C_share_make"
+							enctype="multipart/form-data">
+							<input type="hidden" name="brd_id" value="<%=request.getParameter("brd_id") %>">
+							<div class="form-group mb-3">
+								<div class="input-group input-group-alternative">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="ni ni-email-83"></i></span>
+									</div>
+									<input class="form-control" placeholder="타이틀" type="text"
+										id="share_title" name="share_title">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-group input-group-alternative">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+											class="ni ni-lock-circle-open"></i></span>
+									</div>
+									<input class="form-control" placeholder="link" type="text"
+										id="share_link" name="share_link">
+								</div>
+							</div>
+							<div class="form-group">
+								<input type="text" id="share_file" class="file_input_textbox"
+									readonly="readonly">
+								<div class="file_input_div">
+									<input type="button" value="파일선택" class="btn btn-sm btn-info">
+									<input type="file" class="file_input_hidden" name="file2"
+										onchange="javascript:document.getElementById('share_file').value = this.value.split('\\')[this.value.split('\\').length-1]">
+								</div>
+							</div>
+							<div class="text-center">
+								<input type="button" id="share_upload_button"
+									class="btn btn-primary my-4" value="글쓰기">
+								<button type="button" class="btn btn-primary my-4"
+									data-dismiss="modal">취소하기</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
 		</div>
-		<script type="text/javascript">
-			var oEditors = [];
-			
-
-			var sLang = "ko_KR"; // 언어 (ko_KR/ en_US/ ja_JP/ zh_CN/ zh_TW), default = ko_KR
-			// 추가 글꼴 목록
-			//var aAdditionalFontSet = [["MS UI Gothic", "MS UI Gothic"], ["Comic Sans MS", "Comic Sans MS"],["TEST","TEST"]];
-			nhn.husky.EZCreator
-					.createInIFrame({
-						oAppRef : oEditors,
-						elPlaceHolder : "popContent", //textarea ID
-						sSkinURI : "${contextPath }/resources/smarteditor/SmartEditor2Skin.html", //skin경로
-						htParams : {
-							bUseToolbar : true, // 툴바 사용 여부 (true:사용/ false:사용하지 않음)
-							bUseVerticalResizer : true, // 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
-							bUseModeChanger : true, // 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
-							//bSkipXssFilter : true,  // client-side xss filter 무시 여부 (true:사용하지 않음 / 그외:사용)
-							//aAdditionalFontList : aAdditionalFontSet,  // 추가 글꼴 목록
-							fOnBeforeUnload : function() {
-								//alert("완료!");
-							},
-							I18N_LOCALE : sLang
-						}, //boolean
-						fOnAppLoad : function() {
-							//예제 코드
-							//oEditors.getById["content"].exec("PASTE_HTML", ["로딩이 완료된 후에 본문에 삽입되는 text입니다."]);
-						},
-						fCreator : "createSEditor2"
-					});
-			function pasteHTML(filepath) {
-
-				// var sHTML = "<span style='color:#FF0000;'>이미지도 같은 방식으로 삽입합니다.<\/span>";
-				var sHTML = '<span style="color:#FF0000;"><img src="'+filepath+'"></span>';
-				oEditors.getById["popContent"].exec("PASTE_HTML", [ sHTML ]);
-
-			}
-
-			function showHTML() {
-				var sHTML = oEditors.getById["popContent"].getIR();
-				alert(sHTML);
-			}
-
-			function submitContents(elClickedObj) {
-				oEditors.getById["popContent"].exec("UPDATE_CONTENTS_FIELD", []); // 에디터의 내용이 textarea에 적용됩니다.
-
-				// 에디터의 내용에 대한 값 검증은 이곳에서 document.getElementById("content").value를 이용해서 처리하면 됩니다.
-
-				try {
-
-					var form2 = document.f;
-					if (!form2.name.value) {
-						alert("작성자 이름을 입력해 주십시오");
-						form2.name.focus();
-						return;
-					}
-
-					if (!form2.subject.value) {
-						alert("글제목을 입력해 주십시오.");
-						form2.subject.focus();
-						return;
-					}
-
-					if (document.getElementById("popContent").value == "<p><br></p>") {
-						alert("내용을 입력해 주세요.");
-						oEditors.getById["popContent"].exec("FOCUS", []);
-						return;
-					}
-
-					form2.action = "notice_write_ok.php";
-					//elClickedObj.form.submit();
-					form2.submit();
-				} catch (e) {
-					alert(e);
-				}
-			}
-
-			function setDefaultFont() {
-				var sDefaultFont = '궁서';
-				var nFontSize = 24;
-				oEditors.getById["popContent"].setDefaultFont(sDefaultFont,
-						nFontSize);
-			}
-
-			function writeReset() {
-				document.f.reset();
-				oEditors.getById["popContent"].exec("SET_IR", [ "" ]);
-
-			}
-		</script>
-		<!-- end body -->
 	</div>
-	<!--   Core   -->
-	<%@ include file="../include/core.jsp"%>
-	<!--  end Core -->
-</body>
-</html>
+</div>

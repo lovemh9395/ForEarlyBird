@@ -1,20 +1,33 @@
 package kr.co.forearlybird.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.jsoup.Connection.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.forearlybird.service.ContentService;
 
@@ -32,7 +45,7 @@ public class ContentController {
 		logger.info("컨텐츠게시글 목록 보기 Controller");
 		int idx = Integer.parseInt(request.getParameter("brd_id"));
 		model.addAttribute("list", service.C_list_M(idx));
-		
+
 		return "content/C_list_M";
 	}
 
@@ -72,20 +85,20 @@ public class ContentController {
 	@RequestMapping(value = "/C_detail", method = RequestMethod.GET)
 	public String C_detail(Model model) {
 		logger.info("컨텐츠게시글 상세보기 Controller");
-		
+
 		return "content/C_detail";
 	}
 
 	// 게시글 추천하기
 	@RequestMapping(value = "/C_recommand", method = { RequestMethod.GET, RequestMethod.POST })
 	public String C_recommend(HttpServletRequest request, HttpServletResponse response, HttpSession session,
-			@RequestParam int cnt_id,Model model ) {
+			@RequestParam int cnt_id, Model model) {
 		logger.info("컨텐츠게시글 추천하기 Controller");
 		int brd_id = 0;
 		if (request.getParameter("brd_id") != null) {
 			brd_id = Integer.parseInt(request.getParameter("brd_id"));
 		}
-		
+
 		Cookie[] cookies = request.getCookies();
 		Cookie viewCookies = null; // 비교하기 위해 새로운 쿠키
 
@@ -109,58 +122,62 @@ public class ContentController {
 			}
 		} else {// viewCookie가 null이 아닐경우 쿠키가 있으므로 조회수 증가 로직을 처리하지 않음.
 			// logger.info("게시물 추천 ----- cookie 있음");
-			viewCookies.getValue();// 쿠키 값 받아옴.
+			String value = viewCookies.getValue();// 쿠키 값 받아옴.
 			// logger.info("게시물 추천 ----- cookie 값 = " + value);
 		}
-		logger.info(""+brd_id);
+		logger.info("" + brd_id);
 		if (brd_id != 0) {
+			logger.info("國國國國國國國國國國國國國國國國國國國國國國國國國");
 			model.addAttribute("list", service.C_list_M(brd_id));
 			return "content/C_list_M";
 		} else {
+			logger.info("國國國國國國國國國國國國國國國國國國國國國國國國國");
 			model.addAttribute("list", service.Main_C_list());
 		}
 		return "Mainpage";
 	}
 
 	// 게시글 조회하기
-	@RequestMapping(value="C_view", method = {RequestMethod.GET,RequestMethod.POST})
-	public String C_view(HttpServletRequest request, HttpServletResponse response,@RequestParam int cnt_id,Model model) {
+	@RequestMapping(value = "C_view", method = { RequestMethod.GET, RequestMethod.POST })
+	public String C_view(HttpServletRequest request, HttpServletResponse response, @RequestParam int cnt_id,
+			Model model) {
 		logger.info("컨텐츠게시글 조회하기 Controller");
-		int brd_id=0;
-		if(request.getParameter("brd_id") != null) {
+		int brd_id = 0;
+		if (request.getParameter("brd_id") != null) {
 			brd_id = Integer.parseInt(request.getParameter("brd_id"));
 		}
 		Cookie[] cookie = request.getCookies();
 		Cookie viewCookie = null;
-		
-		if(cookie != null && cookie.length > 0) {
-			for(int i = 0; i < cookie.length; i++) {
-				if(cookie[i].getName().equals("cookie" + cnt_id)) {
+
+		if (cookie != null && cookie.length > 0) {
+			for (int i = 0; i < cookie.length; i++) {
+				if (cookie[i].getName().equals("cookie" + cnt_id)) {
 					viewCookie = cookie[i];
 				}
 			}
 		}
-		if(viewCookie == null) {
-			Cookie newCookie = new Cookie("cookie" + cnt_id, "|" +cnt_id + "|");
+		if (viewCookie == null) {
+			Cookie newCookie = new Cookie("cookie" + cnt_id, "|" + cnt_id + "|");
 			response.addCookie(newCookie);
 			int result = service.C_view(cnt_id);
-			if(result > 0) {
+			if (result > 0) {
 				logger.info("컨텐츠게시글 조회수 쿠키 Controller ----- 조회수 증가");
 			} else {
 				logger.info("컨텐츠게시글 조회수 쿠키 Controller ----- 조회수 증가 에러");
 			}
 		} else {
-			viewCookie.getValue();
+			String value = viewCookie.getValue();
 		}
-		if(brd_id != 0) {
-			model.addAttribute("list",service.C_list_M(brd_id));
+		if (brd_id != 0) {
+			model.addAttribute("list", service.C_list_M(brd_id));
 			return "content/C_list_M";
 		} else {
-			model.addAttribute("list",service.Main_C_list());
+			logger.info("國國國國國國國國國國國國國國國國國國國國國");
+			model.addAttribute("list", service.Main_C_list());
 		}
 		return "Mainpage";
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value = "menu_btn", method = { RequestMethod.GET, RequestMethod.POST })
 	public String menu_btn(HttpServletRequest request, Model model, Map map) {
@@ -170,21 +187,64 @@ public class ContentController {
 		map.put("brd_num", brd_num);
 		map.put("brd_id", brd_id);
 		model.addAttribute("list", service.menu_btn(map));
-		
+
 		return "content/C_list_M";
 	}
-	
-	@RequestMapping(value="C_share_M", method = {RequestMethod.GET, RequestMethod.POST})
-	public String C_share_M(HttpServletRequest request) {
+
+	@RequestMapping(value = "C_share_M", method = { RequestMethod.GET, RequestMethod.POST })
+	public String C_share_M(HttpServletRequest request,Model model) {
 		logger.info("정보 공유 Controller");
+		int brd_id = Integer.parseInt(request.getParameter("brd_id"));
+		model.addAttribute("list",service.C_share_list(brd_id));
 		
 		return "content/C_share_M";
 	}
-	
-	@RequestMapping(value="C_share_make", method = {RequestMethod.GET,RequestMethod.POST})
-	public String C_share_make(HttpServletRequest request) {
+
+	@RequestMapping(value = "C_share_make", method = { RequestMethod.GET, RequestMethod.POST })
+	public String C_share_make(HttpServletRequest request, Map map, @RequestParam("file2") MultipartFile file,@RequestParam("brd_id") int brd_id,
+			HttpSession session, Model model) throws Exception {
 		logger.info("정보 공유 글쓰기 Controller");
+		map.put("share_title", request.getParameter("share_title"));
+		map.put("share_link", request.getParameter("share_link"));
+		logger.info("國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國"+file.toString());
+		map.put("share_brd_id", brd_id);
+		logger.info("ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ"+map.toString());
 		
-		return "content/C_share_make";
+		if (file != null && checkImageType(file)) {
+			logger.info("演演演演演演演演演演演演演演演演演演演演演演演演演演演演演");
+			map.put("share_mem_userid", session.getAttribute("useridd"));
+			map.put("file", file);
+			map = service.C_share_make(map);
+		}
+		model.addAttribute("list",service.C_share_list(brd_id));
+		
+		return "content/C_share_M";
+	}
+
+	// 멀티파일 업로드
+	public File multipartToFile(MultipartFile file) throws IllegalStateException, IOException {
+		logger.info("정보공유 업로드 Controller");
+		File convFile = new File(file.getOriginalFilename());
+		convFile.createNewFile();
+		FileOutputStream fos = new FileOutputStream(convFile);
+		fos.write(file.getBytes());
+		fos.close();
+		return convFile;
+	}
+
+	// 파일의 이미지 타입인지 아닌지 확인하기 위한 메소드
+	private boolean checkImageType(MultipartFile file) {
+		logger.info("정보공유 이미지 타입 확인 메소드");
+		try {
+			String contentType = Files.probeContentType(multipartToFile(file).toPath());
+			if (contentType != null) {
+				return contentType.startsWith("image");
+			} else {
+				return false;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }

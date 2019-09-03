@@ -58,7 +58,7 @@
      function goStartMode(){
     	 var sSrc = welBtnConfirm.attr("src")|| "";
     	 if(sSrc.indexOf("btn_confirm2.png") < 0 ){
-    		 welBtnConfirm.attr("src","../../img/photoQuickPopup/btn_confirm2.png");
+    		 welBtnConfirm.attr("src","./img/btn_confirm2.png");
     		 fnUploadImage.attach(welBtnConfirm.$value(), "click");
     	 }
      } 
@@ -70,7 +70,7 @@
     	 var sSrc = welBtnConfirm.attr("src")|| "";
     	 if(sSrc.indexOf("btn_confirm2.png") >= 0 ){
     		 fnUploadImage.detach(welBtnConfirm.$value(), "click");
-	    	 welBtnConfirm.attr("src","../../img/photoQuickPopup/btn_confirm.png");
+	    	 welBtnConfirm.attr("src","./img/btn_confirm.png");
     	 }
      }   
 	
@@ -234,7 +234,7 @@
 		}
 		
 		if(typeof ev.dataTransfer.files == 'undefined'){
-			alert("HTML5 지원이 정상적으로 이루어지지 않는 브라우저입니다.");
+			alert("HTML5를 지원하지 않는 브라우저입니다.");
 		}else{
 			//변수 선언
 			var wel,
@@ -245,7 +245,7 @@
 			//초기화	
 			files = ev.dataTransfer.files;
 			nCount = files.length;
-			
+						
 			if (!!files && nCount === 0){
 				//파일이 아닌, 웹페이지에서 이미지를 드래서 놓는 경우.
 				alert("정상적인 첨부방식이 아닙니다.");
@@ -317,7 +317,7 @@
     		//List 마크업 생성하기
 			aFileList.push('	<li id="img'+nImageInfoCnt+'" class="imgLi"><span>'+ sFileName +'</span>');
 			aFileList.push('	<em>'+ sFileSize +'</em>');
-	        aFileList.push('	<a onclick="delImage(\'img'+nImageInfoCnt+'\')"><img class="del_button" src="../../img/photoQuickPopup/btn_del.png"  width="14" height="13" alt="첨부 사진 삭제"></a>');
+	        aFileList.push('	<a onclick="delImage(\'img'+nImageInfoCnt+'\')"><img class="del_button" src="./img/btn_del.png"  width="14" height="13" alt="첨부 사진 삭제"></a>');
 			aFileList.push('	</li> ');   
 			
 			sLiTag = aFileList.join(" ");
@@ -330,13 +330,12 @@
      * HTML5 DragAndDrop으로 사진을 추가하고, 확인버튼을 누른 경우에 동작한다.
      * @return
      */
-    function html5Upload() {	
+    function html5Upload() {
+    	console.log("1");
     	var tempFile,
     		sUploadURL;
+    	sUploadURL= 'http://localhost:9003/resources/smarteditor/sample/photo_uploader/file_uploader_html5.jsp'; 	//upload URL
     	
-    	// sUploadURL= 'http://test.naver.com/popup/quick_photo/FileUploader_html5.php'; 	//upload URL
-    	sUploadURL= 'D:/Project/ForEarlyBird/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/EarlyBird/resources/uploadimage/smartfileupload/'; 	//upload URL
-
     	//파일을 하나씩 보내고, 결과를 받음.
     	for(var j=0, k=0; j < nImageInfoCnt; j++) {
     		tempFile = htImageInfo['img'+j];
@@ -349,20 +348,22 @@
 	    	}catch(e){}
     		tempFile = null;
     	}
-
-        console.log('tempFile is ' + tempFile);
 	}
-
-
-
+    
     function callAjaxForHTML5 (tempFile, sUploadURL){
     	var oAjax = jindo.$Ajax(sUploadURL, {
 			type: 'xhr',
 			method : "post",
 			onload : function(res){ // 요청이 완료되면 실행될 콜백 함수
+				var sResString = res._response.responseText;
 				if (res.readyState() == 4) {
-					//성공 시에  responseText를 가지고 array로 만드는 부분.
-					makeArrayFromString(res._response.responseText);
+					if(sResString.indexOf("NOTALLOW_") > -1){
+						var sFileName = sResString.replace("NOTALLOW_", "");
+						alert("이미지 파일(jpg,gif,png,bmp)만 업로드 하실 수 있습니다. ("+sFileName+")");
+					}else{
+						//성공 시에  responseText를 가지고 array로 만드는 부분.
+						makeArrayFromString(res._response.responseText);
+					}
 				}
 			},
 			timeout : 3,
@@ -457,7 +458,7 @@
 	 * @return
 	 */
 	function onAjaxError (){
-		alert("[가이드]사진 업로더할 서버URL셋팅이 필요합니다.-onAjaxError"); //설치 가이드 안내 문구임. 실 서비스에서는 삭제. 
+		alert("[가이드]사진 업로더할 서버URL셋팅이 필요합니다.-onAjaxError");
 	}
 
  	/**
@@ -477,8 +478,10 @@
  	 */
  	function callFileUploader (){
  		oFileUploader = new jindo.FileUploader(jindo.$("uploadInputBox"),{
- 			sUrl  : 'D:/Project/ForEarlyBird/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/EarlyBird/resources/uploadimage/smartfileupload',	//샘플 URL입니다.
- 	        sCallback : location.href.replace(/\/[^\/]*$/, '') + '/callback.html',	//업로드 이후에 iframe이 redirect될 콜백페이지의 주소
+// 			sUrl  : location.href.replace(/\/[^\/]*$/, '') + '/file_uploader.php',	//샘플 URL입니다.
+// 	        sCallback : location.href.replace(/\/[^\/]*$/, '') + '/callback.html',	//업로드 이후에 iframe이 redirect될 콜백페이지의 주소
+ 	        sUrl  : '/resources/smarteditor/sample/photo_uploader/file_uploader.jsp',	//샘플 URL입니다.
+ 	        sCallback : 'http://localhost:9003/resources/smarteditor/sample/photo_uploader/callback.html',	//업로드 이후에 iframe이 redirect될 콜백페이지의 주소
  	    	sFiletype : "*.jpg;*.png;*.bmp;*.gif",						//허용할 파일의 형식. ex) "*", "*.*", "*.jpg", 구분자(;)	
  	    	sMsgNotAllowedExt : 'JPG, GIF, PNG, BMP 확장자만 가능합니다',	//허용할 파일의 형식이 아닌경우에 띄워주는 경고창의 문구
  	    	bAutoUpload : false,									 	//파일이 선택됨과 동시에 자동으로 업로드를 수행할지 여부 (upload 메소드 수행)
@@ -492,7 +495,6 @@
 // 	    			sMsgNotAllowedExt (String) 허용되지 않는 파일 형식인 경우 띄워줄 경고메세지
 // 	    		}
 //  				선택된 파일의 형식이 허용되는 경우만 처리 
-console.log(1);
  	    		if(oCustomEvent.bAllowed === true){
  		    		goStartMode();
  		    	}else{
@@ -503,7 +505,6 @@ console.log(1);
 // 	    		oCustomEvent.stop(); 수행시 bAllowed 가 false이더라도 alert이 수행되지 않음
  	    	},
  	    	success : function(oCustomEvent) {
- 	    	console.log(2);
  	    		// alert("success");
  	    		// 업로드가 성공적으로 완료되었을 때 발생
  	    		// oCustomEvent(이벤트 객체) = {
@@ -515,10 +516,9 @@ console.log(1);
  	    		//버튼 비활성화
  	    		goReadyMode();
  	    		oFileUploader.reset();
- 	    		//window.close();
+ 	    		window.close();
  	    	},
  	    	error : function(oCustomEvent) {
- 	    	console.log(3);
  	    		//업로드가 실패했을 때 발생
  	    		//oCustomEvent(이벤트 객체) = {
  	    		//	htResult : { (Object) 서버에서 전달해주는 결과 객체. 에러발생시 errstr 프로퍼티를 반드시 포함하도록 서버 응답을 설정하여야한다.
@@ -539,12 +539,11 @@ console.log(1);
 	   	if(bSupportDragAndDropAPI){
 	   		removeEvent();
 	   	}
-	 //  	window.close();
+	   	window.close();
     }
     
 	window.onload = function(){
   		checkDragAndDropAPI();
-  		
   		
   		if(bSupportDragAndDropAPI){
   			$Element("pop_container2").hide();
@@ -590,8 +589,6 @@ console.log(1);
  	
  	// 2012.05 현재] jindo.$Ajax.prototype.request에서 file과 form을 지원하지 안함. 
  	jindo.$Ajax.prototype.request = function(oData) {
- 	console.log('in photo');
- 	console.log(oData);
  		this._status++;
  		var t   = this;
  		var req = this._request;
@@ -601,29 +598,18 @@ console.log(1);
  		var url = this._url;
  		this._is_abort = false;
 
- 		console.log(1);
- 		console.log('opt.postBody is ' + opt.postBody);
  		if( opt.postBody && opt.type.toUpperCase()=="XHR" && opt.method.toUpperCase()!="GET"){
-            console.log(2);
  			if(typeof oData == 'string'){
-                console.log(3);
  				data = oData;
-                console.log(4);
  			}else{
-                console.log(5);
  				data = jindo.$Json(oData).toString();	
  			}	
  		}else if (typeof oData == "undefined" || !oData) {
-            console.log(6);
  			data = null;
  		} else {
-            console.log(7);
  			data = oData;
  		}
-        console.log(8);
-
-        console.log(JSON.stringify(data));
-
+ 		
  		req.open(opt.method.toUpperCase(), url, opt.async);
  		if (opt.sendheader) {
  			if(!this._headers["Content-Type"]){
@@ -691,7 +677,6 @@ console.log(1);
  				}
  			}
  		}
-
 
  		req.send(data);
  		return this;

@@ -13,32 +13,6 @@
 <!-- head -->
 <%@ include file="../include/head.jsp"%>
 <!-- end head -->
-<style>
-.container {
-	width: 1670px;
-	display: inline-flex;
-	justify-content: space-around;
-	margin: 0px;
-}
-
-.thumbnail {
-	align: center;
-	margin: 0px;
-	width: 250px;
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-position: center center;
-	background-color: gray;
-}
-
-.thumbnail.round {
-	border-radius: 10%;
-}
-
-.thumbnail.circle {
-	border-radius: 100%;
-}
-</style>
 <script>
 	function menu_btn(brd_num) {
 		var brd_id =
@@ -52,6 +26,7 @@
 				"brd_num" : brd_num
 			},
 			success : function(data) {
+				alert(data);
 				var b = $(data).find("#menu_btn");
 				$("#menu_btn").html(b);
 			}
@@ -59,7 +34,9 @@
 	}
 
 	function C_recommand(cnt_id) {
-		var brd_id=<%=request.getParameter("brd_id")%>;
+		var brd_id =
+<%=request.getParameter("brd_id")%>
+	;
 		$.ajax({
 			async : true,
 			type : "post",
@@ -71,30 +48,68 @@
 			success : function(data) {
 				var a = $(data).find("#menu_btn");
 				$("#menu_btn").html(a);
-			},error:function(request,status,error){
-				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			},
+			error : function(request, status, error) {
+				alert("code:" + request.status + "\n" + "message:"
+						+ request.responseText + "\n" + "error:" + error);
 			}
 		})
 	}
-	
-	function C_view_M(cnt_id,cnt_connectlink){
-		var brd_id=<%=request.getParameter("brd_id")%>;
+
+	function C_view_M(cnt_id, cnt_connectlink) {
+		var brd_id =
+<%=request.getParameter("brd_id")%>
+	;
 		$.ajax({
-			async:false,
-			type:"post",
-			url:"${contextPath}/content/C_view",
-			data:{"cnt_id":cnt_id,
-				  "brd_id":brd_id},
-			success:function(data){
+			async : false,
+			type : "post",
+			url : "${contextPath}/content/C_view",
+			data : {
+				"cnt_id" : cnt_id,
+				"brd_id" : brd_id
+			},
+			success : function(data) {
 				var a = $(data).find("#menu_btn");
 				$("#menu_btn").html(a);
-				window.open(cnt_connectlink, "connectlink", "width=1200,height=600");
-			},error:function(request,status,error){
-				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				window.open(cnt_connectlink, "connectlink",
+						"width=1200,height=600");
+			},
+			error : function(request, status, error) {
+				alert("code:" + request.status + "\n" + "message:"
+						+ request.responseText + "\n" + "error:" + error);
 			}
 		})
 	}
 </script>
+<style>
+#columns {
+	column-width: 300px;
+	column-gap: 15px;
+}
+
+#columns figure {
+	width: 300px;
+	display: inline-block;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	margin: 0;
+	margin-bottom: 15px;
+	padding: 10px;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);;
+}
+
+#columns figure img {
+	width: 100%;
+}
+
+#columns figure figcaption {
+	border-top: 1px solid rgba(0, 0, 0, 0.2);
+	padding-left: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 0px;
+	margin-top: 11px;
+}
+</style>
 <body class="">
 	<!-- side bar -->
 	<%@ include file="../include/left_navbar.jsp"%>
@@ -157,34 +172,29 @@
 				</ul>
 			</div>
 		</div>
-		<div class="container col-md-12">
-			<div class="row" id="menu_btn">
+		<div id="columns">
+			<div id="menu_btn">
 				<c:forEach items="${list}" var="list">
-					<div class="row" style="margin-left: 0px;">
-						<div class="thumbnail"
-							style="margin-top: 25px; margin-bottom: 30px; margin-left: 46px;">
-							<a style="cursor: pointer"
-								onclick="C_view_M('${list.cnt_id }','${list.cnt_connectLink }')"><img
-								src="${list.cnt_thumbnail }" alt="..."
-								style="width: 100%; background: url('${contextPath}/resources/uploadimage/no_image.jpg') no-repeat center center; background-size: cover;"></a>
-							<div class="caption">
-								<h3>${list.cnt_title }</h3>
+					<figure>
+						<a style="cursor: pointer"
+							onclick="C_view_M('${list.cnt_id }','${list.cnt_connectLink }')"><img
+							src="${list.cnt_thumbnail }"></a>
+						<figcaption>${list.cnt_title }<div class="row"
+								style="align: right; padding-left: 240px; padding-top: 10px;">
+								<h4>
+									<i class="ni ni-active-40 text-blue"></i>${list.cnt_hit }</h4>
+								<h4>
+									<a style="cursor: pointer;"
+										onclick="C_recommand(${list.cnt_id})"> <i
+										class="ni ni-favourite-28 text-red" id="C_recommand"></i>${list.cnt_like }</a>
+								</h4>
 							</div>
-							<input type="hidden" value="${list.cnt_id }" id="cnt_id">
-							<input type="hidden" value="${list.cnt_connectLink }"
-								id="cnt_connectlink">
-						</div>
-
-						<h4 style="transform: translate(-70px, 0);">
-							<i class="ni ni-active-40 text-blue"></i>${list.cnt_hit }</h4>
-						<h4 style="transform: translate(-65px, 0);">
-							<a style="cursor: pointer;" onclick="C_recommand(${list.cnt_id})">
-								<i class="ni ni-favourite-28 text-red" id="C_recommand"></i>${list.cnt_like }</a>
-						</h4>
-					</div>
+						</figcaption>
+					</figure>
 				</c:forEach>
 			</div>
 		</div>
+		<!-- end body -->
 	</div>
 </body>
 </html>

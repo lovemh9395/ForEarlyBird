@@ -60,7 +60,11 @@ public interface MemberDAO  {
 	public List getMemberListLikesThisName(String mem_nickname);
 
 	public List<Member> getMemberList();
-
+	
+	public int CheckLevel(Map map);
+	
+	public int searchPWDcheck(Map map);
+	
 	public List<Member> searchMemberList(Map map);
 
 	public List<Member> getAdminList();
@@ -73,7 +77,5 @@ public interface MemberDAO  {
 
 	public List<Member> getBanMemberList();
 
-	int searchPWDcheck(Map map);
-
-	public int CheckLevel(Map map);
+	
 }

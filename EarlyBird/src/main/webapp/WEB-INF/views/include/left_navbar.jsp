@@ -146,14 +146,14 @@
 			<hr class="my-3">
 			<ul class="navbar-nav">
 				<li class="nav-item"><a class="nav-link"
-					href="${contextPath }/content/C_share_M?brd_id=9"> <i
+					href="${contextPath }/content/C_share_M?brd_id=5"> <i
 						class="ni ni-circle-08 text-pink"></i> 정보공유
 				</a></li>
 			</ul>
 			<hr class="my-3">
 			<ul class="navbar-nav">
 				<li class="nav-item"><a class="nav-link"
-					href="./examples/register.html"> <i
+					href=""> <i
 						class="ni ni-circle-08 text-pink"></i> QnA
 				</a></li>
 			</ul>
