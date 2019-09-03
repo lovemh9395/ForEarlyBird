@@ -38,7 +38,7 @@ public class MovieCrawling {
 			Elements link = title3.select(".article-info .subject");
 			Elements abcde = link.select("a");
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			String url = "jdbc:mysql://localhost/earlybird?characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false";
+			String url = "jdbc:mysql://192.168.0.100/earlybird?characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false";
 			String id = "root";
 			String pass = "12345";
 			conn = DriverManager.getConnection(url, id, pass); 
@@ -57,39 +57,39 @@ public class MovieCrawling {
 				pstmt = conn.prepareStatement(sql);
 				rs = pstmt.executeQuery();
 				int cnt = 0;
-				while (rs.next()) { //페이지 줘까치 만들었내;; ㅋㅋㅋㅋㅋㅋ ㅇㅈ
-					cnt = rs.getInt(1);
-					System.out.println("while cnt = "+ cnt);
-				}
-				if (cnt == 0) { // DB가 아예 없을 때
-					sql = "insert into content(brd_id,cnt_title,cnt_thumbnail,cnt_connectlink,cnt_datetime,cnt_updated_datetime,cnt_comment_updated_datetime)"
-							+ " values('"+brd_id+"',?,?,?,now(),now(),now())";
+//				while (rs.next()) { //페이지 줘까치 만들었내;; ㅋㅋㅋㅋㅋㅋ ㅇㅈ
+//					cnt = rs.getInt(1);
+//					System.out.println("while cnt = "+ cnt);
+//				}
+//				if (cnt == 0) { // DB가 아예 없을 때
+					sql = "insert into content(brd_id,cnt_title,cnt_thumbnail,cnt_connectlink,cnt_datetime)"
+							+ " values('"+brd_id+"',?,?,?,now())";
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, cnt_title);
 					pstmt.setString(2, cnt_thumbnail);
 					pstmt.setString(3, mainURL + cnt_link);
 					pstmt.executeUpdate();
-				} else {
-					sql = "select cnt_title from content where brd_id="+brd_id;
-					pstmt = conn.prepareStatement(sql);
-					rs = pstmt.executeQuery();
-					while (rs.next() && !done) { 
-						System.out.println(rs.getString(1));
-						if (rs.getString(1).equals(e.select(".box-contents").select(".title").text())) { //ㄱㄱ
-							done=true; 
-							break;
-						} else {
-							sql = "insert into content(brd_id,cnt_title,cnt_thumbnail,cnt_connectlink,cnt_datetime,cnt_updated_datetime,cnt_comment_updated_datetime)"
-									+ " values('"+brd_id+"',?,?,?,now(),now(),now())";
-							pstmt = conn.prepareStatement(sql);
-							pstmt.setString(1, cnt_title);
-							pstmt.setString(2, cnt_thumbnail);
-							pstmt.setString(3, mainURL + cnt_link);
-							pstmt.executeUpdate();
-						}
-						break;
-					}
-				}
+//				} else {
+//					sql = "select cnt_title from content where brd_id="+brd_id;
+//					pstmt = conn.prepareStatement(sql);
+//					rs = pstmt.executeQuery();
+//					while (rs.next() && !done) { 
+//						System.out.println(rs.getString(1));
+//						if (rs.getString(1).equals(e.select(".box-contents").select(".title").text())) { //ㄱㄱ
+//							done=true; 
+//							break;
+//						} else {
+//							sql = "insert into content(brd_id,cnt_title,cnt_thumbnail,cnt_connectlink,cnt_datetime,cnt_comment_updated_datetime)"
+//									+ " values('"+brd_id+"',?,?,?,now(),now())";
+//							pstmt = conn.prepareStatement(sql);
+//							pstmt.setString(1, cnt_title);
+//							pstmt.setString(2, cnt_thumbnail);
+//							pstmt.setString(3, mainURL + cnt_link);
+//							pstmt.executeUpdate();
+//						}
+//						break;
+//					}
+//				}
 			}
 
 		} catch (IOException e) {

@@ -35,7 +35,7 @@ public class DramaCrawiling {
 			Elements title3 = title2.select("li");
 			
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			String url = "jdbc:mysql://localhost/earlybird?characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false";
+			String url = "jdbc:mysql://192.168.0.100/earlybird?characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false";
 			String id = "root";
 			String pass = "12345";
 			conn = DriverManager.getConnection(url, id, pass);
@@ -54,43 +54,43 @@ public class DramaCrawiling {
 				rs = pstmt.executeQuery();
 				int cnt = 0;
 				System.out.println("1");
-				while (rs.next()) {
-					cnt = rs.getInt(1);
-				}
-				if (cnt == 0) { // DB가 아예 없을 때
+//				while (rs.next()) {
+//					cnt = rs.getInt(1);
+//				}
+//				if (cnt == 0) { // DB가 아예 없을 때
 					System.out.println("2");
-					sql = "insert into content(brd_id,cnt_title,cnt_thumbnail,cnt_connectlink,cnt_datetime,cnt_updated_datetime,cnt_comment_updated_datetime)"
-							+ " values('"+brd_id+"',?,?,?,now(),now(),now())";
+					sql = "insert into content(brd_id,cnt_title,cnt_thumbnail,cnt_connectlink,cnt_datetime)"
+							+ " values('"+brd_id+"',?,?,?,now())";
 						System.out.println("2");	
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, cnt_title);
 					pstmt.setString(2, cnt_thumbnail);
 					pstmt.setString(3, mainURL+cnt_link);
 					pstmt.executeUpdate();
-				} else {
-					sql = "select cnt_title from content where brd_id="+brd_id;
-					pstmt = conn.prepareStatement(sql);
-					rs = pstmt.executeQuery();
-					while (rs.next() && !done) {
-						System.out.println(rs.getString(1));
-						if (rs.getString(1).contains(e.select(".subject").select("a").text())) {
-							System.out.println("1");
-							done=true;
-							break;
-						} else {
-							System.out.println("혹시 안들어오니?");
-							sql = "insert into content(brd_id,cnt_title,cnt_thumbnail,cnt_connectlink,cnt_datetime,cnt_updated_datetime,cnt_comment_updated_datetime)"
-									+ " values('"+brd_id+"',?,?,?,now(),now(),now())";
-							pstmt = conn.prepareStatement(sql);
-							pstmt.setString(1, cnt_title);
-							pstmt.setString(2, cnt_thumbnail);
-							pstmt.setString(3, mainURL + cnt_link);
-							pstmt.executeUpdate();
-						}
-						System.out.println("여기는?");
-						break;
-					}
-				}
+//				} else {
+//					sql = "select cnt_title from content where brd_id="+brd_id;
+//					pstmt = conn.prepareStatement(sql);
+//					rs = pstmt.executeQuery();
+//					while (rs.next() && !done) {
+//						System.out.println(rs.getString(1));
+//						if (rs.getString(1).contains(e.select(".subject").select("a").text())) {
+//							System.out.println("1");
+//							done=true;
+//							break;
+//						} else {
+//							System.out.println("혹시 안들어오니?");
+//							sql = "insert into content(brd_id,cnt_title,cnt_thumbnail,cnt_connectlink,cnt_datetime,cnt_updated_datetime,cnt_comment_updated_datetime)"
+//									+ " values('"+brd_id+"',?,?,?,now(),now(),now())";
+//							pstmt = conn.prepareStatement(sql);
+//							pstmt.setString(1, cnt_title);
+//						  	pstmt.setString(2, cnt_thumbnail);
+//							pstmt.setString(3, mainURL + cnt_link);
+//							pstmt.executeUpdate();
+//						}
+//						System.out.println("여기는?");
+//						break;
+//					}
+//				}
 			}
 
 		} catch (IOException e) {

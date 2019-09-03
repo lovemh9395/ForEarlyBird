@@ -225,10 +225,7 @@ public class MemberServiceImpl implements MemberService {
 		MailHandler sendMail = new MailHandler(mailSender);
 		sendMail.setSubject("[ForEarlyBird 서비스 이메일 인증]");
 		sendMail.setText(
-				new StringBuffer().append("<h1>메일인증</h1>").append("회원님의 임시 비밀번호는 " + key + " 입니다.")
-						.append("<a href='http://localhost:9002/member/M_newJoin?user_email=")
-						.append(vo.getMem_profile_content()).append("&key=").append(key)
-						.append("' target='_blenk'>이메일 인증 확인</a>").toString());
+				new StringBuffer().append("<h1>메일인증</h1>").append("회원님의 임시 비밀번호는 " + key + " 입니다.").toString());
 		sendMail.setFrom("lovemh9395", "ForEarlyBird");
 		sendMail.setTo(vo.getMem_userid());
 		sendMail.send();

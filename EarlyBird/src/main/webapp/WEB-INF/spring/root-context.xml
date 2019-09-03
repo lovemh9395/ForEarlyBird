@@ -14,7 +14,7 @@
 		<property name="driverClassName"
 			value="com.mysql.cj.jdbc.Driver"></property>
 		<property name="url"
-			value="jdbc:mysql://localhost:3306/earlybird?characterEncoding=UTF-8&amp;serverTimezone=Asia/Seoul&amp;useSSL=false&amp;autoReconnection=true"></property>
+			value="jdbc:mysql://192.168.0.100:3306/earlybird?characterEncoding=UTF-8&amp;serverTimezone=Asia/Seoul&amp;useSSL=false&amp;autoReconnection=true"></property>
 		<property name="username" value="root"></property>
 		<property name="password" value="12345"></property>
 	</bean>

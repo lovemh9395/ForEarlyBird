@@ -38,7 +38,7 @@ public class MusicCrawling {
 			Elements title4 = title3.select(".wrap_song_info");
 
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			String url = "jdbc:mysql://localhost/earlybird?characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false";
+			String url = "jdbc:mysql://192.168.0.100/earlybird?characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false";
 			String id = "root";
 			String pass = "12345";
 			conn = DriverManager.getConnection(url, id, pass);
@@ -60,8 +60,8 @@ public class MusicCrawling {
 //					cnt = rs.getInt(1);
 //				}
 //				if (cnt == 0) { // DB가 아예 없을 때
-					sql = "insert into content(brd_id,cnt_title,cnt_thumbnail,cnt_connectlink,cnt_datetime,cnt_updated_datetime,cnt_comment_updated_datetime)"
-							+ " values('"+brd_id+"',?,?,?,now(),now(),now())";
+					sql = "insert into content(brd_id,cnt_title,cnt_thumbnail,cnt_connectlink,cnt_datetime)"
+							+ " values('"+brd_id+"',?,?,?,now())";
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, cnt_title);
 					pstmt.setString(2, cnt_thumbnail);

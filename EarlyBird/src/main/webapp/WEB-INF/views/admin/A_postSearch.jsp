@@ -177,7 +177,7 @@
 	};
 
 	function set1_month_ago() {
-		var month1 = getDate(1, 0);
+		var month1 = getDate(1,0);
 		$("#dateFrom").val(month1);
 	};
 

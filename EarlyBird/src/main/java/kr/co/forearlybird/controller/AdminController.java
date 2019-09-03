@@ -389,7 +389,6 @@ public class AdminController {
 	private Post makePost(HttpServletRequest request, HttpSession session) {
 		Post post = new Post();
 		post.setBrd_id(1);
-		post.setPost_id(Integer.parseInt(request.getParameter("post_id")));
 		post.setMem_userid((String) session.getAttribute("useridd"));
 		post.setPost_title(request.getParameter("notice_title"));
 		post.setPost_content(request.getParameter("notice_content"));

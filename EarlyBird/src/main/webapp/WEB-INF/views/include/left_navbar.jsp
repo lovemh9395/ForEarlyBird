@@ -147,16 +147,16 @@
 			<ul class="navbar-nav">
 				<li class="nav-item"><a class="nav-link"
 					href="${contextPath }/content/C_share_M?brd_id=5"> <i
-						class="ni ni-circle-08 text-pink"></i> 정보공유
+						class="ni ni-circle-08 text-pink"></i> 정보공유게시판
 				</a></li>
 			</ul>
-			<hr class="my-3">
+			<!-- <hr class="my-3">
 			<ul class="navbar-nav">
 				<li class="nav-item"><a class="nav-link"
 					href=""> <i
 						class="ni ni-circle-08 text-pink"></i> QnA
 				</a></li>
-			</ul>
+			</ul> -->
 			<hr class="my-3">
 			<ul class="navbar-nav">
 				<li class="nav-item"><a class="nav-link" id="MOVE_TOP_BTN"
