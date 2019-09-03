@@ -3,7 +3,6 @@ package kr.co.forearlybird.common;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
-@SuppressWarnings("restriction")
 public class SHA256 {
 	
 	BASE64Encoder encoder = new BASE64Encoder();

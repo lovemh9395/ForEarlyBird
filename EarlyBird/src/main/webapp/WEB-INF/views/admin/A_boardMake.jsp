@@ -108,7 +108,7 @@
 		$.ajax({
 			async : false,
 			url : "${contextPath}/admin/A_makeBoard",
-			type : "GET",
+			type : "post",
 			data : query,
 			success : function() {
 				window.location.reload();
