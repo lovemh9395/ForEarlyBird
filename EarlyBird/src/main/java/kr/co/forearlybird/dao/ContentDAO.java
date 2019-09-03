@@ -5,6 +5,7 @@ import java.util.Map;
 
 import kr.co.forearlybird.domain.Content;
 
+@SuppressWarnings("rawtypes")
 public interface ContentDAO {
 
 	public List<Content> Main_C_list();
@@ -17,8 +18,8 @@ public interface ContentDAO {
 	
 	public String C_connectlink(int connectlink);
 	
-	@SuppressWarnings("rawtypes")
 	public List<Content> menu_btn(Map map);
+	
 	public int C_share_make(Map middlemap);
 	
 	public List<Content> C_share_list(int brd_id);}

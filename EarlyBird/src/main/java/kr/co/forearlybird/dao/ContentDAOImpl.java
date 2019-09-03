@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import kr.co.forearlybird.MainController;
 import kr.co.forearlybird.domain.Content;
 
+@SuppressWarnings("rawtypes")
 @Repository
 public class ContentDAOImpl implements ContentDAO {
 	
@@ -49,7 +50,6 @@ public class ContentDAOImpl implements ContentDAO {
 		return sqlSession.selectOne("content.C_connectlink",connectlink);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Content> menu_btn(Map map) {
 		logger.info("컨텐츠 하나의 메뉴 리스트 DAO");

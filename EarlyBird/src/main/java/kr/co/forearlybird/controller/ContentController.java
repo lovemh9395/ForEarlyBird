@@ -3,34 +3,27 @@ package kr.co.forearlybird.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
-import java.text.SimpleDateFormat;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.jsoup.Connection.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.forearlybird.service.ContentService;
 
+@SuppressWarnings({ "unchecked", "rawtypes" })
 @Controller
 @RequestMapping(value = "content", method = { RequestMethod.GET, RequestMethod.POST })
 public class ContentController {
@@ -122,7 +115,7 @@ public class ContentController {
 			}
 		} else {// viewCookie가 null이 아닐경우 쿠키가 있으므로 조회수 증가 로직을 처리하지 않음.
 			// logger.info("게시물 추천 ----- cookie 있음");
-			String value = viewCookies.getValue();// 쿠키 값 받아옴.
+			viewCookies.getValue();// 쿠키 값 받아옴.
 			// logger.info("게시물 추천 ----- cookie 값 = " + value);
 		}
 		logger.info("" + brd_id);
@@ -166,7 +159,7 @@ public class ContentController {
 				logger.info("컨텐츠게시글 조회수 쿠키 Controller ----- 조회수 증가 에러");
 			}
 		} else {
-			String value = viewCookie.getValue();
+			viewCookie.getValue();
 		}
 		if (brd_id != 0) {
 			model.addAttribute("list", service.C_list_M(brd_id));
@@ -178,7 +171,7 @@ public class ContentController {
 		return "Mainpage";
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	
 	@RequestMapping(value = "menu_btn", method = { RequestMethod.GET, RequestMethod.POST })
 	public String menu_btn(HttpServletRequest request, Model model, Map map) {
 		logger.info("메뉴 버튼 클릭 시 값 가져오는 Controller");
