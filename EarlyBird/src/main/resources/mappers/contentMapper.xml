@@ -29,22 +29,51 @@
 		cnt_hit + 1
 		where cnt_id = #{cnt_id}
 	</update>
-	
-	<select id="C_connectlink" parameterType = "java.lang.Integer" resultType="java.lang.String">
-		select cnt_connectlink from content where cnt_id = #{cnt_id}
+
+	<select id="C_connectlink" parameterType="java.lang.Integer"
+		resultType="java.lang.String">
+		select cnt_connectlink from content where cnt_id =
+		#{cnt_id}
 	</select>
-	
-	<select id="menu_btn" parameterType = "java.util.Map" resultType="kr.co.forearlybird.domain.Content">
-		select * from content where brd_id = (#{brd_id}*100+#{brd_num})
+
+	<select id="menu_btn" parameterType="java.util.Map"
+		resultType="kr.co.forearlybird.domain.Content">
+		select * from content where brd_id =
+		(#{brd_id}*100+#{brd_num})
 	</select>
-	
+
 	<insert id="share_make" parameterType="java.util.Map">
-		insert into 
-		content(brd_id,cnt_title,cnt_thumbnail,cnt_connectlink,cnt_datetime,cnt_updated_datetime,cnt_comment_updated_datetime,mem_userid)
-		values(#{share_brd_id},#{share_title},#{share_image},#{share_link},now(),now(),now(),#{share_mem_userid})
+		insert into
+		content(brd_id,cnt_title,cnt_thumbnail,cnt_connectlink,cnt_datetime,mem_userid)
+		values(#{share_brd_id},#{share_title},#{share_image},#{share_link},now(),#{share_mem_userid})
 	</insert>
-	
-	<select id="C_share_list" parameterType="java.lang.Integer" resultType="kr.co.forearlybird.domain.Content">
+
+	<select id="C_share_list" parameterType="java.lang.Integer"
+		resultType="kr.co.forearlybird.domain.Content">
 		select * from content where brd_id = #{brd_id}
 	</select>
+
+	<select id="getContent" parameterType="java.lang.Integer"
+		resultType="kr.co.forearlybird.domain.Content">
+		select * from content where cnt_id = #{cnt_id}
+	</select>
+
+	<update id="deleteContents" parameterType="java.util.Map">
+		UPDATE content SET
+		cnt_del=#{cnt_del} WHERE cnt_id=#{cnt_id}
+	</update>
+
+	<insert id="makeContent" parameterType="java.util.Map">
+		<if test="mem_userid!=null and mem_userid!=''">
+			insert into
+			content(brd_id,cnt_title,cnt_thumbnail,cnt_connectlink,cnt_datetime,mem_userid)
+			values(#{brd_id},#{cnt_title},#{cnt_thumbnail},#{cnt_connectlink},now(),#{mem_userid})
+		</if>
+		<if test="mem_userid==null or mem_userid==''">
+			insert into
+			content(brd_id,cnt_title,cnt_thumbnail,cnt_connectlink,cnt_datetime)
+			values(#{brd_id},#{cnt_title},#{cnt_thumbnail},#{cnt_connectlink},now())
+
+		</if>
+	</insert>
 </mapper>

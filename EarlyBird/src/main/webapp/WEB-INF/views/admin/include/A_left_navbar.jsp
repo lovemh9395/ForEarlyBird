@@ -26,7 +26,7 @@
 			<div class="navbar-collapse-header d-md-none">
 				<div class="row">
 					<div class="col-6 collapse-brand">
-						<a href="./index.html"> <img
+						<a href="${contextPath }/"> <img
 							src="/resources/assets/img/brand/blue.png">
 						</a>
 					</div>
@@ -58,27 +58,27 @@
 			<h6 class="navbar-heading text-muted">site Management</h6>
 			<ul class="navbar-nav">
 				<li class="nav-item"><a class="nav-link"
-					href="../admin/A_noticeList"> 
+					href="${contextPath }/admin/A_noticeList"> 
 					<i class="ni ni-air-baloon text-yellow"></i>
 						공지사항 관리
 				</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="../admin/A_categoryList"> 
+					href="${contextPath }/admin/A_categoryList"> 
 					<i class="ni ni-archive-2 text-indigo"></i>
 						카테고리 관리
 				</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="../admin/A_boardList"> 
+					href="${contextPath }/admin/A_boardList"> 
 					<i class="ni ni-bullet-list-67 text-rainbow"></i>
 						게시판 관리
 				</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="../admin/A_postList?brd_id=1"> 
+					href="${contextPath }/admin/A_postList?brd_id=1"> 
 					<i class="ni ni-single-copy-04 text-rainbow"></i>
 						게시물 관리
 				</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="../content/C_list"> 
+					href="${contextPath }/admin/A_contentsList"> 
 					<i class="ni ni-controller text-teal"></i>
 						컨텐츠 관리
 				</a></li>
@@ -87,15 +87,15 @@
 			<h6 class="navbar-heading text-muted">member Management</h6>
 			<ul class="navbar-nav">
 				<li class="nav-item"><a class="nav-link"
-					href="../admin/A_adminList"> <i
+					href="${contextPath }/admin/A_adminList"> <i
 						class="ni ni-single-02 text-blue"></i> 관리자 설정
 				</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="../admin/A_memberList"> <i
+					href="${contextPath }/admin/A_memberList"> <i
 						class="ni ni-single-02 text-pink"></i> 회원 관리
 				</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="../admin/A_memberList?mem_level=1"> <i
+					href="${contextPath }/admin/A_memberList?mem_level=1"> <i
 						class="ni ni-circle-08 text-black"></i> 블랙리스트 관리
 				</a></li>
 			</ul>

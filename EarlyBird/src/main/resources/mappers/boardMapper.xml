@@ -24,7 +24,8 @@
 	</select>
 
 	<select id="getBoardMAXID" resultType="java.lang.Integer">
-		SELECT IFNULL(MAX(brd_id),0) FROM
+		SELECT
+		IFNULL(MAX(brd_id),0) FROM
 		board
 	</select>
 
@@ -54,7 +55,7 @@
 		SELECT brd_id FROM board WHERE large_id=#{large_id} and
 		category_id=#{category_id}
 	</select>
-	
+
 	<select id="getBrd_list" resultType="java.lang.Integer">
 		SELECT brd_id FROM board
 	</select>
@@ -64,19 +65,33 @@
 		SELECT large_id,
 		category_id FROM board WHERE brd_id=#{brd_id}
 	</select>
-	
-	<select id="checkBoardId"
-		parameterType="java.lang.Integer" resultType="java.lang.Integer">
+
+	<select id="checkBoardId" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
 		SELECT COUNT(brd_id) FROM board WHERE brd_id=#{category_id}
 	</select>
-	
+
 	<select id="checkBoardIdByCategory"
 		parameterType="java.lang.Integer" resultType="java.lang.Integer">
-		SELECT COUNT(brd_id) FROM board WHERE category_id=#{category_id}
+		SELECT COUNT(brd_id) FROM
+		board WHERE category_id=#{category_id}
 	</select>
-	
+
 	<select id="getBoardMAXIDUnderCategory"
 		parameterType="java.lang.Integer" resultType="java.lang.Integer">
-		SELECT IFNULL(MAX(brd_id),0) FROM board WHERE category_id=#{category_id}
+		SELECT
+		IFNULL(MAX(brd_id),0) FROM board WHERE category_id=#{category_id}
 	</select>
+
+	<select id="getBoardParam" parameterType="java.lang.Integer"
+		resultType="kr.co.forearlybird.domain.Board">
+		SELECT * FROM board WHERE brd_id=#{brd_id}
+	</select>
+
+	<update id="updateBoard" parameterType="java.util.Map">
+		UPDATE board SET
+		brd_name=#{brd_name}, large_id=#{large_id},
+		category_id=#{category_id}, brd_readauth=#{brd_readauth},
+		brd_writeauth=#{brd_writeauth} WHERE brd_id=#{brd_id}
+	</update>
 </mapper>

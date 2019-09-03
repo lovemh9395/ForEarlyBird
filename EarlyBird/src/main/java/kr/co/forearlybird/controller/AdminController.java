@@ -121,26 +121,26 @@ public class AdminController {
 
 		return "admin/A_boardAdminList";
 	}
-	
+
 	@RequestMapping(value = "/A_boardAdminDelete", method = { RequestMethod.GET, RequestMethod.POST })
 	public String A_boardAdminDelete(HttpServletRequest request, HttpSession session, Model model) {
 		logger.info("게시판 관리자 변경 페이지");
 		int brd_id = Integer.parseInt(request.getParameter("brd_id"));
 		String mem_userid = request.getParameter("mem_userid");
-		
+
 		Map map = new HashMap();
 		map.put("brd_id", brd_id);
 		map.put("mem_userid", mem_userid);
-		
+
 		service.deleteAdmin(map);
-		
+
 		List<String> adminNicknames = service.getAdminNickname(brd_id);
 		List<Map> adminList = service.getMemberListForBoardAdmin();
-		
+
 		model.addAttribute("brd_id", brd_id);
 		model.addAttribute("adminNicknames", adminNicknames);
 		model.addAttribute("adminList", adminList);
-		
+
 		return "admin/A_boardAdminList";
 	}
 
@@ -246,9 +246,10 @@ public class AdminController {
 		}
 		return "admin/A_memberDetail";
 	}
-	
+
 	@RequestMapping(value = "/A_memberPostListUpdate", method = RequestMethod.POST)
-	public String A_memberPostListUpdate(String[] checkedList, String[] isDelList, HttpServletRequest request, HttpSession session, Model model) throws Exception {
+	public String A_memberPostListUpdate(String[] checkedList, String[] isDelList, HttpServletRequest request,
+			HttpSession session, Model model) throws Exception {
 		logger.info("회원 작성글 열람 페이지");
 		Map map = new HashMap();
 		List<String> checklist = new ArrayList<>();
@@ -260,7 +261,7 @@ public class AdminController {
 		map.put("checklist", checklist);
 		map.put("dellist", dellist);
 		service.updatePost(map);
-		
+
 		String mem_userid = request.getParameter("mem_userid");
 		if (service.getPostNumWritenBy(mem_userid) > 0) {
 			model.addAttribute("postList", service.getPostListFromWriter(mem_userid));
@@ -272,9 +273,10 @@ public class AdminController {
 		model.addAttribute("mem_nickname", service.getNickname(mem_userid));
 		return "admin/A_memberDetail";
 	}
-	
+
 	@RequestMapping(value = "/A_memberReplyListUpdate", method = RequestMethod.POST)
-	public String A_memberReplyListUpdate(String[] checkedList, String[] isDelList, HttpServletRequest request, HttpSession session, Model model) throws Exception {
+	public String A_memberReplyListUpdate(String[] checkedList, String[] isDelList, HttpServletRequest request,
+			HttpSession session, Model model) throws Exception {
 		logger.info("회원 작성글 열람 페이지");
 		Map map = new HashMap();
 		List<String> checklist = new ArrayList<>();
@@ -286,7 +288,7 @@ public class AdminController {
 		map.put("checklist", checklist);
 		map.put("dellist", dellist);
 		service.updateReply(map);
-		
+
 		String mem_userid = request.getParameter("mem_userid");
 		if (service.getPostNumWritenBy(mem_userid) > 0) {
 			model.addAttribute("postList", service.getPostListFromWriter(mem_userid));
@@ -431,6 +433,7 @@ public class AdminController {
 			noticeOrNot.add(NoticeOrNot[i]);
 		}
 		map.put("brd_id", request.getParameter("brd_id"));
+		map.put("type", "notice");
 		map.put("checklist", checklist);
 		map.put("NoticeOrNot", noticeOrNot);
 
@@ -453,7 +456,7 @@ public class AdminController {
 
 		map.put("brd_id", request.getParameter("brd_id"));
 		map.put("checklist", checklist);
-
+		map.put("type", "notice");
 		service.updatePostToBoard(map);
 
 		model.addAttribute("noticeList", service.getNoticeListFromBoard());
@@ -603,6 +606,7 @@ public class AdminController {
 			noticeOrNot.add(NoticeOrNot[i]);
 		}
 		map.put("brd_id", request.getParameter("brd_id"));
+		map.put("type", "notice");
 		map.put("checklist", checklist);
 		map.put("NoticeOrNot", noticeOrNot);
 
@@ -696,20 +700,32 @@ public class AdminController {
 		List<Map> boardList = service.getBoardList();
 		List<Map> largeList = service.largeCategoryList();
 		List<Map> categoryList = service.CategoryList();
-
 		String forlargeList = getStringFromLargeList(largeList);
 		String forcategoryList = getStringFromCategoryList(categoryList);
-
-		model.addAttribute("boardList", boardList);
 		model.addAttribute("largeList", largeList);
 		model.addAttribute("forlargeList", forlargeList);
 		model.addAttribute("forcategoryList", forcategoryList);
+		model.addAttribute("boardList", boardList);
 		return "admin/A_boardList";
 	}
 
 	// 게시판 추가하기
+	@RequestMapping(value = "/A_makeBoard", method = RequestMethod.GET)
+	public String A_makeBoardModal(HttpSession session, Model model) throws Exception {
+		logger.info("게시판 제작하기");
+		List<Map> largeList = service.largeCategoryList();
+		List<Map> categoryList = service.CategoryList();
+		String forlargeList = getStringFromLargeList(largeList);
+		String forcategoryList = getStringFromCategoryList(categoryList);
+		model.addAttribute("largeList", largeList);
+		model.addAttribute("forlargeList", forlargeList);
+		model.addAttribute("forcategoryList", forcategoryList);
+		return "admin/A_boardMake";
+	}
+
+	// 게시판 추가하기
 	@RequestMapping(value = "/A_makeBoard", method = RequestMethod.POST)
-	public String A_makeBoard(HttpServletRequest request, HttpSession session, Model model) {
+	public String A_makeBoard(HttpServletRequest request, HttpSession session, Model model) throws Exception {
 		logger.info("게시판 제작하기");
 		Map map = new HashMap();
 		map.put("large_id", Integer.parseInt(request.getParameter("large_id")));
@@ -719,6 +735,43 @@ public class AdminController {
 		map.put("brd_name", (String) request.getParameter("brd_name"));
 		service.makeBoard(map);
 		return "admin/A_boardList";
+	}
+
+	@RequestMapping(value = "/A_updateBoard", method = RequestMethod.POST)
+	public String A_updateBoard(HttpServletRequest request, HttpSession session, Model model) {
+		logger.info("게시판 제작하기");
+		Map map = new HashMap();
+		map.put("brd_id", Integer.parseInt(request.getParameter("brd_id")));
+		map.put("large_id", Integer.parseInt(request.getParameter("large_id")));
+		map.put("category_id", Integer.parseInt(request.getParameter("category_id")));
+		map.put("brd_readauth", Integer.parseInt(request.getParameter("brd_readauth")));
+		map.put("brd_writeauth", Integer.parseInt(request.getParameter("brd_writeauth")));
+		map.put("brd_name", (String) request.getParameter("brd_name"));
+		service.updateBoard(map);
+		return "admin/A_boardList";
+	}
+
+	@RequestMapping(value = "/A_changeBoard", method = RequestMethod.POST)
+	public String A_changeBoard(HttpServletRequest request, HttpSession session, Model model) throws Exception {
+		logger.info("게시판 제작하기");
+		int brd_id = Integer.parseInt(request.getParameter("brd_id"));
+		Map map = service.getBoardParam(brd_id);
+		List<Map> largeList = service.largeCategoryList();
+		List<Map> categoryList = service.CategoryList();
+		String forlargeList = getStringFromLargeList(largeList);
+		String forcategoryList = getStringFromCategoryList(categoryList);
+		model.addAttribute("largeList", largeList);
+		model.addAttribute("forlargeList", forlargeList);
+		model.addAttribute("forcategoryList", forcategoryList);
+		model.addAttribute("large_id", map.get("large_id"));
+		model.addAttribute("large_name", map.get("large_name"));
+		model.addAttribute("category_id", map.get("category_id"));
+		model.addAttribute("category_name", map.get("category_name"));
+		model.addAttribute("brd_readauth", map.get("brd_readauth"));
+		model.addAttribute("brd_writeauth", map.get("brd_writeauth"));
+		model.addAttribute("brd_name", map.get("brd_name"));
+		model.addAttribute("brd_id", brd_id);
+		return "admin/A_boardMake";
 	}
 
 	@ResponseBody
@@ -734,6 +787,27 @@ public class AdminController {
 			@RequestParam("brd_exposure") int brd_exposure, Model model) {
 		logger.info("게시판 표시여부 변경하기");
 		model.addAttribute(service.changeBoardVisibility(brd_id, brd_exposure));
+	}
+
+	@RequestMapping(value = "/A_contentsList", method = RequestMethod.GET)
+	public String A_contentsList(HttpSession session, Model model) {
+		logger.info("컨텐츠 게시판 목록보기");
+		model.addAttribute("contentsList", service.getContentsList());
+		return "admin/A_contentsList";
+	}
+
+	@RequestMapping(value = "/A_contentsDelete", method = RequestMethod.POST)
+	public String A_contentsDelete(int[] checkedList, int[] delList, HttpSession session, Model model) {
+		logger.info("컨텐츠 삭제/복구 하기");
+		List checklist = new ArrayList<>();
+		List dellist = new ArrayList<>();
+		for (int i = 0; i < checkedList.length; i++) {
+			checklist.add(checkedList[i]);
+			dellist.add(delList[i]);
+		}
+		service.deleteContents(checklist, dellist);
+		model.addAttribute("contentsList", service.getContentsList());
+		return "admin/A_contentsList";
 	}
 
 	private Date StringToDate(String string) throws ParseException {

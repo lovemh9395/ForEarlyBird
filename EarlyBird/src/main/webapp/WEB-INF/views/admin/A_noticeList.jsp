@@ -14,13 +14,13 @@
 				value="공지등록"></a>
 		</div>
 		<div class="col-md-auto">
-			<input type="button" value="공지 숨기기/복구" id="deleteWhatSelected">
+			<input type="button" value="공지글 숨기기/복구" id="deleteWhatSelected">
 		</div>
 		<div class="col-md-auto">
 			<input type="button" value="공지 수정" onclick="updateNotice()">
 		</div>
 		<div class="col-md-auto">
-			<input type="button" value="공지 해제" id="dropWhatSelected">
+			<input type="button" value="공지 선정 해제" id="dropWhatSelected">
 		</div>
 	</div>
 	<div class="table-responsive" id="noticeTable">
@@ -144,10 +144,11 @@
 
 		$(document).on('click', '#dropWhatSelected', function() {
 			var checkedList = getCheckedValue();
-
+			var NoticeOrNot = isNoticeWhatChecked();
 			var query = {
 				"brd_id" : 0,
 				"checkedList" : checkedList,
+				"NoticeOrNot" : NoticeOrNot
 			};
 			if (checkedList[0] == null) {
 				alert("항목을 선택하여 주십시오");

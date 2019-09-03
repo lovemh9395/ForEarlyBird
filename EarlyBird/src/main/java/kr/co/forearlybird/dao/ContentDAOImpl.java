@@ -59,7 +59,6 @@ public class ContentDAOImpl implements ContentDAO {
 	@Override
 	public int C_share_make(Map middlemap) {
 		logger.info("컨텐츠 글쓰기 DAO");
-		System.out.println(middlemap.toString());
 		return sqlSession.update("content.share_make", middlemap);
 	}
 
@@ -67,6 +66,24 @@ public class ContentDAOImpl implements ContentDAO {
 	public List<Content> C_share_list(int brd_id) {
 		logger.info("컨텐츠 리스트 가져오기 DAO");
 		return sqlSession.selectList("content.C_share_list", brd_id);
+	}
+	
+	@Override
+	public void deleteContents(Map tmp) {
+		logger.info("deleteContents DAO");
+		sqlSession.update("content.deleteContents", tmp);
+	}
+
+	@Override
+	public Content getContent(int cnt_id) {
+		logger.info("getContent DAO");
+		return sqlSession.selectOne("content.getContent", cnt_id);
+	}
+
+	@Override
+	public void makeContent(Map map) {
+		logger.info("makeContent DAO");
+		sqlSession.update("content.makeContent", map);
 	}
 
 }

@@ -22,4 +22,12 @@ public interface ContentDAO {
 	
 	public int C_share_make(Map middlemap);
 	
-	public List<Content> C_share_list(int brd_id);}
+	public List<Content> C_share_list(int brd_id);
+
+	public void deleteContents(Map tmp);
+
+	public Content getContent(int cnt_id);
+
+	public void makeContent(Map map);
+	
+}

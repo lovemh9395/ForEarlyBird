@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import kr.co.forearlybird.dao.BoardAdminDAO;
 import kr.co.forearlybird.dao.BoardDAO;
 import kr.co.forearlybird.dao.CategoryDAO;
+import kr.co.forearlybird.dao.ContentDAO;
 import kr.co.forearlybird.dao.LargeCategoryDAO;
 import kr.co.forearlybird.dao.MemberDAO;
 import kr.co.forearlybird.dao.PostDAO;
@@ -29,6 +30,7 @@ import kr.co.forearlybird.dao.ReplyDAO;
 import kr.co.forearlybird.domain.A_postListDTO;
 import kr.co.forearlybird.domain.Board;
 import kr.co.forearlybird.domain.Category;
+import kr.co.forearlybird.domain.Content;
 import kr.co.forearlybird.domain.LargeCategory;
 import kr.co.forearlybird.domain.Member;
 import kr.co.forearlybird.domain.Post;
@@ -55,6 +57,8 @@ public class AdminServiceImpl implements AdminService {
 	PostDAO postDAO;
 	@Autowired
 	ReplyDAO replyDAO;
+	@Autowired
+	ContentDAO contentDAO;
 
 	@Inject
 	private JavaMailSender mailSender;
@@ -396,7 +400,7 @@ public class AdminServiceImpl implements AdminService {
 		logger.info("updateAdmin");
 		return boardAdminDAO.makeAdmin(map);
 	}
-	
+
 	@Override
 	public void deleteAdmin(Map map) {
 		logger.info("deleteAdmin");
@@ -480,6 +484,34 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
+	public void updateBoard(Map map) {
+		logger.info("updateBoard");
+		Map newMap = new HashMap();
+		newMap.put("brd_id", (int) map.get("brd_id"));
+		newMap.put("brd_name", (String) map.get("brd_name"));
+		newMap.put("large_id", (int) map.get("large_id"));
+		newMap.put("category_id", (int) map.get("category_id"));
+		newMap.put("brd_readauth", (int) map.get("brd_readauth"));
+		newMap.put("brd_writeauth", (int) map.get("brd_writeauth"));
+		boardDAO.updateBoard(newMap);
+	}
+
+	@Override
+	public Map getBoardParam(int brd_id) {
+		logger.info("getBoardParam");
+		Map map = new HashMap();
+		Board brd = boardDAO.getBoardParam(brd_id);
+		map.put("large_id", brd.getLarge_id());
+		map.put("large_name", largecategoryDAO.getLargeName(brd.getLarge_id()));
+		map.put("category_id", brd.getCategory_id());
+		map.put("category_name", categoryDAO.getCategoryName(brd.getCategory_id()));
+		map.put("brd_name", brd.getBrd_name());
+		map.put("brd_readauth", brd.getBrd_readauth());
+		map.put("brd_writeauth", brd.getBrd_writeauth());
+		return map;
+	}
+
+	@Override
 	public List<Map> CategoryList(int large_id) {
 		logger.info("CategoryList");
 		return categoryDAO.getCategoryList(large_id);
@@ -556,13 +588,18 @@ public class AdminServiceImpl implements AdminService {
 		logger.info("updatePostToBoard");
 		List<String> checklist = (List<String>) map.get("checklist");
 		List<String> NoticeOrNot = (List<String>) map.get("NoticeOrNot");
+		String type = (String) map.get("type");
 		if (NoticeOrNot == null) {
 			for (int i = 0; i < checklist.size(); i++) {
 				postDAO.changeParamDrop(Integer.parseInt(checklist.get(i)));
 			}
 		} else {
 			for (int i = 0; i < checklist.size(); i++) {
-				postDAO.changeParamDelete(Integer.parseInt(checklist.get(i)), Integer.parseInt(NoticeOrNot.get(i)));
+				if (type.equals("delete")) {
+					postDAO.changeParamDelete(Integer.parseInt(checklist.get(i)), Integer.parseInt(NoticeOrNot.get(i)));
+				} else {
+					postDAO.changeParamNotice(Integer.parseInt(checklist.get(i)), Integer.parseInt(NoticeOrNot.get(i)));
+				}
 			}
 		}
 	}
@@ -850,4 +887,33 @@ public class AdminServiceImpl implements AdminService {
 			replyDAO.updateReplyDel(tmp);
 		}
 	}
+
+	@Override
+	public List<Content> getContentsList() {
+		logger.info("getContentsList");
+		return contentDAO.Main_C_list();
+	}
+
+	@Override
+	public void deleteContents(List checklist, List dellist) {
+		logger.info("deleteContents");
+		for (int i = 0; i < checklist.size(); i++) {
+			Map tmp = new HashMap();
+			int delnum = (int) dellist.get(i);
+			if (delnum == 1) {
+				tmp.put("cnt_del", delnum - 1);
+			} else {
+				tmp.put("cnt_del", delnum + 1);
+			}
+			tmp.put("cnt_id", checklist.get(i));
+			contentDAO.deleteContents(tmp);
+		}
+	}
+
+	@Override
+	public Content getContent(int cnt_id) {
+		logger.info("getContent");
+		return contentDAO.getContent(cnt_id);
+	}
+
 }

@@ -167,17 +167,17 @@
 	};
 
 	function set3_days_ago() {
-		var day3 = getDate(0, 3);
+		var day3 = getDate(0, 2);
 		$("#dateFrom").val(day3);
 	};
 
 	function set7_days_ago() {
-		var day7 = getDate(0, 7);
+		var day7 = getDate(0, 6);
 		$("#dateFrom").val(day7);
 	};
 
 	function set1_month_ago() {
-		var month1 = getDate(1,0);
+		var month1 = getDate(1, 0);
 		$("#dateFrom").val(month1);
 	};
 
@@ -186,8 +186,17 @@
 		var year = now.getFullYear();
 		var mon = (now.getMonth() + 1 - i) > 9 ? '' + (now.getMonth() + 1 - i)
 				: '0' + (now.getMonth() + 1 - i);
-		var day = (now.getDate() - j) > 9 ? '' + (now.getDate() - j) : '0'
-				+ (now.getDate() - j);
+		var day = (now.getDate() - j) > 9 ? '' + (now.getDate() - j) : '0'+ (now.getDate() - j);
+		if (now.getDate()- j <= 0) {
+			mon = (now.getMonth() - i) > 9 ? '' + (now.getMonth() - i) : '0' + (now.getMonth() - i);
+			if (mon == 4 || mon == 6 || mon == 9 || mon == 11) {
+				day = (now.getDate() + (30 - j)) > 9 ? '' + (now.getDate() + (30 - j)) : '0'+ (now.getDate() + (30 - j));
+			} else if (mon == 2) {
+				day = (now.getDate() + 28 - j) > 9 ? '' + (now.getDate() + 28 - j) : '0'+ (now.getDate() + 28 - j);
+			} else {
+				day = (now.getDate() + (31 - j)) > 9 ? '' + (now.getDate() + (31 - j)) : '0'+ (now.getDate() + (31 - j));
+			}
+		}
 		var today = year + '-' + mon + '-' + day;
 		return today;
 	};

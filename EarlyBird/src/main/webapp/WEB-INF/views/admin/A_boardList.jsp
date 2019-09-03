@@ -12,8 +12,7 @@
 				</h2>
 			</div>
 			<div class="col-8" align="right">
-				<button type="button" data-toggle="modal"
-					data-target="#modal-makeboard">게시판 추가하기</button>
+				<button type="button" id="makebrd">게시판 추가하기</button>
 			</div>
 		</div>
 		<div class="table-responsive">
@@ -43,11 +42,13 @@
 								href="A_postList?brd_id=${list.brd_id}"><input type="button"
 									value=${list.brd_name }></a></td>
 							<td class="text-center">${list.brd_id }</td>
-							<td class="text-center">${list.brd_readauthname }<input
+							<td class="text-center"><a
+								onclick="changeBrd(${list.brd_id });">
+									${list.brd_readauthname } / ${list.brd_writeauthname }</a><input
 								type="hidden" id="readAuth${list.brd_id }"
-								value="${list.brd_readauth }"> /${list.brd_writeauthname }<input
-								type="hidden" id="writeauth${list.brd_id }"
-								value="${list.brd_writeauth }"></td>
+								value="${list.brd_readauth }"> <input type="hidden"
+								id="writeauth${list.brd_id }" value="${list.brd_writeauth }">
+							</td>
 							<td class="text-center">${list.brd_newPostNum}/${list.brd_allPostNum}<input
 								type="hidden" id="allPostNum${list.brd_id }"
 								value="${list.brd_allPostNum}"></td>
@@ -74,50 +75,39 @@
 	return b;
 } */
 $(document).ready(function() {
-	var largeArray = new Array();
-	var largeObject = new Object();
-	var largeList = ${forlargeList};
-
-	$.each(largeList, function(index, list1) {
-		largeObject = new Object();
-		largeObject.large_id = list1.id;
-		largeObject.large_name = list1.name;
-		largeArray.push(largeObject);
-	});
-	
-	var largeSelectBox = $("select[name='large_List']");
-	for (var i = 0; i < largeArray.length; i++) {
-		largeSelectBox.append("<option value='"+largeArray[i].large_id+"'>"+ largeArray[i].large_name+ "</option>");
-	}
-
-	var categoryArray = new Array();
-	var categoryObject = new Object();
-	var categoryList = ${forcategoryList};
-	$.each(categoryList, function(index, list2) {
-		categoryObject = new Object();
-		categoryObject.large_id = list2.large_id;
-		categoryObject.category_id = list2.category_id;
-		categoryObject.category_name = list2.category_name;
-		categoryArray.push(categoryObject);
-	});
-
-	$(document).on("change","select[name='large_List']",function() {
-		//두번째 셀렉트 박스를 삭제 시킨다.
-		var categorySelectBox = $("select[name='category_List']");
-		categorySelectBox.children().remove();
-		
-		//선택한 첫번째 박스의 값을 가져와 일치하는 값을 두번째 셀렉트 박스에 넣는다.
-		$("option:selected", this).each(function() {
-			var selectValue = $(this).val();
-			categorySelectBox.append("<option value=''>소분류</option>");
-			for (var i = 0; i < categoryArray.length; i++) {
-				if (selectValue == categoryArray[i].large_id) {
-					categorySelectBox.append("<option value="+categoryArray[i].category_id+">"+ categoryArray[i].category_name+ "</option>");
-				}
+	$(document).on("click","#makebrd",function() {
+		$.ajax({
+			async:false,
+			type:"get",
+			url:"${contextPath}/admin/A_makeBoard",
+			success:function(data){
+				$("#formodal").html(data);
+				$("#formodal").css("display","");
+				$("#modal-makeboard").modal({
+					show:true,
+					backdrop:false
+				});
 			}
 		});
 	});
 });
+
+function changeBrd(brd_id){
+	$.ajax({
+		async:false,
+		type:"post",
+		url:"${contextPath}/admin/A_changeBoard",
+		data:{"brd_id":brd_id},
+		success:function(data){
+			$("#formodal").html(data);
+			$("#formodal").css("display","");
+			$("#modal-makeboard").modal({
+				show:true,
+				backdrop:false
+			});
+		}
+	});
+};
 
 function adminUpdate(brd_id){
 	$.ajax({
@@ -285,6 +275,50 @@ function changeVisibility(brd_id, brd_exposure){
 		}
 	});
 }
+$(document).ready(function(){
+	var largeArray = new Array();
+	var largeObject = new Object();
+	var largeList = ${forlargeList};
+
+	$.each(largeList, function(index, list1) {
+		largeObject = new Object();
+		largeObject.large_id = list1.id;
+		largeObject.large_name = list1.name;
+		largeArray.push(largeObject);
+	});
+	
+	var largeSelectBox = $("select[name='large_List']");
+	for (var i = 0; i < largeArray.length; i++) {
+		largeSelectBox.append("<option value='"+largeArray[i].large_id+"'>"+ largeArray[i].large_name+ "</option>");
+	}
+
+	var categoryArray = new Array();
+	var categoryObject = new Object();
+	var categoryList = ${forcategoryList};
+	$.each(categoryList, function(index, list2) {
+		categoryObject = new Object();
+		categoryObject.large_id = list2.large_id;
+		categoryObject.category_id = list2.category_id;
+		categoryObject.category_name = list2.category_name;
+		categoryArray.push(categoryObject);
+	});
+
+	$(document).on("change","select[name='large_List']",function() {
+		//두번째 셀렉트 박스를 삭제 시킨다.
+		var categorySelectBox = $("select[name='category_List']");
+		categorySelectBox.children().remove();
+		
+		//선택한 첫번째 박스의 값을 가져와 일치하는 값을 두번째 셀렉트 박스에 넣는다.
+		$("option:selected", this).each(function() {
+			var selectValue = $(this).val();
+			categorySelectBox.append("<option value=''>소분류</option>");
+			for (var i = 0; i < categoryArray.length; i++) {
+				if (selectValue == categoryArray[i].large_id) {
+					categorySelectBox.append("<option value="+categoryArray[i].category_id+">"+ categoryArray[i].category_name+ "</option>");
+				}
+			}
+		});
+	});
+});
 </script>
 <%@include file="include/A_footer.jsp"%>
-<%@include file="A_boardMake.jsp"%>

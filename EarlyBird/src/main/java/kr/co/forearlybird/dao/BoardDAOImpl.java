@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import kr.co.forearlybird.domain.Board;
 
+@SuppressWarnings("rawtypes")
 @Repository
 public class BoardDAOImpl implements BoardDAO {
 	private static final Logger logger = LoggerFactory.getLogger(BoardDAOImpl.class);
@@ -30,14 +31,12 @@ public class BoardDAOImpl implements BoardDAO {
 		return sqlsession.selectList("board.getBoardList");
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public int getBoardIdNumToName(Map map) {
 		logger.info("getBoardIdToNameDAO");
 		return sqlsession.selectOne("board.getBoardIdNumToName", map);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void makeBoard(Map newMap) {
 		logger.info("makeBoardDAO");
@@ -56,14 +55,12 @@ public class BoardDAOImpl implements BoardDAO {
 		return sqlsession.delete("board.leaveBoard",brd_id);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public int changeBoardVisibility(Map map) {
 		logger.info("changeBoardVisibilityDAO");
 		return sqlsession.update("board.changeBoardVisibility", map);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Integer> getBrd_idList(Map tmp) {
 		logger.info("getBrd_idListDAO");
@@ -76,7 +73,6 @@ public class BoardDAOImpl implements BoardDAO {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public Map getLargeAndCategoryid(int brd_id) {
 		logger.info("getLargeAndCategoryidDAO");
@@ -99,6 +95,18 @@ public class BoardDAOImpl implements BoardDAO {
 	public int getBoardMAXIDUnderCategory(int category_id) {
 		logger.info("getBoardMAXIDUnderCategoryDAO");
 		return sqlsession.selectOne("board.getBoardMAXIDUnderCategory",category_id);
+	}
+
+	@Override
+	public Board getBoardParam(int brd_id) {
+		logger.info("getBoardParamDAO");
+		return sqlsession.selectOne("board.getBoardParam",brd_id);
+	}
+
+	@Override
+	public void updateBoard(Map newMap) {
+		logger.info("updateBoardDAO");
+		sqlsession.update("board.updateBoard", newMap);
 	}
 
 }

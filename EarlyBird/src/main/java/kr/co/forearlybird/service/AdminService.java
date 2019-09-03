@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import kr.co.forearlybird.domain.A_postListDTO;
+import kr.co.forearlybird.domain.Content;
 import kr.co.forearlybird.domain.Post;
 
 @SuppressWarnings("rawtypes")
@@ -105,4 +106,14 @@ public interface AdminService {
 	void updateReply(Map map);
 
 	void deleteAdmin(Map map);
+
+	Map getBoardParam(int brd_id);
+
+	void updateBoard(Map map);
+
+	List<Content> getContentsList();
+
+	void deleteContents(List checklist, List dellist);
+
+	Content getContent(int cnt_id);
 }
