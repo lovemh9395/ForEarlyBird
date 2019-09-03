@@ -130,10 +130,10 @@
 				console.log(data.zonecode);
 				console.log(fullRoadAddr);
 
-				$("[name=mem_zipcode]").val(data.zonecode);
-				$("[name=mem_address1]").val(fullRoadAddr);
-				$("[name=mem_address2]").val('');
-				$("[name=mem_address2]").focus();
+				$("[name=update_mem_zipcode]").val(data.zonecode);
+				$("[name=update_mem_address1]").val(fullRoadAddr);
+				$("[name=update_mem_address2]").val("");
+				$("[name=update_mem_address2]").focus();
 
 				/* document.getElementById('signUpUserPostNo').value = data.zonecode; //5자리 새우편번호 사용
 				document.getElementById('signUpUserCompanyAddress').value = fullRoadAddr;

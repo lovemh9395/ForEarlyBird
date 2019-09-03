@@ -42,6 +42,55 @@
 	z-index: -1;
 }
 </style>
+<script>
+	function C_share_recommand(cnt_id) {
+		var brd_id =
+<%=request.getParameter("brd_id")%>
+	;
+		$.ajax({
+			async : true,
+			type : "post",
+			url : "${contextPath}/content/C_recommand",
+			data : {
+				"cnt_id" : cnt_id,
+				"brd_id" : brd_id
+			},
+			success : function(data) {
+				var a = $(data).find("#menu_btn");
+				$("#menu_btn").html(a);
+			},
+			error : function(request, status, error) {
+				alert("code:" + request.status + "\n" + "message:"
+						+ request.responseText + "\n" + "error:" + error);
+			}
+		})
+	}
+
+	function C_share_view_M(cnt_id, cnt_connectlink) {
+		var brd_id =
+<%=request.getParameter("brd_id")%>
+	;
+		$.ajax({
+			async : false,
+			type : "post",
+			url : "${contextPath}/content/C_view",
+			data : {
+				"cnt_id" : cnt_id,
+				"brd_id" : brd_id
+			},
+			success : function(data) {
+				var a = $(data).find("#menu_btn");
+				$("#menu_btn").html(a);
+				window.open(cnt_connectlink, "connectlink",
+						"width=1200,height=600");
+			},
+			error : function(request, status, error) {
+				alert("code:" + request.status + "\n" + "message:"
+						+ request.responseText + "\n" + "error:" + error);
+			}
+		})
+	}
+	</script>
 <body class="">
 	<!-- side bar -->
 	<%@ include file="../include/left_navbar.jsp"%>
@@ -62,7 +111,7 @@
 			<c:forEach items="${list}" var="list">
 				<figure>
 					<a style="cursor: pointer"
-						onclick="C_view_M('${list.cnt_id }','${list.cnt_connectLink }')"><img
+						onclick="C_share_view_M('${list.cnt_id }','${list.cnt_connectLink }')"><img
 						src="${contextPath }/shareimage/${list.cnt_thumbnail }"></a>
 					<figcaption>${list.cnt_title }<div class="row"
 							style="align: right; padding-left: 240px; padding-top: 10px;">
@@ -70,7 +119,7 @@
 								<i class="ni ni-active-40 text-blue"></i>${list.cnt_hit }</h4>
 							<h4>
 								<a style="cursor: pointer;"
-									onclick="C_recommand(${list.cnt_id})"> <i
+									onclick="C_share_recommand(${list.cnt_id})"> <i
 									class="ni ni-favourite-28 text-red" id="C_recommand"></i>${list.cnt_like }</a>
 							</h4>
 						</div>

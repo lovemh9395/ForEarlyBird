@@ -15,16 +15,30 @@
 			if (formCheck()) {
 				var formId = $("#mem_userid").val();
 				$.ajax({
-					async:false,
-					type:"post",
-					url:"${contextPath}/member/M_CheckId",
-					data:{"formId":formId},
-					success:function(data) {
-						if(data==1){
-						document.getElementById('forming').submit();
+					async : false,
+					type : "post",
+					url : "${contextPath}/member/M_CheckId",
+					data : {
+						"formId" : formId
+					},
+					success : function(data) {
+						if (data == 1) {
+							var form = $("form[name=forming]").serialize();
+							$.ajax({
+								async : false,
+								type : "post",
+								url : "${contextPath }/member/M_make",
+								data : form,
+								success : function(result) {
+									alert("회원가입이 완료되었습니다.");
+									location.href="/";
+								}
+							})
 						} else {
 							alert("중복된 아이디 입니다.");
 						}
+					},error:function(data){
+						alert(data);
 					}
 				})
 			}
@@ -94,8 +108,7 @@
 								style="width: 200px; height: auto;">
 							</a>
 						</div>
-						<form role="forming" id="forming" action="${contextPath }/member/M_make"
-							method="post">
+						<form role="forming" id="forming" name="forming">
 							<div class="form-group mb-3">
 								<div class="input-group input-group-alternative">
 									<div class="input-group-prepend">
@@ -161,8 +174,8 @@
 									<div class="input-group-prepend">
 										<span class="input-group-text"><i class="ni ni-like-2"></i></span>
 									</div>
-									<input class="form-control" placeholder="ex)19950911" type="text"
-										id="mem_birthday" name="mem_birthday">
+									<input class="form-control" placeholder="ex)19950911"
+										type="text" id="mem_birthday" name="mem_birthday">
 								</div>
 							</div>
 							<div
